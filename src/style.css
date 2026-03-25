@@ -1303,7 +1303,13 @@ footer {
 }
 
 [data-theme="dark"] .tab-btn.active {
-  background: #2d2b28;
+  background: rgba(147, 197, 253, 0.22);
+  color: #93c5fd;
+}
+
+[data-theme="dark"] .rotating-text-word {
+  background-image: linear-gradient(rgba(147, 197, 253, 0.4), rgba(147, 197, 253, 0.4));
+  color: #1a1a1a;
 }
 
 [data-theme="dark"] .see-more button:hover,
