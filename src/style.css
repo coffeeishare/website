@@ -578,6 +578,16 @@ mark.highlight-animated {
   justify-content: space-between;
   padding: 22px 0;
   border-bottom: 1px solid var(--border);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.exp-item:hover {
+  transform: translateX(8px);
+}
+
+.exp-item:hover .exp-date {
+  background: #fbabe7;
+  color: #1a1a1a;
 }
 
 .exp-item:last-child { border-bottom: none; }
@@ -600,6 +610,7 @@ mark.highlight-animated {
 }
 
 .exp-date {
+  font-family: 'DM Mono', monospace;
   font-size: 12px;
   color: var(--text-secondary);
   background: #f3f4f6;
@@ -607,6 +618,7 @@ mark.highlight-animated {
   border-radius: 20px;
   white-space: nowrap;
   font-weight: 450;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ===== REFERENCES ===== */
@@ -1188,6 +1200,15 @@ footer {
   transition: opacity 1.2s ease, filter 1.2s ease;
 }
 
+.splash::before {
+  content: '';
+  position: absolute;
+  inset: 32px;
+  background: url('/splash-photo.webp') center center / cover no-repeat;
+  border-radius: 12px;
+  z-index: 0;
+}
+
 .splash--fade {
   opacity: 0;
   filter: blur(12px);
@@ -1195,6 +1216,8 @@ footer {
 }
 
 .splash-logo {
+  position: relative;
+  z-index: 1;
   width: 120px;
   height: 60px;
 }
@@ -1255,7 +1278,7 @@ footer {
 /* ===== DARK MODE ===== */
 [data-theme="dark"] {
   color-scheme: dark;
-  --white: #30302E;
+  --white: #1E1E1E;
   --off-white: #1a1917;
   --bg-card: #1e1d1b;
   --text-primary: #f0ede8;
@@ -1267,7 +1290,7 @@ footer {
 }
 
 [data-theme="dark"] nav {
-  background: rgba(48, 48, 46, 0.92);
+  background: rgba(30, 30, 30, 0.92);
 }
 
 [data-theme="dark"] .project-card,
