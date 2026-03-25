@@ -689,9 +689,14 @@ mark.highlight-animated {
   margin: 0;
 }
 
-/* Key phrase highlight — turns blue the moment the typewriter reaches the full word */
+/* Key phrase highlight — light blue background matching the hero highlight */
 .quote-highlight {
-  color: var(--ref-highlight);
+  color: #1a1a1a;
+  background-image: linear-gradient(rgba(186, 230, 253, 0.6), rgba(186, 230, 253, 0.6));
+  background-repeat: no-repeat;
+  background-size: 103% 80%;
+  background-position: 0 55%;
+  border-radius: 2px;
 }
 
 /* Scramble symbols shown before each character settles */
@@ -1250,7 +1255,7 @@ footer {
 /* ===== DARK MODE ===== */
 [data-theme="dark"] {
   color-scheme: dark;
-  --white: #111110;
+  --white: #30302E;
   --off-white: #1a1917;
   --bg-card: #1e1d1b;
   --text-primary: #f0ede8;
@@ -1262,7 +1267,7 @@ footer {
 }
 
 [data-theme="dark"] nav {
-  background: rgba(17, 17, 16, 0.92);
+  background: rgba(48, 48, 46, 0.92);
 }
 
 [data-theme="dark"] .project-card,
