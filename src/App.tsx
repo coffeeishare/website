@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react"
 import { flushSync } from "react-dom"
 import Lottie from "lottie-react"
 import logoAnimation from "../public/logo.json"
+import logoSplashAnimation from "../public/logo-splash.json"
 import helloAnimation from "../public/hello.json"
 import "./style.css"
 
@@ -813,7 +814,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
   return (
     <div className={`splash${fading ? " splash--fade" : ""}`}>
       <div className="splash-logo">
-        <Lottie animationData={logoAnimation} loop={false} autoplay />
+        <Lottie animationData={logoSplashAnimation} loop={false} autoplay />
       </div>
     </div>
   )
