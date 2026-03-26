@@ -401,8 +401,8 @@ const Footer = () => {
     let steps = 0
     const id = setInterval(() => {
       setFrame(f => 1 - f)
-      if (++steps >= 14) clearInterval(id) // ~14 steps × 176 ms ≈ 2.46 s
-    }, 176)
+      if (++steps >= 14) clearInterval(id) // ~14 steps × 357 ms ≈ 5 s
+    }, 357)
     return () => clearInterval(id)
   }, [arrived])
 
