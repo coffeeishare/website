@@ -268,15 +268,17 @@ function ProjectContent({ project }: { project: ProjectDetailEntry }) {
         </div>
       </header>
 
-      {/* ── Hero image ───────────────────────────────────────────────────── */}
-      {heroUrl && (
-        <div className="pd-hero-image">
-          <img src={`https:${heroUrl}?w=1200&fm=webp&q=80`} alt={`${client} — ${title}`} />
-        </div>
-      )}
-
-      {/* ── Stats bar ────────────────────────────────────────────────────── */}
+      {/* ── Hero image + Stats (shared container for matched width) ────── */}
       <div className="container">
+        {heroUrl && (
+          <div className="pd-hero-frame">
+            <div className="pd-hero-image">
+              <img src={`https:${heroUrl}?w=1200&fm=webp&q=80`} alt={`${client} — ${title}`} />
+            </div>
+          </div>
+        )}
+
+        {/* ── Stats bar ──────────────────────────────────────────────────── */}
         <div className="pd-stats-bar">
           {introText && (
             <div className="pd-stats-intro">
