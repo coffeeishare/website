@@ -936,6 +936,42 @@ footer {
   color: var(--text-light);
 }
 
+/* ── Clawd mascot walk-in ──────────────────────────────────────────
+ * Starts off-screen right; slides left when footer enters viewport.
+ * Walk frames are toggled via React state during the slide duration.
+ * ----------------------------------------------------------------- */
+.footer-clawd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transform: translateX(60px);
+  opacity: 0;
+  /* Spring slide over 0.8 s — matches the 6-step frame cycle */
+  transition:
+    transform 0.8s cubic-bezier(0.34, 1.1, 0.64, 1),
+    opacity   0.4s ease;
+}
+
+.footer-clawd--arrived {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Pixel-art mascot — sized to match footer text cap-height */
+.footer-clawd-mascot {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--text-light); /* SVG uses currentColor */
+  image-rendering: pixelated;
+}
+
+.footer-clawd-label {
+  font-size: 12px;
+  color: var(--text-light);
+  white-space: nowrap;
+}
+
 /* ============================================================
    15. ABOUT PAGE
    ============================================================ */

@@ -375,7 +375,7 @@ function ProjectContent({ project }: { project: ProjectDetailEntry }) {
       <footer>
         <div className="container">
           <div className="footer-inner">
-            <span className="footer-credit">Website design by Ula in 2025</span>
+            <span className="footer-credit">Website design by Ula in 2026</span>
           </div>
         </div>
       </footer>

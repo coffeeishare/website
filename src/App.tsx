@@ -358,15 +358,67 @@ const CTA = () => (
   </section>
 )
 
-const Footer = () => (
-  <footer>
-    <div className="container">
-      <div className="footer-inner">
-        <span className="footer-credit">Website design by Ula in 2025</span>
-      </div>
-    </div>
-  </footer>
+/* ── Clawd mascot SVG frames (2-frame walk cycle) ─────────────────── */
+const ClawdFrame1 = () => (
+  <svg viewBox="0 0 395 395" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M358.256 119.488H395V202.163H358.256V348.675H321.512V275.651H284.768V330.675H248.023V275.651H137.791V330.675H101.047V275.651H73.4883V348.675H36.7441V202.163H0V119.488H36.7441V46H358.256V119.488Z" fill="currentColor"/>
+    <rect x="73.4883" y="119.488" width="36.7442" height="45.9302" fill="black"/>
+    <rect x="284.767" y="119.488" width="36.7442" height="45.9302" fill="black"/>
+  </svg>
 )
+
+const ClawdFrame2 = () => (
+  <svg viewBox="0 0 395 395" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M358.256 119.488H395V202.163H358.256V330.675H321.512V275.651H284.768V349.14H248.023V275.651H137.791V348.675H101.047V275.651H73.4883V330.768H36.7441V202.163H0V119.488H36.7441V46H358.256V119.488Z" fill="currentColor"/>
+    <rect x="73.4884" y="119.488" width="36.7442" height="45.9302" fill="black"/>
+    <rect x="284.767" y="119.488" width="36.7442" height="45.9302" fill="black"/>
+  </svg>
+)
+
+const Footer = () => {
+  const [frame, setFrame] = useState(0)
+  const [arrived, setArrived] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+
+  /* Trigger walk-in when footer scrolls into view */
+  useEffect(() => {
+    const el = wrapRef.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setArrived(true); obs.disconnect() } },
+      { threshold: 0.5 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  /* Alternate walk frames while sliding in (~800 ms), then settle */
+  useEffect(() => {
+    if (!arrived) return
+    let steps = 0
+    const id = setInterval(() => {
+      setFrame(f => 1 - f)
+      if (++steps >= 6) clearInterval(id)
+    }, 130)
+    return () => clearInterval(id)
+  }, [arrived])
+
+  return (
+    <footer>
+      <div className="container">
+        <div className="footer-inner">
+          <span className="footer-credit">Website design by Ula in 2026</span>
+          <div ref={wrapRef} className={`footer-clawd${arrived ? " footer-clawd--arrived" : ""}`}>
+            <div className="footer-clawd-mascot">
+              {frame === 0 ? <ClawdFrame1 /> : <ClawdFrame2 />}
+            </div>
+            <span className="footer-clawd-label">with Claude</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
 
 function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: Page) => void; isDark: boolean; toggleDark: (e: React.MouseEvent) => void }) {
   const navigate = useNavigate()
