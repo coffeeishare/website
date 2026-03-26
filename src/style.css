@@ -1314,3 +1314,579 @@ footer {
 [data-theme="dark"] .work-tile {
   background: var(--bg-card);
 }
+
+/* =====================================================================
+   PROJECT DETAIL PAGE  (pd-*)
+   ===================================================================== */
+
+/* Make project cards work as <a> elements (react-router Link) */
+a.project-card {
+  display: grid;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ── Page wrapper ─────────────────────────────────────────────────── */
+.pd-page {
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Inside pd-page, containers fill the full constrained width */
+.pd-page .container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 40px;
+}
+
+/* ── Back link ───────────────────────────────────────────────────── */
+.pd-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+  margin-bottom: 24px;
+}
+.pd-back-link:hover { color: var(--text-primary); }
+
+/* ── Hero header ─────────────────────────────────────────────────── */
+.pd-hero {
+  padding: 60px 0 40px;
+}
+
+.pd-hero-inner {
+  max-width: 860px;
+}
+
+.pd-breadcrumb {
+  margin-bottom: 16px;
+}
+
+.pd-hero-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.pd-client {
+  color: var(--text-secondary);
+}
+
+.pd-title-sep {
+  color: var(--text-light);
+  margin: 0 4px;
+}
+
+.pd-title {
+  color: var(--text-primary);
+}
+
+/* ── Hero image ──────────────────────────────────────────────────── */
+.pd-hero-image {
+  width: 100%;
+  max-height: 600px;
+  overflow: hidden;
+  background: var(--bg-card);
+  border-radius: 12px;
+}
+
+.pd-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── Stats bar ───────────────────────────────────────────────────── */
+.pd-stats-bar {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 28px 0 56px;
+  overflow: hidden;
+}
+
+.pd-stats-bar > * {
+  padding: 24px 28px;
+}
+
+.pd-stats-bar > * + * {
+  border-left: 1px solid var(--border);
+}
+
+.pd-stats-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pd-stats-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.pd-stats-sub-group {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pd-stats-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.pd-meta-value {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.pd-meta-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pd-meta-list li {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pd-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.pd-skill-tag {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px 10px;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+/* ── Article content ─────────────────────────────────────────────── */
+.pd-content {
+  padding-bottom: 80px;
+}
+
+/* Intro paragraph */
+.pd-intro {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+/* Opening pull quote */
+.pd-pull-quote {
+  position: relative;
+  margin: 0 0 48px;
+  padding: 28px 32px;
+  background: var(--bg-card);
+  border-left: 3px solid var(--text-primary);
+  border-radius: 0 8px 8px 0;
+}
+
+.pd-pull-quote p {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+/* Closing testimonial quote */
+.pd-closing-quote {
+  position: relative;
+  margin: 48px 0 0;
+  padding: 32px 36px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.pd-closing-quote p {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin: 0;
+  font-style: italic;
+}
+
+.pd-quote-mark {
+  display: block;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--text-light);
+  font-family: Georgia, serif;
+  margin-bottom: 8px;
+  user-select: none;
+}
+
+.pd-quote-mark--close {
+  margin-bottom: 0;
+  margin-top: 8px;
+  transform: rotate(180deg);
+}
+
+/* ── Rich text ───────────────────────────────────────────────────── */
+.pd-rich-text {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  column-gap: 0;
+  position: relative;
+}
+
+.pd-section-heading {
+  grid-column: 1;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text-primary);
+  padding: 0 20px 0 0;
+  margin: 0;
+  border-bottom: none;
+  align-self: start;
+}
+
+/* Inter-section spacing */
+.pd-paragraph:has(+ .pd-section-heading),
+.pd-list:has(+ .pd-section-heading) {
+  padding-bottom: 48px;
+}
+
+/* Images span both columns — no border, full width */
+.pd-inline-image {
+  grid-column: 1 / -1;
+  padding-left: 0;
+  margin: 8px 0;
+}
+
+/* Content elements in column 2 with left border as divider — direct children only */
+.pd-rich-text > .pd-paragraph,
+.pd-rich-text > .pd-blockquote--inline,
+.pd-rich-text > .pd-divider {
+  grid-column: 2;
+  padding-left: 28px;
+  border-left: 1px solid var(--border);
+}
+
+.pd-list {
+  grid-column: 2;
+  padding-left: 44px; /* 28px col offset + 16px bullet indent */
+  border-left: 1px solid var(--border);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Use padding (not margin) for vertical spacing so borders stay connected */
+.pd-paragraph {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin-bottom: 0;
+  padding-bottom: 16px;
+}
+
+/* Last paragraph in a section still needs bottom padding for inter-section gap */
+.pd-list {
+  padding-bottom: 16px;
+}
+
+.pd-paragraph strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pd-list--ordered {
+  list-style-type: decimal;
+}
+
+.pd-list-item {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.pd-list-item p {
+  margin: 0;
+  padding-bottom: 0;
+}
+
+.pd-list-item strong {
+  color: var(--text-primary);
+}
+
+.pd-blockquote--inline {
+  margin: 24px 0;
+  padding: 20px 24px;
+  background: var(--accent-yellow);
+  border-radius: 6px;
+  font-style: italic;
+}
+
+.pd-blockquote--inline p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.pd-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+/* Inline images */
+.pd-inline-image {
+  margin: 32px 0;
+}
+
+.pd-inline-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+.pd-image-caption {
+  font-size: 13px;
+  color: var(--text-light);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ── Related projects ─────────────────────────────────────────────── */
+.pd-related {
+  border-top: 1px solid var(--border);
+  padding: 64px 0 80px;
+}
+
+.pd-related-heading {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 32px;
+}
+
+.pd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.pd-related-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pd-related-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.pd-related-image {
+  aspect-ratio: 16 / 10;
+  background: var(--bg-card);
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.pd-related-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.pd-related-card:hover .pd-related-image img {
+  transform: scale(1.03);
+}
+
+.pd-related-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--border) 100%);
+}
+
+.pd-related-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pd-related-client {
+  font-size: 12px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.pd-related-title {
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ── Loading / error states ──────────────────────────────────────── */
+.pd-state {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.pd-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border);
+  border-top-color: var(--text-primary);
+  border-radius: 50%;
+  animation: pd-spin 0.7s linear infinite;
+}
+
+@keyframes pd-spin {
+  to { transform: rotate(360deg); }
+}
+
+.pd-error {
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+
+/* ── Dark mode overrides ──────────────────────────────────────────── */
+[data-theme="dark"] .pd-pull-quote,
+[data-theme="dark"] .pd-closing-quote {
+  background: var(--bg-card);
+}
+
+[data-theme="dark"] .pd-skill-tag {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+[data-theme="dark"] .pd-related-card:hover {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .pd-stats-bar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pd-stats-intro {
+    grid-column: 1 / -1;
+    border-left: none;
+    border-bottom: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 600px) {
+  .pd-stats-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .pd-stats-bar > * + * {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 680px) {
+  .pd-rich-text {
+    grid-template-columns: 1fr;
+  }
+
+  .pd-rich-text::before {
+    display: none;
+  }
+
+  .pd-section-heading {
+    padding: 32px 0 8px;
+  }
+
+  .pd-section-heading:first-child {
+    padding-top: 0;
+  }
+
+  .pd-paragraph,
+  .pd-list,
+  .pd-blockquote--inline,
+  .pd-inline-image,
+  .pd-divider {
+    grid-column: 1 / -1;
+    padding-left: 0;
+  }
+
+  .pd-list {
+    padding-left: 20px;
+  }
+
+  .pd-paragraph:has(+ .pd-section-heading),
+  .pd-list:has(+ .pd-section-heading) {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .pd-hero {
+    padding: 40px 0 24px;
+  }
+
+  .pd-hero-title {
+    font-size: 26px;
+  }
+
+  .pd-pull-quote {
+    padding: 20px 20px;
+  }
+
+  .pd-pull-quote p {
+    font-size: 17px;
+  }
+
+  .pd-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
