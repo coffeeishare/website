@@ -395,14 +395,10 @@ const Footer = () => {
     return () => obs.disconnect()
   }, [])
 
-  /* Alternate walk frames for the full slide duration (~2.46 s), then settle */
+  /* Walk frame loop — starts on arrival, runs forever */
   useEffect(() => {
     if (!arrived) return
-    let steps = 0
-    const id = setInterval(() => {
-      setFrame(f => 1 - f)
-      if (++steps >= 14) clearInterval(id) // ~14 steps × 357 ms ≈ 5 s
-    }, 357)
+    const id = setInterval(() => setFrame(f => 1 - f), 357)
     return () => clearInterval(id)
   }, [arrived])
 
