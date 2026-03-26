@@ -378,15 +378,18 @@ const ClawdFrame2 = () => (
 const Footer = () => {
   const [frame, setFrame] = useState(0)
   const [arrived, setArrived] = useState(false)
-  const wrapRef = useRef<HTMLDivElement>(null)
+  const footerRef = useRef<HTMLElement>(null) // observe the footer, not the translated element
 
-  /* Trigger walk-in when footer scrolls into view */
+  /* Trigger walk-in when footer scrolls into view.
+   * We observe the <footer> itself — not the Clawd wrapper — because
+   * translateX(55vw) pushes that element off-screen and IntersectionObserver
+   * would never register it as visible. */
   useEffect(() => {
-    const el = wrapRef.current
+    const el = footerRef.current
     if (!el) return
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setArrived(true); obs.disconnect() } },
-      { threshold: 0.5 }
+      { threshold: 0.1 }
     )
     obs.observe(el)
     return () => obs.disconnect()
@@ -404,11 +407,11 @@ const Footer = () => {
   }, [arrived])
 
   return (
-    <footer>
+    <footer ref={footerRef}>
       <div className="container">
         <div className="footer-inner">
           <span className="footer-credit">Website design by Ula in 2026</span>
-          <div ref={wrapRef} className={`footer-clawd${arrived ? " footer-clawd--arrived" : ""}`}>
+          <div className={`footer-clawd${arrived ? " footer-clawd--arrived" : ""}`}>
             <div className="footer-clawd-mascot">
               {frame === 0 ? <ClawdFrame1 /> : <ClawdFrame2 />}
             </div>
