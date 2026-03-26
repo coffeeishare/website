@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react"
 import { flushSync } from "react-dom"
+import { Routes, Route, Link, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react"
 import logoAnimation from "../public/logo.json"
 import logoSplashAnimation from "../public/logo-splash.json"
 import helloAnimation from "../public/hello.json"
 import "./style.css"
+import { ProjectDetail } from "./pages/ProjectDetail"
 
 type Page = "home" | "about" | "other-work"
 
@@ -312,9 +314,10 @@ const Footer = () => (
 )
 
 function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: Page) => void; isDark: boolean; toggleDark: (e: React.MouseEvent) => void }) {
+  const navigate = useNavigate()
   return (
     <nav>
-      <div className="nav-logo" onClick={() => setPage("home")} style={{ width: 80, height: 40, cursor: "pointer" }}>
+      <div className="nav-logo" onClick={() => { navigate("/"); setPage("home") }} style={{ width: 80, height: 40, cursor: "pointer" }}>
         <Lottie animationData={logoAnimation} loop={false} autoplay style={{ width: "100%", height: "100%" }} />
       </div>
       <div className="nav-links">
@@ -385,7 +388,7 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
         {/* WORK TAB */}
         <div className={`tab-panel${activeTab === "work" ? " active" : ""}`}>
           <div className="projects-list">
-            <div className="project-card reveal">
+            <Link to="/work/ai-composer" className="project-card reveal">
               <div className="project-info">
                 <div className="project-company-logo"><TulipLogo /></div>
                 <div className="project-company">Tulip.</div>
@@ -397,9 +400,9 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                   <img src="/ai-app-generation-cover.webp" alt="AI app generation project cover" />
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="project-card reveal">
+            <Link to="/work/conditional-formatting" className="project-card reveal">
               <div className="project-info">
                 <div className="project-company-logo"><TulipLogo /></div>
                 <div className="project-company">Tulip.</div>
@@ -411,9 +414,9 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                   <img src="/conditional-formatting-cover.webp" alt="Conditional formatting project cover" />
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="project-card reveal">
+            <Link to="/work/find-talent-dashboard" className="project-card reveal">
               <div className="project-info">
                 <div className="project-company-logo"><CompanionLogo /></div>
                 <div className="project-company">Companion.</div>
@@ -426,9 +429,9 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                   <MockWindow accentColor="#bfdbfe" />
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="project-card reveal">
+            <Link to="/work/influencer-data-metrics" className="project-card reveal">
               <div className="project-info">
                 <div className="project-company-logo"><CompanionLogo /></div>
                 <div className="project-company">Companion.</div>
@@ -441,9 +444,9 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                   <img src="/influencer-data-metrics-cover.webp" alt="Influencer data & metrics project cover" />
                 </div>
               </div>
-            </div>
+            </Link>
 
-            <div className="project-card reveal">
+            <Link to="/work/marketing-website-redesign" className="project-card reveal">
               <div className="project-info">
                 <div className="project-company-logo"><CompanionLogo /></div>
                 <div className="project-company">Companion.</div>
@@ -456,7 +459,7 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                   <img src="/marketing-website-cover.webp" alt="Marketing website redesign project cover" />
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
 
           <div className="see-more">
@@ -857,11 +860,27 @@ export default function App() {
   return (
     <>
       {showSplash && <SplashScreen onDone={handleSplashDone} />}
-      <Nav page={page} setPage={setPage} isDark={isDark} toggleDark={toggleDark} />
-      {page === "home" && <HomePage onOtherWork={() => setPage("other-work")} />}
-      {page === "about" && <AboutPage />}
-      {page === "other-work" && <OtherWorkPage />}
-      <Footer />
+      <Routes>
+        {/* Project detail pages — full-page layout with own nav */}
+        <Route
+          path="/work/:slug"
+          element={<ProjectDetail isDark={isDark} toggleDark={toggleDark} />}
+        />
+
+        {/* Main portfolio pages */}
+        <Route
+          path="*"
+          element={
+            <>
+              <Nav page={page} setPage={setPage} isDark={isDark} toggleDark={toggleDark} />
+              {page === "home" && <HomePage onOtherWork={() => setPage("other-work")} />}
+              {page === "about" && <AboutPage />}
+              {page === "other-work" && <OtherWorkPage />}
+              <Footer />
+            </>
+          }
+        />
+      </Routes>
     </>
   )
 }
