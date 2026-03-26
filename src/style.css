@@ -1421,13 +1421,23 @@ a.project-card {
   color: var(--text-primary);
 }
 
+/* ── Hero frame ──────────────────────────────────────────────────── */
+.pd-hero-frame {
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-bottom: none;
+  background: var(--white);
+  padding: 8px;
+}
+
+
 /* ── Hero image ──────────────────────────────────────────────────── */
 .pd-hero-image {
   width: 100%;
-  max-height: 600px;
+  max-height: 560px;
   overflow: hidden;
-  background: var(--bg-card);
-  border-radius: 12px;
+  background: var(--white);
 }
 
 .pd-hero-image img {
@@ -1435,6 +1445,7 @@ a.project-card {
   height: 100%;
   object-fit: cover;
   display: block;
+  border-radius: 6px;
 }
 
 /* ── Stats bar ───────────────────────────────────────────────────── */
@@ -1442,8 +1453,8 @@ a.project-card {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr;
   border: 1px solid var(--border);
-  border-radius: 12px;
-  margin: 28px 0 56px;
+  border-radius: 0 0 12px 12px;
+  margin: 0 0 56px;
   overflow: hidden;
 }
 
