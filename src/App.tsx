@@ -7,6 +7,60 @@ import logoSplashAnimation from "../public/logo-splash.json"
 import helloAnimation from "../public/hello.json"
 import "./style.css"
 import { ProjectDetail } from "./pages/ProjectDetail"
+import { getAllProjects } from "./lib/contentful"
+
+interface ProjectStub {
+  slug: string
+  title: string
+  client: string
+  description: string
+  imageUrl: string
+}
+
+const FALLBACK_PROJECTS: ProjectStub[] = [
+  {
+    slug: "ai-composer",
+    title: "AI app generation",
+    client: "Tulip",
+    description: "Designed AI Composer – a smart tool for manufacturing work instructions that cut app-building time by 75%. Collaborated with ML engineers and PMs to create a scalable, intuitive experience adopted widely by users.",
+    imageUrl: "/ai-app-generation-cover.webp",
+  },
+  {
+    slug: "conditional-formatting",
+    title: "Conditional formatting",
+    client: "Tulip",
+    description: "Introduced dynamic formatting for Tulip's table components to improve data clarity and speed up decision-making. Co-led with PM and engineering to deliver a performant, scalable solution shaped by user demand and system constraints.",
+    imageUrl: "/conditional-formatting-cover.webp",
+  },
+  {
+    slug: "find-talent-dashboard",
+    title: "Find talent dashboard",
+    client: "Companion",
+    description: "Designed a new talent discovery dashboard that reduced reliance on third-party tools like CreatorIQ and Upfluence by surfacing smarter, context-aware creator suggestions within the Companion platform.",
+    imageUrl: "",
+  },
+  {
+    slug: "influencer-data-metrics",
+    title: "Influencer data & metrics",
+    client: "Companion",
+    description: "Redesigned influencer profiles to streamline discovery, reduce tool-hopping, and surface key metrics – boosting adoption and user trust.",
+    imageUrl: "/influencer-data-metrics-cover.webp",
+  },
+  {
+    slug: "marketing-website-redesign",
+    title: "Marketing website redesign",
+    client: "Companion",
+    description: "Full redesign of Companion's marketing website to better reflect the product's value, increase user trust, and convert high-intent visitors. The new site drove a 43% increase in traffic and boosted client sign-ups, directly supporting growth-stage business goals.",
+    imageUrl: "/marketing-website-cover.webp",
+  },
+]
+
+function clientLogo(client: string) {
+  const name = client.toLowerCase()
+  if (name.includes("tulip")) return <TulipLogo />
+  if (name.includes("companion")) return <CompanionLogo />
+  return null
+}
 
 type Page = "home" | "about" | "other-work"
 
@@ -345,7 +399,28 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
 
 function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
   const [activeTab, setActiveTab] = useState<"work" | "experience" | "references">("work")
-  useScrollReveal(activeTab)
+  const [projects, setProjects] = useState<ProjectStub[]>(FALLBACK_PROJECTS)
+  useScrollReveal([activeTab, projects])
+
+  useEffect(() => {
+    getAllProjects()
+      .then((entries) => {
+        if (!entries.length) return
+        const mapped: ProjectStub[] = entries.map((e) => ({
+          slug: e.fields.slug,
+          title: e.fields.title,
+          client: e.fields.client,
+          description: (e.fields as any).introText ?? "",
+          imageUrl: (e.fields.heroImage as any)?.fields?.file?.url
+            ? `https:${(e.fields.heroImage as any).fields.file.url}`
+            : "",
+        }))
+        setProjects(mapped)
+      })
+      .catch(() => {
+        // env vars not set – keep fallback data
+      })
+  }, [])
 
   return (
     <div className="container">
@@ -388,78 +463,23 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
         {/* WORK TAB */}
         <div className={`tab-panel${activeTab === "work" ? " active" : ""}`}>
           <div className="projects-list">
-            <Link to="/work/ai-composer" className="project-card reveal">
-              <div className="project-info">
-                <div className="project-company-logo"><TulipLogo /></div>
-                <div className="project-company">Tulip.</div>
-                <h3 className="project-title">AI app generation</h3>
-                <p className="project-desc">Designed AI Composer – a smart tool for manufacturing work instructions that cut app-building time by 75%. Collaborated with ML engineers and PMs to create a scalable, intuitive experience adopted widely by users.</p>
-              </div>
-              <div className="project-preview">
-                <div className="project-preview-image">
-                  <img src="/ai-app-generation-cover.webp" alt="AI app generation project cover" />
+            {projects.map((project) => (
+              <Link key={project.slug} to={`/work/${project.slug}`} className="project-card reveal">
+                <div className="project-info">
+                  <div className="project-company-logo">{clientLogo(project.client)}</div>
+                  <div className="project-company">{project.client}.</div>
+                  <h3 className="project-title">{project.title}</h3>
+                  <p className="project-desc">{project.description}</p>
                 </div>
-              </div>
-            </Link>
-
-            <Link to="/work/conditional-formatting" className="project-card reveal">
-              <div className="project-info">
-                <div className="project-company-logo"><TulipLogo /></div>
-                <div className="project-company">Tulip.</div>
-                <h3 className="project-title">Conditional formatting</h3>
-                <p className="project-desc">Introduced dynamic formatting for Tulip's table components to improve data clarity and speed up decision-making. Co-led with PM and engineering to deliver a performant, scalable solution shaped by user demand and system constraints.</p>
-              </div>
-              <div className="project-preview">
-                <div className="project-preview-image">
-                  <img src="/conditional-formatting-cover.webp" alt="Conditional formatting project cover" />
+                <div className="project-preview">
+                  <div className="project-preview-image">
+                    {project.imageUrl && (
+                      <img src={project.imageUrl} alt={`${project.title} project cover`} />
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Link>
-
-            <Link to="/work/find-talent-dashboard" className="project-card reveal">
-              <div className="project-info">
-                <div className="project-company-logo"><CompanionLogo /></div>
-                <div className="project-company">Companion.</div>
-                <h3 className="project-title">Find talent dashboard</h3>
-                <p className="project-desc">Designed a new talent discovery dashboard that reduced reliance on third-party tools like CreatorIQ and Upfluence by surfacing smarter, context-aware creator suggestions within the Companion platform.</p>
-              </div>
-              <div className="project-preview">
-                <div className="project-preview-image">
-                  <span className="project-badge">☆ Award winning</span>
-                  <MockWindow accentColor="#bfdbfe" />
-                </div>
-              </div>
-            </Link>
-
-            <Link to="/work/influencer-data-metrics" className="project-card reveal">
-              <div className="project-info">
-                <div className="project-company-logo"><CompanionLogo /></div>
-                <div className="project-company">Companion.</div>
-                <h3 className="project-title">Influencer data &amp; metrics</h3>
-                <p className="project-desc">Redesigned influencer profiles to streamline discovery, reduce tool-hopping, and surface key metrics – boosting adoption and user trust.</p>
-              </div>
-              <div className="project-preview">
-                <div className="project-preview-image">
-                  <span className="project-badge">☆ Award winning</span>
-                  <img src="/influencer-data-metrics-cover.webp" alt="Influencer data & metrics project cover" />
-                </div>
-              </div>
-            </Link>
-
-            <Link to="/work/marketing-website-redesign" className="project-card reveal">
-              <div className="project-info">
-                <div className="project-company-logo"><CompanionLogo /></div>
-                <div className="project-company">Companion.</div>
-                <h3 className="project-title">Marketing website redesign</h3>
-                <p className="project-desc">Full redesign of Companion's marketing website to better reflect the product's value, increase user trust, and convert high-intent visitors. The new site drove a 43% increase in traffic and boosted client sign-ups, directly supporting growth-stage business goals.</p>
-              </div>
-              <div className="project-preview">
-                <div className="project-preview-image">
-                  <span className="project-badge">☆ Award winning</span>
-                  <img src="/marketing-website-cover.webp" alt="Marketing website redesign project cover" />
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
 
           <div className="see-more">

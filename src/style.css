@@ -1520,14 +1520,15 @@ a.project-card {
 }
 
 .pd-skill-tag {
+  font-family: 'DM Mono', monospace;
   font-size: 12px;
+  font-weight: 450;
   color: var(--text-secondary);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
+  background: #f3f4f6;
   border-radius: 20px;
-  padding: 3px 10px;
-  line-height: 1.5;
+  padding: 4px 12px;
   white-space: nowrap;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ── Article content ─────────────────────────────────────────────── */
@@ -1845,8 +1846,7 @@ a.project-card {
 }
 
 [data-theme="dark"] .pd-skill-tag {
-  background: var(--bg-card);
-  border-color: var(--border);
+  background: #2d2b28;
 }
 
 [data-theme="dark"] .pd-related-card:hover {

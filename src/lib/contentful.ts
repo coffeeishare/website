@@ -39,7 +39,7 @@ export async function getProjectBySlug(slug: string): Promise<ProjectDetailEntry
 export async function getAllProjects(): Promise<ProjectDetailEntry[]> {
   const entries = await getClient().getEntries<any>({
     content_type: "projectDetail",
-    select: ["fields.slug", "fields.title", "fields.client", "fields.heroImage"],
+    select: ["fields.slug", "fields.title", "fields.client", "fields.introText", "fields.heroImage"],
     order: ["-sys.createdAt"],
   })
   return entries.items as ProjectDetailEntry[]
