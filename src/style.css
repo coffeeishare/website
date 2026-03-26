@@ -1,7 +1,60 @@
-/* ===== RESET & BASE ===== */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/**
+ * Portfolio — Global Stylesheet
+ *
+ * Design tokens, component styles, page layouts, animations,
+ * dark mode overrides, and responsive breakpoints.
+ *
+ * Breakpoints:
+ *   1200px — tablet/small desktop: 36px body padding, full-width container
+ *    900px — tablet portrait: 24px body padding, single-column cards
+ *    680px — rich text collapses to single column (pd-* only)
+ *    600px — mobile: 16px body padding, navigation hidden
+ */
 
+/* ============================================================
+   TABLE OF CONTENTS
+   ============================================================
+   1.  Design Tokens (:root)
+   2.  Reset & Base
+   3.  Navigation
+   4.  Layout
+   5.  Avatar Pill
+   6.  Hero
+   7.  Hero Orbit
+   8.  Rotating Hero Text
+   9.  Highlight
+   10. Tabs
+   11. Project Cards
+   12. Experience
+   13. References
+   14. CTA / Footer
+   15. About Page
+   16. Logo Carousel
+   17. Other Work Page
+   18. Responsive (global breakpoints)
+   19. Animations
+   20. Splash Screen
+   21. Scroll Reveal
+   22. Theme Transition
+   23. Dark Mode Toggle
+   24. Dark Mode Overrides      (component-specific pd-* overrides live in §25g)
+       Note: .on-accent dark override is co-located with its light rule in §7
+   25. Project Detail Page (pd-*)
+       25a. Page wrapper & back link
+       25b. Hero header & frame
+       25c. Stats bar
+       25d. Article content
+       25e. Related projects
+       25f. Loading / error states
+       25g. Dark mode overrides
+       25h. Responsive breakpoints
+   ============================================================ */
+
+/* ============================================================
+   1. DESIGN TOKENS
+   ============================================================ */
 :root {
+  /* ── Colour palette ────────────────────────────────────────── */
   --white: #ffffff;
   --off-white: #fafafa;
   --bg-card: #f0f4f8;
@@ -11,11 +64,33 @@
   --accent-yellow: rgba(255, 210, 100, 0.45);
   --accent-blue-light: #dbeafe;
   --border: #e5e7eb;
+
+  /* ── Typography ────────────────────────────────────────────── */
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-script: 'Dancing Script', cursive;
+
+  /* ── Layout ────────────────────────────────────────────────── */
   --max-width: 1400px;
   --nav-height: 64px;
+
+  /* ── Reference Card ────────────────────────────────────────── */
+  --ref-card-bg:        #ffffff;
+  --ref-card-border:    var(--border);
+  --ref-card-border-hv: var(--border);
+  --ref-card-divider:   var(--border);
+  --ref-quote-color:    #1e1d1b;
+  --ref-author-color:   #1e1d1b;
+  --ref-title-color:    rgba(30, 29, 27, 0.55);
+  --ref-badge-bg:       rgba(30, 29, 27, 0.07);
+  --ref-badge-color:    rgba(30, 29, 27, 0.55);
+  --ref-highlight:      #0284c7;   /* sky-600 — readable on light bg */
+  --ref-cursor-color:   rgba(30, 29, 27, 0.3);
 }
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
 
@@ -33,7 +108,9 @@ body {
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
 
-/* ===== NAVIGATION ===== */
+/* ============================================================
+   3. NAVIGATION
+   ============================================================ */
 nav {
   position: sticky;
   top: 0;
@@ -94,7 +171,9 @@ nav {
 
 .nav-icons svg { width: 18px; height: 18px; }
 
-/* ===== LAYOUT ===== */
+/* ============================================================
+   4. LAYOUT
+   ============================================================ */
 .container {
   width: 75%;
   max-width: var(--max-width);
@@ -102,7 +181,9 @@ nav {
   padding: 0 40px;
 }
 
-/* ===== AVATAR PILL ===== */
+/* ============================================================
+   5. AVATAR PILL
+   ============================================================ */
 .hero-pill {
   display: inline-flex;
   align-items: center;
@@ -154,7 +235,9 @@ nav {
   line-height: 1;
 }
 
-/* ===== HERO ===== */
+/* ============================================================
+   6. HERO
+   ============================================================ */
 .hero {
   padding: 100px 0 80px;
   display: flex;
@@ -171,7 +254,9 @@ nav {
   z-index: 1;
 }
 
-/* ===== HERO ORBIT ===== */
+/* ============================================================
+   7. HERO ORBIT
+   ============================================================ */
 .hero-orbit {
   position: absolute;
   inset: 0;
@@ -301,10 +386,14 @@ nav {
   line-height: 1.6;
 }
 
+/* Text on an accent-coloured background (e.g. yellow highlight) — always stays dark */
 .on-accent { color: var(--text-primary); }
+/* Dark mode: accent bg becomes dark so the text must stay near-black */
 [data-theme="dark"] .on-accent { color: #1a1a1a; }
 
-/* ===== ROTATING HERO TEXT ===== */
+/* ============================================================
+   8. ROTATING HERO TEXT
+   ============================================================ */
 .rotating-text {
   display: block;
   margin-top: 2px;
@@ -321,7 +410,9 @@ nav {
   border-radius: 3px;
 }
 
-/* ===== HIGHLIGHT ===== */
+/* ============================================================
+   9. HIGHLIGHT
+   ============================================================ */
 mark, .highlight {
   background-color: transparent;
   background-image: linear-gradient(rgba(255, 220, 100, 0.4), rgba(255, 220, 100, 0.4));
@@ -342,7 +433,9 @@ mark.highlight-animated {
   animation: highlight-draw 0.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;
 }
 
-/* ===== TABS ===== */
+/* ============================================================
+   10. TABS
+   ============================================================ */
 .tabs-nav {
   display: flex;
   gap: 4px;
@@ -374,12 +467,14 @@ mark.highlight-animated {
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
 
-/* ===== PROJECT CARDS ===== */
+/* ============================================================
+   11. PROJECT CARDS
+   ============================================================ */
 .projects-list {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  margin: 0 -40px;
+  margin: 0 -40px; /* Bleed to container edges on wide screens; reset to 0 at ≤1200px */
 }
 
 .project-card {
@@ -566,7 +661,9 @@ mark.highlight-animated {
   background: #f9fafb;
 }
 
-/* ===== EXPERIENCE ===== */
+/* ============================================================
+   12. EXPERIENCE
+   ============================================================ */
 .experience-list {
   display: flex;
   flex-direction: column;
@@ -621,28 +718,12 @@ mark.highlight-animated {
   transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ===== REFERENCES ===== */
+/* ============================================================
+   13. REFERENCES
+   ============================================================ */
 .references-grid {
   columns: 2;
   column-gap: 20px;
-}
-
-/*
- * Reference card CSS variables — light mode defaults.
- * Overridden in [data-theme="dark"] below.
- */
-:root {
-  --ref-card-bg:        #ffffff;
-  --ref-card-border:    var(--border);
-  --ref-card-border-hv: var(--border);
-  --ref-card-divider:   var(--border);
-  --ref-quote-color:    #1e1d1b;
-  --ref-author-color:   #1e1d1b;
-  --ref-title-color:    rgba(30, 29, 27, 0.55);
-  --ref-badge-bg:       rgba(30, 29, 27, 0.07);
-  --ref-badge-color:    rgba(30, 29, 27, 0.55);
-  --ref-highlight:      #0284c7;   /* sky-600 — readable on light bg */
-  --ref-cursor-color:   rgba(30, 29, 27, 0.3);
 }
 
 /* Outer wrap: flex-col, badge stacked above card aligned to right */
@@ -778,7 +859,9 @@ mark.highlight-animated {
   color: var(--ref-title-color);
 }
 
-/* ===== CTA / FOOTER ===== */
+/* ============================================================
+   14. CTA / FOOTER
+   ============================================================ */
 .cta-section {
   padding: 80px 0 60px;
   text-align: left;
@@ -854,7 +937,9 @@ footer {
   color: var(--text-light);
 }
 
-/* ===== ABOUT PAGE ===== */
+/* ============================================================
+   15. ABOUT PAGE
+   ============================================================ */
 .about-hero {
   padding: 80px 0 60px;
   display: grid;
@@ -948,7 +1033,9 @@ footer {
 /* When a meta item is a link, restore flex layout (icon + label side by side) */
 .about-meta-item a { display: flex; align-items: center; gap: 12px; color: inherit; }
 
-/* ===== LOGO CAROUSEL ===== */
+/* ============================================================
+   16. LOGO CAROUSEL
+   ============================================================ */
 .logo-carousel {
   overflow: hidden;
   width: 100%;
@@ -988,14 +1075,6 @@ footer {
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
-}
-
-[data-theme="dark"] .logo-item img {
-  filter: grayscale(1) invert(1) opacity(0.35);
-}
-
-[data-theme="dark"] .logo-item img:hover {
-  filter: grayscale(0) invert(1) opacity(0.9);
 }
 
 .about-section {
@@ -1044,7 +1123,9 @@ footer {
   border-color: #9ca3af;
 }
 
-/* ===== OTHER WORK PAGE ===== */
+/* ============================================================
+   17. OTHER WORK PAGE
+   ============================================================ */
 .other-hero {
   padding: 80px 0 48px;
 }
@@ -1133,7 +1214,16 @@ footer {
   line-height: 1.5;
 }
 
-/* ===== RESPONSIVE ===== */
+/* ============================================================
+   18. RESPONSIVE (global breakpoints)
+   ============================================================ */
+@media (max-width: 1200px) {
+  nav { padding: 0 36px; }
+  .container { width: 100%; padding: 0 36px; }
+  .pd-page .container { padding: 0 36px; }
+  .projects-list { margin: 0; }
+}
+
 @media (max-width: 900px) {
   nav { padding: 0 24px; }
   .container { padding: 0 24px; }
@@ -1160,7 +1250,6 @@ footer {
   .hero-orbit { display: none; }
 
   /* Projects */
-  .projects-list { margin: 0 -16px; }
   .project-info { padding: 20px 16px; }
 
   /* Experience — stack role/company vertically, badge floats right */
@@ -1174,7 +1263,9 @@ footer {
   .cta-section { padding: 60px 0 40px; }
 }
 
-/* ===== ANIMATIONS ===== */
+/* ============================================================
+   19. ANIMATIONS
+   ============================================================ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
   to   { opacity: 1; transform: translateY(0);    filter: blur(0px); }
@@ -1188,7 +1279,9 @@ footer {
 .fade-up-delay-2 { animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards; opacity: 0; }
 .fade-up-delay-3 { animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; opacity: 0; }
 
-/* ===== SPLASH SCREEN ===== */
+/* ============================================================
+   20. SPLASH SCREEN
+   ============================================================ */
 .splash {
   position: fixed;
   inset: 0;
@@ -1222,7 +1315,9 @@ footer {
   height: 60px;
 }
 
-/* ===== SCROLL REVEAL ===== */
+/* ============================================================
+   21. SCROLL REVEAL
+   ============================================================ */
 .reveal {
   opacity: 0;
   transform: translateY(36px);
@@ -1239,7 +1334,9 @@ footer {
   filter: blur(0px);
 }
 
-/* ===== THEME TRANSITION ===== */
+/* ============================================================
+   22. THEME TRANSITION
+   ============================================================ */
 @keyframes theme-reveal {
   from { clip-path: circle(0px at var(--toggle-x, 50%) var(--toggle-y, 50%)); }
   to   { clip-path: circle(150vmax at var(--toggle-x, 50%) var(--toggle-y, 50%)); }
@@ -1260,7 +1357,9 @@ footer {
   transition: background-color 0.8s ease, color 0.8s ease, border-color 0.8s ease, fill 0.8s ease, stroke 0.8s ease !important;
 }
 
-/* ===== DARK MODE TOGGLE ===== */
+/* ============================================================
+   23. DARK MODE TOGGLE
+   ============================================================ */
 .dark-toggle {
   background: none;
   border: none;
@@ -1275,7 +1374,9 @@ footer {
 .dark-toggle:hover { color: var(--text-primary); }
 .dark-toggle svg { width: 18px; height: 18px; }
 
-/* ===== DARK MODE ===== */
+/* ============================================================
+   24. DARK MODE OVERRIDES
+   ============================================================ */
 [data-theme="dark"] {
   color-scheme: dark;
   --white: #1E1E1E;
@@ -1287,6 +1388,19 @@ footer {
   --accent-yellow: rgba(255, 210, 100, 0.2);
   --accent-blue-light: #272522;
   --border: #2d2b28;
+
+  /* Reference card token overrides */
+  --ref-card-bg:        #1e1d1b;
+  --ref-card-border:    var(--border);
+  --ref-card-border-hv: var(--border);
+  --ref-card-divider:   var(--border);
+  --ref-quote-color:    #f1ede9;
+  --ref-author-color:   #f1ede9;
+  --ref-title-color:    rgba(241, 237, 233, 0.7);
+  --ref-badge-bg:       rgba(76, 76, 76, 0.5);
+  --ref-badge-color:    #f1ede9;
+  --ref-highlight:      #7dd3fc;   /* light sky-blue on dark bg */
+  --ref-cursor-color:   rgba(255, 255, 255, 0.4);
 }
 
 [data-theme="dark"] nav {
@@ -1317,24 +1431,6 @@ footer {
   background: #252320;
 }
 
-/*
- * Reference card dark-mode variable overrides.
- * Restores the terminal/dark aesthetic when the page theme is dark.
- */
-[data-theme="dark"] {
-  --ref-card-bg:        #1e1d1b;
-  --ref-card-border:    var(--border);
-  --ref-card-border-hv: var(--border);
-  --ref-card-divider:   var(--border);
-  --ref-quote-color:    #f1ede9;
-  --ref-author-color:   #f1ede9;
-  --ref-title-color:    rgba(241, 237, 233, 0.7);
-  --ref-badge-bg:       rgba(76, 76, 76, 0.5);
-  --ref-badge-color:    #f1ede9;
-  --ref-highlight:      #7dd3fc;   /* light sky-blue on dark bg */
-  --ref-cursor-color:   rgba(255, 255, 255, 0.4);
-}
-
 [data-theme="dark"] .exp-date {
   background: #2d2b28;
   color: var(--text-secondary);
@@ -1349,9 +1445,17 @@ footer {
   background: var(--bg-card);
 }
 
-/* =====================================================================
-   PROJECT DETAIL PAGE  (pd-*)
-   ===================================================================== */
+/* Logo carousel — invert light logos so they read on a dark background */
+[data-theme="dark"] .logo-item img {
+  filter: grayscale(1) invert(1) opacity(0.35);
+}
+[data-theme="dark"] .logo-item img:hover {
+  filter: grayscale(0) invert(1) opacity(0.9);
+}
+
+/* ============================================================
+   25. PROJECT DETAIL PAGE (pd-*)
+   ============================================================ */
 
 /* Make project cards work as <a> elements (react-router Link) */
 a.project-card {
@@ -1631,7 +1735,21 @@ a.project-card {
 .pd-inline-image {
   grid-column: 1 / -1;
   padding-left: 0;
-  margin: 8px 0;
+  margin: 32px 0;
+}
+
+.pd-inline-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  display: block;
+}
+
+.pd-image-caption {
+  font-size: 13px;
+  color: var(--text-light);
+  text-align: center;
+  margin-top: 10px;
 }
 
 /* Content elements in column 2 with left border as divider — direct children only */
@@ -1646,6 +1764,7 @@ a.project-card {
 .pd-list {
   grid-column: 2;
   padding-left: 44px; /* 28px col offset + 16px bullet indent */
+  padding-bottom: 16px;
   border-left: 1px solid var(--border);
   margin: 0;
   display: flex;
@@ -1659,11 +1778,6 @@ a.project-card {
   line-height: 1.8;
   color: var(--text-secondary);
   margin-bottom: 0;
-  padding-bottom: 16px;
-}
-
-/* Last paragraph in a section still needs bottom padding for inter-section gap */
-.pd-list {
   padding-bottom: 16px;
 }
 
@@ -1710,25 +1824,6 @@ a.project-card {
   border: none;
   border-top: 1px solid var(--border);
   margin: 32px 0;
-}
-
-/* Inline images */
-.pd-inline-image {
-  margin: 32px 0;
-}
-
-.pd-inline-image img {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  display: block;
-}
-
-.pd-image-caption {
-  font-size: 13px;
-  color: var(--text-light);
-  text-align: center;
-  margin-top: 10px;
 }
 
 /* ── Related projects ─────────────────────────────────────────────── */
@@ -1866,17 +1961,6 @@ a.project-card {
   }
 }
 
-@media (max-width: 600px) {
-  .pd-stats-bar {
-    grid-template-columns: 1fr;
-  }
-
-  .pd-stats-bar > * + * {
-    border-left: none;
-    border-top: 1px solid var(--border);
-  }
-}
-
 @media (max-width: 680px) {
   .pd-rich-text {
     grid-template-columns: 1fr;
@@ -1914,6 +1998,15 @@ a.project-card {
 }
 
 @media (max-width: 600px) {
+  .pd-stats-bar {
+    grid-template-columns: 1fr;
+  }
+
+  .pd-stats-bar > * + * {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+
   .pd-hero {
     padding: 40px 0 24px;
   }
@@ -1933,5 +2026,4 @@ a.project-card {
   .pd-related-grid {
     grid-template-columns: 1fr;
   }
-
 }

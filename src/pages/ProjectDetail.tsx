@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom"
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { BLOCKS, MARKS } from "@contentful/rich-text-types"
 import Lottie from "lottie-react"
-import logoAnimation from "../../public/logo.json"
+import logoAnimation from "../logo.json"
 import { getProjectBySlug } from "../lib/contentful"
 import type { ProjectDetailEntry } from "../types/contentful"
 
