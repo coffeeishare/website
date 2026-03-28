@@ -87,6 +87,14 @@ function DetailNav({ isDark, toggleDark }: DetailNavProps) {
         >
           Other work
         </button>
+        <button
+          onClick={() => {
+            navigate("/")
+            sessionStorage.setItem("pendingPage", "design-system")
+          }}
+        >
+          Design system
+        </button>
       </div>
 
       <div className="nav-icons">

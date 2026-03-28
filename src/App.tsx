@@ -7,6 +7,7 @@ import logoSplashAnimation from "./logo-splash.json"
 import helloAnimation from "./hello.json"
 import "./style.css"
 import { ProjectDetail } from "./pages/ProjectDetail"
+import DesignSystemPage from "./pages/DesignSystem"
 import { getAllProjects } from "./lib/contentful"
 
 interface ProjectStub {
@@ -62,7 +63,7 @@ function clientLogo(client: string) {
   return null
 }
 
-type Page = "home" | "about" | "other-work"
+type Page = "home" | "about" | "other-work" | "design-system"
 
 function useScrollReveal(dep?: unknown) {
   useEffect(() => {
@@ -378,6 +379,7 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
         <button className={page === "home" ? "active" : ""} onClick={() => setPage("home")}>Work</button>
         <button className={page === "about" ? "active" : ""} onClick={() => setPage("about")}>About me</button>
         <button className={page === "other-work" ? "active" : ""} onClick={() => setPage("other-work")}>Other work</button>
+        <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}>Design system</button>
       </div>
       <div className="nav-icons">
         <button className="dark-toggle" onClick={toggleDark} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
@@ -896,6 +898,7 @@ export default function App() {
               {page === "home" && <HomePage onOtherWork={() => setPage("other-work")} />}
               {page === "about" && <AboutPage />}
               {page === "other-work" && <OtherWorkPage />}
+              {page === "design-system" && <DesignSystemPage isDark={isDark} toggleDark={toggleDark} />}
               <Footer />
             </>
           }
