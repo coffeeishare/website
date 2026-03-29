@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import { Palette, Component, Flash, ViewGrid, SunLight, HalfMoon, Copy, Check } from "iconoir-react"
 
 // ── Types ─────────────────────────────────────────────────────────────────
 type MainSection = "foundation" | "components" | "motion" | "patterns"
@@ -10,57 +11,14 @@ type SectionDef = {
   children: { id: string; label: string }[]
 }
 
-// ── Icons ─────────────────────────────────────────────────────────────────
-const IconPalette = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="13.5" cy="6.5" r="1.5"/><circle cx="17.5" cy="10.5" r="1.5"/><circle cx="8.5" cy="7.5" r="1.5"/><circle cx="6.5" cy="12.5" r="1.5"/>
-    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
-  </svg>
-)
-
-const IconLayers = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="12 2 2 7 12 12 22 7 12 2"/>
-    <polyline points="2 17 12 22 22 17"/>
-    <polyline points="2 12 12 17 22 12"/>
-  </svg>
-)
-
-const IconZap = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-  </svg>
-)
-
-const IconGrid = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
-  </svg>
-)
-
-const IconSun = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="4"/>
-    <line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/>
-    <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
-    <line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/>
-    <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
-  </svg>
-)
-
-const IconMoon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-  </svg>
-)
+// Icons sourced from iconoir-react
 
 // ── Nav structure ─────────────────────────────────────────────────────────
 const sections: SectionDef[] = [
   {
     id: "foundation",
     label: "Foundation",
-    icon: <IconPalette />,
+    icon: <Palette width={16} height={16} strokeWidth={1.6} />,
     children: [
       { id: "tokens",      label: "Tokens" },
       { id: "typography",  label: "Typography" },
@@ -74,7 +32,7 @@ const sections: SectionDef[] = [
   {
     id: "components",
     label: "Components",
-    icon: <IconLayers />,
+    icon: <Component width={16} height={16} strokeWidth={1.6} />,
     children: [
       { id: "comp-buttons", label: "Buttons" },
       { id: "comp-tabs",    label: "Tabs" },
@@ -85,7 +43,7 @@ const sections: SectionDef[] = [
   {
     id: "motion",
     label: "Motion",
-    icon: <IconZap />,
+    icon: <Flash width={16} height={16} strokeWidth={1.6} />,
     children: [
       { id: "motion-tokens", label: "Animation tokens" },
       { id: "motion-easing", label: "Easing curves" },
@@ -94,7 +52,7 @@ const sections: SectionDef[] = [
   {
     id: "patterns",
     label: "Patterns",
-    icon: <IconGrid />,
+    icon: <ViewGrid width={16} height={16} strokeWidth={1.6} />,
     children: [
       { id: "patterns-layout",      label: "Layout" },
       { id: "patterns-interaction", label: "Interaction" },
@@ -104,14 +62,28 @@ const sections: SectionDef[] = [
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const semanticTokens: { label: string; var: string; light: string; dark: string; lightText?: boolean }[] = [
-  { label: "Background",       var: "--white",              light: "#ffffff",                dark: "#1E1E1E",               lightText: false },
-  { label: "Foreground",       var: "--text-primary",       light: "#1a1a1a",                dark: "#f0ede8",               lightText: true  },
-  { label: "Card",             var: "--bg-card",            light: "#f0f4f8",                dark: "#1e1d1b",               lightText: false },
-  { label: "Muted",            var: "--off-white",          light: "#fafafa",                dark: "#1a1917",               lightText: false },
-  { label: "Muted foreground", var: "--text-secondary",     light: "#6b7280",                dark: "#9c9892",               lightText: true  },
-  { label: "Border",           var: "--border",             light: "#e5e7eb",                dark: "#2d2b28",               lightText: false },
-  { label: "Accent",           var: "--accent-yellow",      light: "rgba(255,210,100,0.45)", dark: "rgba(255,210,100,0.2)", lightText: false },
-  { label: "Secondary",        var: "--accent-blue-light",  light: "#dbeafe",                dark: "#272522",               lightText: false },
+  { label: "Background",       var: "--background",         light: "#ffffff",   dark: "#1E1E1E",   lightText: false },
+  { label: "Foreground",       var: "--text-primary",       light: "#1a1a1a",   dark: "#f0ede8",   lightText: true  },
+  { label: "Card",             var: "--bg-card",            light: "#f0f4f8",   dark: "#1e1d1b",   lightText: false },
+  { label: "Muted",            var: "--background-subtle",  light: "#fafafa",   dark: "#1a1917",   lightText: false },
+  { label: "Muted foreground", var: "--text-secondary",     light: "#6b7280",   dark: "#9c9892",   lightText: true  },
+  { label: "Border",           var: "--border",             light: "#e5e7eb",   dark: "#2d2b28",   lightText: false },
+  { label: "Accent yellow",    var: "--accent-yellow",      light: "#FFD26473", dark: "#FFD26433", lightText: false },
+  { label: "Accent secondary", var: "--accent-secondary",   light: "#dbeafe",   dark: "#272522",   lightText: false },
+]
+
+// Blues and pastels hardcoded across the codebase (avatar colours, glitch chars, tile lines, card gradients)
+const accentPalette: { label: string; hex: string; usage: string; lightText?: boolean }[] = [
+  { label: "Sky 200",    hex: "#bae6fd", usage: "Glitch chars, avatars" },
+  { label: "Sky 300",    hex: "#7dd3fc", usage: "Tile accent, ref highlight (dark)" },
+  { label: "Blue 200",   hex: "#bfdbfe", usage: "Tile lines, mock lines" },
+  { label: "Blue 300",   hex: "#93c5fd", usage: "Avatar pill bg, active tab (dark)" },
+  { label: "Blue 100",   hex: "#dbeafe", usage: "Accent secondary (light)" },
+  { label: "Violet 200", hex: "#ddd6fe", usage: "Tile bg, glitch chars" },
+  { label: "Purple 300", hex: "#d8b4fe", usage: "Tile line, card gradient" },
+  { label: "Green 200",  hex: "#bbf7d0", usage: "Tile line" },
+  { label: "Amber 200",  hex: "#fde68a", usage: "Avatars, tile bg", lightText: true },
+  { label: "Pink 300",   hex: "#f9a8d4", usage: "Glitch chars, tile bg", lightText: true },
 ]
 
 const typeScale = [
@@ -141,11 +113,10 @@ const spacingScale = [
 ]
 
 const radiiTokens = [
-  { value: "6px",    label: "sm",   usage: "Badges, chips" },
-  { value: "12px",   label: "md",   usage: "Cards, inputs" },
-  { value: "16px",   label: "lg",   usage: "Project cards" },
-  { value: "24px",   label: "xl",   usage: "CTA buttons" },
-  { value: "9999px", label: "full", usage: "Avatar pill" },
+  { value: "4px",    label: "sm",   token: "--radius-sm",   usage: "Tab buttons, small chips" },
+  { value: "8px",    label: "md",   token: "--radius-md",   usage: "Project cards, orbit items" },
+  { value: "16px",   label: "lg",   token: "--radius-lg",   usage: "Splash photo, larger panels" },
+  { value: "9999px", label: "full", token: "--radius-full", usage: "Ghost buttons, avatar pill, badges" },
 ]
 
 const iconList = [
@@ -168,14 +139,14 @@ const animations = [
 
 const TOKEN_CODE = `:root {
   /* Colour */
-  --white:              #ffffff;
-  --off-white:          #fafafa;
+  --background:         #ffffff;
+  --background-subtle:  #fafafa;
   --bg-card:            #f0f4f8;
   --text-primary:       #1a1a1a;
   --text-secondary:     #6b7280;
   --text-light:         #9ca3af;
   --accent-yellow:      rgba(255, 210, 100, 0.45);
-  --accent-blue-light:  #dbeafe;
+  --accent-secondary:   #dbeafe;
   --border:             #e5e7eb;
 
   /* Typography */
@@ -187,14 +158,14 @@ const TOKEN_CODE = `:root {
 }
 
 [data-theme="dark"] {
-  --white:              #1E1E1E;
-  --off-white:          #1a1917;
+  --background:         #1E1E1E;
+  --background-subtle:  #1a1917;
   --bg-card:            #1e1d1b;
   --text-primary:       #f0ede8;
   --text-secondary:     #9c9892;
   --text-light:         #6b6864;
   --accent-yellow:      rgba(255, 210, 100, 0.2);
-  --accent-blue-light:  #272522;
+  --accent-secondary:   #272522;
   --border:             #2d2b28;
 }`
 
@@ -252,9 +223,7 @@ function TokensSection({ isDark: _isDark }: { isDark: boolean }) {
       <div className="ds-code-header">
         <span className="ds-code-filename">tokens.css</span>
         <button className="ds-code-copy" onClick={handleCopy}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
-          </svg>
+          {copied ? <Check width={13} height={13} strokeWidth={2} /> : <Copy width={13} height={13} strokeWidth={2} />}
           {copied ? "COPIED!" : "COPY"}
         </button>
       </div>
@@ -337,6 +306,27 @@ function ColorsSection({ isDark }: { isDark: boolean }) {
             </div>
           )
         })}
+      </div>
+
+      <GroupLabel>Accent palette</GroupLabel>
+      <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 16 }}>
+        Pastels and blues used for glitch chars, avatar initials, tile line accents, and card gradients. Not tokenised — referenced directly.
+      </p>
+      <div className="ds-swatch-grid">
+        {accentPalette.map((c) => (
+          <div key={c.hex} className="ds-swatch-tile">
+            <div
+              className="ds-swatch-block"
+              style={{ background: c.hex, color: c.lightText ? "#1a1a1a" : "#1a1a1a" }}
+            >
+              <span className="ds-swatch-hex">{c.hex}</span>
+            </div>
+            <div className="ds-swatch-info">
+              <span className="ds-swatch-label">{c.label}</span>
+              <span style={{ fontSize: 11, color: "var(--text-light)" }}>{c.usage}</span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -429,6 +419,7 @@ function ContainersSection() {
             <div className="ds-radius-preview" style={{ borderRadius: r.value === "9999px" ? "9999px" : r.value }} />
             <span className="ds-radius-label">{r.label}</span>
             <span className="ds-radius-value">{r.value}</span>
+            <TokenTag name={r.token} />
             <span className="ds-radius-usage">{r.usage}</span>
           </div>
         ))}
@@ -471,12 +462,12 @@ function ComponentsContent() {
   return (
     <div>
       <section id="comp-buttons" className="ds-sub-section">
-        <SectionHeader title="Buttons" description="Core interactive elements. Three variants cover the majority of use cases." />
+        <SectionHeader title="Buttons" description="Two interactive button patterns plus a badge chip. All use the shared .btn base class." />
         <div className="ds-component-canvas" style={{ display: "flex", gap: 16, flexWrap: "wrap", alignItems: "center" }}>
-          <button className="ds-btn-default">Default</button>
-          <button className="ds-btn-cta">CTA / Primary</button>
-          <button className="ds-btn-ghost">Ghost / Nav link</button>
-          <span className="ds-btn-badge">Badge</span>
+          <button className="btn">Ghost button</button>
+          <button className="tab-btn active">Active tab</button>
+          <button className="tab-btn">Tab</button>
+          <span className="project-badge">Work · 2024</span>
         </div>
       </section>
 
@@ -709,11 +700,11 @@ export default function DesignSystemPage({
       {/* ── Sidebar ── */}
       <aside className="ds-sidebar">
         <div className="ds-sidebar-header">
-          <p className="ds-sidebar-wordmark">Ula</p>
+          <p className="ds-sidebar-wordmark">Syntax Sugar</p>
           <div className="ds-sidebar-meta">
             <span className="ds-sidebar-system-label">DESIGN SYSTEM</span>
             <button className="ds-sidebar-theme-badge" onClick={toggleDark} aria-label="Toggle theme">
-              {isDark ? <IconMoon /> : <IconSun />}
+              {isDark ? <HalfMoon width={13} height={13} strokeWidth={2} /> : <SunLight width={13} height={13} strokeWidth={2} />}
               {isDark ? "DARK" : "LIGHT"}
             </button>
           </div>

@@ -55,14 +55,14 @@
    ============================================================ */
 :root {
   /* ── Colour palette ────────────────────────────────────────── */
-  --white: #ffffff;
-  --off-white: #fafafa;
+  --background: #ffffff;
+  --background-subtle: #fafafa;
   --bg-card: #f0f4f8;
   --text-primary: #1a1a1a;
   --text-secondary: #6b7280;
   --text-light: #9ca3af;
   --accent-yellow: rgba(255, 210, 100, 0.45);
-  --accent-blue-light: #dbeafe;
+  --accent-secondary: #dbeafe;
   --border: #e5e7eb;
 
   /* ── Typography ────────────────────────────────────────────── */
@@ -71,6 +71,37 @@
   /* ── Layout ────────────────────────────────────────────────── */
   --max-width: 1400px;
   --nav-height: 64px;
+
+  /* ── Spacing (4px grid) ─────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ── Radius ─────────────────────────────────────────────────── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   16px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ────────────────────────────────────────────────── */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:  0 8px 24px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.04);
+
+  /* ── Transitions ────────────────────────────────────────────── */
+  --duration-fast:  150ms;
+  --duration-base:  200ms;
+  --duration-slow:  400ms;
+  --ease-smooth:    cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:    cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ── Reference Card ────────────────────────────────────────── */
   --ref-card-bg:        #ffffff;
@@ -86,6 +117,16 @@
   --ref-cursor-color:   rgba(30, 29, 27, 0.3);
 }
 
+/* Mobile responsive token overrides */
+@media (max-width: 600px) {
+  :root {
+    --space-10: 32px;  /* 40px → 32px on mobile */
+    --space-12: 40px;  /* 48px → 40px on mobile */
+    --space-16: 48px;  /* 64px → 48px on mobile */
+    --space-20: 60px;  /* 80px → 60px on mobile */
+  }
+}
+
 /* ============================================================
    2. RESET & BASE
    ============================================================ */
@@ -95,7 +136,7 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
-  background: var(--white);
+  background: var(--background);
   color: var(--text-primary);
   font-size: 16px;
   line-height: 1.6;
@@ -151,6 +192,7 @@ nav {
   letter-spacing: 0.01em;
   cursor: pointer;
   padding: 0;
+  white-space: nowrap;
 }
 .nav-links button:hover, .nav-links button.active { color: var(--text-primary); }
 
@@ -188,8 +230,8 @@ nav {
   align-items: center;
   height: 60px;
   width: 60px; /* collapsed: just wraps the photo */
-  border-radius: 100px;
-  background: var(--accent-blue-light);
+  border-radius: var(--radius-full);
+  background: var(--accent-secondary);
   overflow: hidden;
   padding: 4px;
   gap: 6px;
@@ -273,13 +315,13 @@ nav {
   width: 52px;
   height: 52px;
   transform: translate(-50%, -50%);
-  background: var(--white);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px;
+  padding: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   pointer-events: auto;
   animation: orbit-counter 90s linear infinite;
@@ -369,7 +411,7 @@ nav {
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .hero-word {
@@ -443,8 +485,8 @@ mark.highlight-animated {
 }
 
 .tab-btn {
-  padding: 8px 18px;
-  border-radius: 4px;
+  padding: 8px 20px;
+  border-radius: var(--radius-sm);
   border: none;
   background: transparent;
   font-family: 'DM Mono', monospace;
@@ -477,9 +519,9 @@ mark.highlight-animated {
 }
 
 .project-card {
-  background: var(--white);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   display: grid;
   grid-template-columns: 1fr 1.6fr;
@@ -499,7 +541,7 @@ mark.highlight-animated {
   width: 34px;
   height: 34px;
   margin-bottom: 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--bg-card);
   display: flex;
@@ -544,7 +586,7 @@ mark.highlight-animated {
   font-size: 12px;
   font-weight: 500;
   padding: 6px 14px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   width: fit-content;
   letter-spacing: 0.01em;
   position: absolute;
@@ -576,7 +618,7 @@ mark.highlight-animated {
 
 .project-preview-image {
   flex: 1;
-  background: var(--white);
+  background: var(--background);
   position: relative;
   display: flex;
   align-items: center;
@@ -588,7 +630,7 @@ mark.highlight-animated {
 
 .preview-mock {
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   width: 90%;
   height: 80%;
   box-shadow: 0 12px 48px rgba(0,0,80,0.12);
@@ -625,13 +667,13 @@ mark.highlight-animated {
 
 .mock-line {
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   background: #e5e7eb;
 }
 .mock-line.short { width: 40%; }
 .mock-line.medium { width: 65%; }
 .mock-line.long { width: 85%; }
-.mock-line.accent { background: #bfdbfe; width: 50%; }
+.mock-line--accent { background: #bfdbfe; width: 50%; }
 
 /* See more link */
 .see-more {
@@ -640,6 +682,7 @@ mark.highlight-animated {
 }
 
 .see-more button {
+  /* Inherits .btn pattern — apply .btn class in markup when refactoring */
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -647,9 +690,9 @@ mark.highlight-animated {
   font-weight: 500;
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  padding: 10px 20px;
-  border-radius: 20px;
-  transition: all 0.2s;
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  transition: all var(--duration-base);
   background: none;
   font-family: var(--font-body);
   cursor: pointer;
@@ -668,50 +711,50 @@ mark.highlight-animated {
   flex-direction: column;
 }
 
-.exp-item {
+.experience-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 0;
+  padding: 24px 0;
   border-bottom: 1px solid var(--border);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.exp-item:hover {
+.experience-item:hover {
   transform: translateX(8px);
 }
 
-.exp-item:hover .exp-date {
+.experience-item:hover .experience-date {
   background: #fbabe7;
   color: #1a1a1a;
 }
 
-.exp-item:last-child { border-bottom: none; }
+.experience-item:last-child { border-bottom: none; }
 
-.exp-left {
+.experience-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.exp-role {
+.experience-role {
   font-size: 15px;
   font-weight: 500;
   color: var(--text-primary);
 }
 
-.exp-company {
+.experience-company {
   font-size: 15px;
   color: var(--text-secondary);
 }
 
-.exp-date {
+.experience-date {
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   color: var(--text-secondary);
   background: #f3f4f6;
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   white-space: nowrap;
   font-weight: 450;
   transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -742,7 +785,7 @@ mark.highlight-animated {
   padding: 3px 6px;
   background: var(--ref-badge-bg);
   color: var(--ref-badge-color);
-  border-radius: 4px 4px 0 0;        /* only top corners rounded */
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;        /* only top corners rounded */
   transition: background 0.25s ease, color 0.25s ease;
   white-space: nowrap;
 }
@@ -757,7 +800,7 @@ mark.highlight-animated {
 .reference-card {
   background: var(--ref-card-bg);
   border: 1px solid var(--ref-card-border);
-  border-radius: 8px 0 8px 8px;
+  border-radius: var(--radius-md) 0 var(--radius-md) var(--radius-md);
   width: 100%;
   transition: border-color 0.25s ease;
   overflow: hidden;
@@ -897,28 +940,32 @@ mark.highlight-animated {
   margin-top: 20px;
 }
 
+/* Unified ghost button */
+.btn,
 .cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13.5px;
+  gap: 8px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  padding: 9px 18px;
-  border-radius: 20px;
-  transition: all 0.2s;
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
+  transition: all var(--duration-base);
   background: none;
   font-family: var(--font-body);
   cursor: pointer;
   text-decoration: none;
 }
+.btn:hover,
 .cta-btn:hover {
   color: var(--text-primary);
   border-color: #9ca3af;
   background: #f9fafb;
 }
-.cta-btn svg { width: 15px; height: 15px; }
+.btn svg,
+.cta-btn svg { width: 16px; height: 16px; }
 
 footer {
   padding: 24px 0;
@@ -957,7 +1004,7 @@ footer {
   width: 100%;
   flex: 1;
   min-height: 0;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   overflow: hidden;
   background: #dbeafe;
   display: flex;
@@ -1094,32 +1141,35 @@ footer {
   max-width: 680px;
 }
 
-.refs-section {
+.references-section {
   padding: 60px 0;
 }
 
-.refs-section h2 {
+.references-section h2 {
   font-size: 22px;
   font-weight: 500;
   margin-bottom: 32px;
 }
 
 .linkedin-link {
+  /* Inherits .btn pattern */
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-secondary);
   border: 1px solid var(--border);
-  padding: 9px 18px;
-  border-radius: 20px;
+  padding: 8px 20px;
+  border-radius: var(--radius-full);
   margin-top: 24px;
-  transition: all 0.2s;
+  transition: all var(--duration-base);
+  text-decoration: none;
 }
 .linkedin-link:hover {
   color: var(--text-primary);
   border-color: #9ca3af;
+  background: #f9fafb;
 }
 
 /* ============================================================
@@ -1152,7 +1202,7 @@ footer {
 
 .work-tile {
   background: var(--bg-card);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   cursor: default;
@@ -1175,7 +1225,7 @@ footer {
 
 .work-tile-inner {
   background: white;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   width: 70%;
   height: 60%;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
@@ -1188,12 +1238,12 @@ footer {
 
 .tile-content { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 .tile-line { height: 6px; border-radius: 3px; background: #e5e7eb; }
-.tile-line.s { width: 35%; }
-.tile-line.m { width: 60%; }
-.tile-line.l { width: 80%; }
-.tile-line.accent { background: #bfdbfe; width: 45%; }
-.tile-line.accent2 { background: #d8b4fe; width: 55%; }
-.tile-line.accent3 { background: #bbf7d0; width: 40%; }
+.tile-line--sm { width: 35%; }
+.tile-line--md { width: 60%; }
+.tile-line--lg { width: 80%; }
+.tile-line--accent-blue { background: #bfdbfe; width: 45%; }
+.tile-line--accent-purple { background: #d8b4fe; width: 55%; }
+.tile-line--accent-green { background: #bbf7d0; width: 40%; }
 
 .work-tile-label {
   padding: 16px 18px;
@@ -1252,9 +1302,9 @@ footer {
   .project-info { padding: 20px 16px; }
 
   /* Experience — stack role/company vertically, badge floats right */
-  .exp-item { align-items: flex-start; gap: 12px; }
-  .exp-left { flex-direction: column; align-items: flex-start; gap: 2px; }
-  .exp-date { flex-shrink: 0; margin-top: 2px; }
+  .experience-item { align-items: flex-start; gap: 12px; }
+  .experience-left { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .experience-date { flex-shrink: 0; margin-top: 2px; }
 
   /* Other pages */
   .work-grid { grid-template-columns: 1fr; }
@@ -1285,7 +1335,7 @@ footer {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: var(--white);
+  background: var(--background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1297,7 +1347,7 @@ footer {
   position: absolute;
   inset: 32px;
   background: url('/splash-photo.webp') center center / cover no-repeat;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   z-index: 0;
 }
 
@@ -1378,14 +1428,14 @@ footer {
    ============================================================ */
 [data-theme="dark"] {
   color-scheme: dark;
-  --white: #1E1E1E;
-  --off-white: #1a1917;
+  --background: #1E1E1E;
+  --background-subtle: #1a1917;
   --bg-card: #1e1d1b;
   --text-primary: #f0ede8;
   --text-secondary: #9c9892;
   --text-light: #6b6864;
   --accent-yellow: rgba(255, 210, 100, 0.2);
-  --accent-blue-light: #272522;
+  --accent-secondary: #272522;
   --border: #2d2b28;
 
   /* Reference card token overrides */
@@ -1408,7 +1458,7 @@ footer {
 
 [data-theme="dark"] .project-card,
 [data-theme="dark"] .project-preview {
-  background: var(--white);
+  background: var(--background);
 }
 
 [data-theme="dark"] .project-preview-image {
@@ -1425,12 +1475,14 @@ footer {
   color: #1a1a1a;
 }
 
+[data-theme="dark"] .btn:hover,
+[data-theme="dark"] .cta-btn:hover,
 [data-theme="dark"] .see-more button:hover,
-[data-theme="dark"] .cta-btn:hover {
+[data-theme="dark"] .linkedin-link:hover {
   background: #252320;
 }
 
-[data-theme="dark"] .exp-date {
+[data-theme="dark"] .experience-date {
   background: #2d2b28;
   color: var(--text-secondary);
 }
@@ -1526,11 +1578,11 @@ a.project-card {
 
 /* ── Hero frame ──────────────────────────────────────────────────── */
 .pd-hero-frame {
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   overflow: hidden;
   border: 1px solid var(--border);
   border-bottom: none;
-  background: var(--white);
+  background: var(--background);
   padding: 8px;
 }
 
@@ -1540,8 +1592,8 @@ a.project-card {
   width: 100%;
   max-height: 560px;
   overflow: hidden;
-  border-radius: 6px; /* matches img border-radius so overflow clip preserves corners */
-  background: var(--white);
+  border-radius: var(--radius-md); /* matches img border-radius so overflow clip preserves corners */
+  background: var(--background);
 }
 
 .pd-hero-image img {
@@ -1549,7 +1601,7 @@ a.project-card {
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
 }
 
 /* ── Stats bar ───────────────────────────────────────────────────── */
@@ -1557,7 +1609,7 @@ a.project-card {
   display: grid;
   grid-template-columns: 1.6fr 1fr 1fr;
   border: 1px solid var(--border);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   margin: 0 0 56px;
   overflow: hidden;
 }
@@ -1629,7 +1681,7 @@ a.project-card {
   font-weight: 450;
   color: var(--text-secondary);
   background: #f3f4f6;
-  border-radius: 20px;
+  border-radius: var(--radius-full);
   padding: 4px 12px;
   white-space: nowrap;
   transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1656,7 +1708,7 @@ a.project-card {
   padding: 28px 32px;
   background: var(--bg-card);
   border-left: 3px solid var(--text-primary);
-  border-radius: 0 8px 8px 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
 
 .pd-pull-quote p {
@@ -1674,7 +1726,7 @@ a.project-card {
   margin: 48px 0 0;
   padding: 32px 36px;
   background: var(--bg-card);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-align: center;
 }
 
@@ -1741,7 +1793,7 @@ a.project-card {
 .pd-inline-image img {
   width: 100%;
   height: auto;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: block;
 }
 
@@ -1809,7 +1861,7 @@ a.project-card {
   margin: 24px 0;
   padding: 20px 24px;
   background: var(--accent-yellow);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   font-style: italic;
 }
 
@@ -1852,7 +1904,7 @@ a.project-card {
   text-decoration: none;
   color: inherit;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -1866,7 +1918,7 @@ a.project-card {
   aspect-ratio: 16 / 10;
   background: var(--bg-card);
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 .pd-related-image img {
@@ -2087,18 +2139,18 @@ a.project-card {
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text-secondary);
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   padding: 3px 8px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 
 .ds-sidebar-theme-badge:hover {
-  background: var(--accent-blue-light);
+  background: var(--accent-secondary);
   color: var(--text-primary);
-  border-color: var(--accent-blue-light);
+  border-color: var(--accent-secondary);
 }
 
 /* Nav */
@@ -2123,7 +2175,7 @@ a.project-card {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-nav-group.open {
@@ -2143,7 +2195,7 @@ a.project-card {
   background: none;
   border: none;
   outline: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 9px 12px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
@@ -2245,7 +2297,7 @@ a.project-card {
 /* ── Token category table ── */
 .ds-token-table {
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   margin-bottom: 36px;
 }
@@ -2288,10 +2340,10 @@ a.project-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
   border-bottom: none;
-  border-radius: 12px 12px 0 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   padding: 10px 16px;
 }
 
@@ -2314,7 +2366,7 @@ a.project-card {
   border: none;
   cursor: pointer;
   padding: 4px 8px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   transition: color 0.15s, background 0.15s;
 }
 
@@ -2329,9 +2381,9 @@ a.project-card {
 .ds-code-block {
   margin: 0;
   padding: 24px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   overflow-x: auto;
   font-family: 'DM Mono', monospace;
   font-size: 13px;
@@ -2388,7 +2440,7 @@ a.project-card {
 
 .ds-swatch-block {
   aspect-ratio: 4 / 3;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2415,10 +2467,10 @@ a.project-card {
 .ds-token-tag {
   font-family: "DM Mono", monospace;
   font-size: 11px;
-  background: var(--bg-card);
+  background: var(--background);
   color: var(--text-secondary);
   padding: 2px 7px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
 
@@ -2431,9 +2483,9 @@ a.project-card {
   align-items: center;
   gap: 16px;
   padding: 12px 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-token-swatches { display: flex; gap: 6px; }
@@ -2441,7 +2493,7 @@ a.project-card {
 .ds-swatch {
   width: 32px;
   height: 32px;
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   flex-shrink: 0;
 }
@@ -2489,9 +2541,9 @@ a.project-card {
 }
 
 .ds-color-card {
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 
@@ -2534,9 +2586,9 @@ a.project-card {
 
 .ds-font-card {
   padding: 20px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -2580,9 +2632,9 @@ a.project-card {
   align-items: center;
   gap: 20px;
   padding: 12px 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-type-meta { display: flex; flex-direction: column; gap: 2px; }
@@ -2629,9 +2681,9 @@ a.project-card {
   flex-direction: column;
   gap: 6px;
   padding: 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-icon-preview {
@@ -2666,9 +2718,9 @@ a.project-card {
   align-items: center;
   gap: 16px;
   padding: 9px 14px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
 .ds-spacing-value {
@@ -2687,9 +2739,9 @@ a.project-card {
 
 .ds-spacing-bar {
   height: 100%;
-  background: var(--accent-blue-light);
+  background: var(--accent-secondary);
   border-radius: 3px;
-  border: 1px solid color-mix(in srgb, var(--accent-blue-light) 80%, var(--border));
+  border: 1px solid color-mix(in srgb, var(--accent-secondary) 80%, var(--border));
 }
 
 .ds-spacing-usage {
@@ -2709,9 +2761,9 @@ a.project-card {
 
 .ds-radius-card {
   padding: 16px 20px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -2721,7 +2773,7 @@ a.project-card {
 .ds-radius-preview {
   width: 44px;
   height: 44px;
-  background: var(--accent-blue-light);
+  background: var(--accent-secondary);
   border: 1px solid var(--border);
   margin-bottom: 8px;
 }
@@ -2754,9 +2806,9 @@ a.project-card {
   align-items: center;
   gap: 20px;
   padding: 12px 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-divider-preview {
@@ -2780,57 +2832,12 @@ a.project-card {
 /* Components */
 .ds-component-canvas {
   padding: 24px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   margin-bottom: 8px;
 }
 
-.ds-btn-default {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 9px 22px;
-  cursor: pointer;
-}
-
-.ds-btn-cta {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--text-primary);
-  background: var(--accent-yellow);
-  border: none;
-  border-radius: 24px;
-  padding: 9px 22px;
-  cursor: pointer;
-}
-
-.ds-btn-ghost {
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 450;
-  color: var(--text-secondary);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-.ds-btn-badge {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--off-white);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 5px 12px;
-}
 
 .ds-tab-btn {
   font-family: var(--font-body);
@@ -2839,7 +2846,7 @@ a.project-card {
   color: var(--text-secondary);
   background: none;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   padding: 7px 16px;
   cursor: pointer;
 }
@@ -2847,12 +2854,12 @@ a.project-card {
 .ds-tab-btn.active {
   font-weight: 600;
   color: var(--text-primary);
-  background: var(--accent-blue-light);
+  background: var(--accent-secondary);
 }
 
 .ds-project-card-preview {
   max-width: 320px;
-  background: var(--off-white);
+  background: var(--background);
   border: 1px solid var(--border);
   border-radius: 14px;
   overflow: hidden;
@@ -2879,7 +2886,7 @@ a.project-card {
   font-size: 11px;
   font-weight: 500;
   color: var(--text-secondary);
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
   border-radius: 5px;
   padding: 3px 8px;
@@ -2905,8 +2912,8 @@ a.project-card {
   align-items: center;
   gap: 10px;
   padding: 5px 16px 5px 5px;
-  background: var(--accent-blue-light);
-  border-radius: 9999px;
+  background: var(--accent-secondary);
+  border-radius: var(--radius-full);
 }
 
 .ds-avatar-circle {
@@ -2933,9 +2940,9 @@ a.project-card {
   align-items: center;
   gap: 16px;
   padding: 12px 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .ds-motion-preview {
@@ -2948,7 +2955,7 @@ a.project-card {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--accent-blue-light);
+  background: var(--accent-secondary);
   border: 1px solid var(--border);
 }
 
@@ -2984,9 +2991,9 @@ a.project-card {
 
 .ds-easing-card {
   padding: 16px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -3017,9 +3024,9 @@ a.project-card {
 
 .ds-pattern-row {
   padding: 16px 20px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   display: grid;
   grid-template-columns: 160px 1fr;
   gap: 20px;
@@ -3047,9 +3054,9 @@ a.project-card {
   flex-direction: column;
   gap: 12px;
   padding: 32px;
-  background: var(--bg-card);
+  background: var(--background);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   margin-top: 8px;
 }
 
@@ -3061,9 +3068,9 @@ a.project-card {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-secondary);
-  background: var(--off-white);
+  background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-md);
   padding: 4px 10px;
   width: fit-content;
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react"
+import { Linkedin, SendDiagonal, Page, SunLight, HalfMoon, Language, Heart } from "iconoir-react"
 import { flushSync } from "react-dom"
 import { Routes, Route, Link, useNavigate } from "react-router-dom"
 import Lottie from "lottie-react"
@@ -227,6 +228,67 @@ function RotatingText({ phrases }: { phrases: string[] }) {
 }
 
 
+/* ── Reusable glitch-on-hover hook ──────────────────────────── */
+function useGlitch(text: string) {
+  const settled = text.split("").map(c => ({ char: c, settled: true, color: undefined as string | undefined }))
+  const [chars, setChars] = useState(settled)
+  const busyRef  = useRef(false)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function applyGlitch(density: number) {
+    setChars(
+      settled.map(({ char }) =>
+        char !== " " && Math.random() < density
+          ? {
+              char:    SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)],
+              settled: false,
+              color:   GLITCH_COLORS[Math.floor(Math.random() * GLITCH_COLORS.length)],
+            }
+          : { char, settled: true, color: undefined }
+      )
+    )
+  }
+
+  function trigger() {
+    if (busyRef.current) return
+    busyRef.current = true
+    applyGlitch(0.75)
+    timerRef.current = setTimeout(() => {
+      setChars(settled)
+      timerRef.current = setTimeout(() => {
+        applyGlitch(0.35)
+        timerRef.current = setTimeout(() => {
+          setChars(settled)
+          busyRef.current = false
+        }, 120)
+      }, 60)
+    }, 140)
+  }
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current) }, [])
+
+  return { chars, trigger }
+}
+
+function GlitchText({ text }: { text: string }) {
+  const { chars, trigger } = useGlitch(text)
+  return (
+    <span onMouseEnter={trigger} style={{ display: "inline-block", position: "relative" }}>
+      {/* Invisible text locks the button width */}
+      <span style={{ visibility: "hidden" }}>{text}</span>
+      {/* Animated chars sit on top without affecting layout */}
+      <span style={{ position: "absolute", inset: 0 }}>
+        {chars.map((c, i) => (
+          <span key={i} className={c.settled ? undefined : "scramble-char"}
+            style={c.color ? { color: c.color } : undefined}>
+            {c.char}
+          </span>
+        ))}
+      </span>
+    </span>
+  )
+}
+
 function HeroOrbit() {
   const n = ORBIT_LOGOS.length
   const radius = 310
@@ -266,53 +328,13 @@ function LogoCarousel() {
   )
 }
 
-const LinkedInIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="4" />
-    <line x1="8" y1="11" x2="8" y2="16" />
-    <line x1="8" y1="8" x2="8" y2="8.5" />
-    <line x1="12" y1="16" x2="12" y2="11" />
-    <path d="M12 13a2 2 0 0 1 4 0v3" />
-  </svg>
-)
-
-// Filled variant used for "view on LinkedIn" links
-const LinkedInIconFilled = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
-    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-  </svg>
-)
-
-const EmailIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-  </svg>
-)
-
-const ResumeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-  </svg>
-)
-
-const SunIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="5" />
-    <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
-    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-    <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
-    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-  </svg>
-)
-
-const MoonIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-  </svg>
-)
+// Icons sourced from iconoir-react
+const LinkedInIcon    = () => <Linkedin     width={18} height={18} strokeWidth={1.8} />
+const LinkedInIconFilled = () => <Linkedin  width={14} height={14} strokeWidth={1.8} />
+const EmailIcon       = () => <SendDiagonal width={18} height={18} strokeWidth={1.8} />
+const ResumeIcon      = () => <Page         width={18} height={18} strokeWidth={1.8} />
+const SunIcon         = () => <SunLight     width={18} height={18} strokeWidth={1.8} />
+const MoonIcon        = () => <HalfMoon     width={18} height={18} strokeWidth={1.8} />
 
 const TulipLogo = () => (
   <img src="/tulip-logo.webp" alt="Tulip" />
@@ -379,7 +401,7 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
         <button className={page === "home" ? "active" : ""} onClick={() => setPage("home")}>Work</button>
         <button className={page === "about" ? "active" : ""} onClick={() => setPage("about")}>About me</button>
         <button className={page === "other-work" ? "active" : ""} onClick={() => setPage("other-work")}>Other work</button>
-        <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}>Design system</button>
+        <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}><GlitchText text="Syntax Sugar" /></button>
       </div>
       <div className="nav-icons">
         <button className="dark-toggle" onClick={toggleDark} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
@@ -499,12 +521,12 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
               { role: "Senior Designer.", company: "Marks.", date: "May 2019 – Aug 2021" },
               { role: "Product Designer.", company: "Euro Packaging.", date: "Oct 2017 – May 2019" },
             ].map((item) => (
-              <div className="exp-item" key={item.date}>
-                <div className="exp-left">
-                  <span className="exp-role">{item.role}</span>
-                  <span className="exp-company">{item.company}</span>
+              <div className="experience-item" key={item.date}>
+                <div className="experience-left">
+                  <span className="experience-role">{item.role}</span>
+                  <span className="experience-company">{item.company}</span>
                 </div>
-                <span className="exp-date">{item.date}</span>
+                <span className="experience-date">{item.date}</span>
               </div>
             ))}
           </div>
@@ -731,16 +753,11 @@ function AboutPage() {
           </div>
           <div className="about-meta">
             <div className="about-meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-              </svg>
+              <Language width={18} height={18} strokeWidth={1.8} />
               <span>Polish, English &amp; German (B1)</span>
             </div>
             <div className="about-meta-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-              </svg>
+              <Heart width={18} height={18} strokeWidth={1.8} />
               <span>Drawing, painting, videography &amp; video editing</span>
             </div>
             <div className="about-meta-item">
@@ -765,7 +782,7 @@ function AboutPage() {
         <p>I'm always exploring new areas of craft and believe that what I do outside of work deeply informs my design practice. Whether it's photography, video editing, or travel, these hobbies keep my creative thinking sharp and help me connect with new perspectives. I actively seek out community through these interests and carry that same mindset into my work. I care deeply about inclusivity and accessibility – values that can only be achieved by designing with, and learning from, people of diverse backgrounds.</p>
       </section>
 
-      <section className="refs-section">
+      <section className="references-section">
         <h2>Colleague's references</h2>
         <ReferencesGrid />
         <a href="https://www.linkedin.com/in/ulaksiazkiewicz/" target="_blank" rel="noreferrer" className="linkedin-link">
@@ -809,10 +826,10 @@ function OtherWorkPage() {
               <div className="work-tile-inner" style={tile.dark ? { background: "#1e293b" } : undefined}>
                 <div className="tile-bar" style={tile.dark ? { background: "#334155", borderColor: "#475569" } : undefined} />
                 <div className="tile-content">
-                  <div className="tile-line m" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
-                  <div className="tile-line l" style={tile.dark ? { background: "#3b82f6" } : undefined} />
-                  <div className="tile-line s" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
-                  <div className="tile-line m" style={tile.dark ? { background: "#475569" } : undefined} />
+                  <div className="tile-line--md" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
+                  <div className="tile-line--lg" style={tile.dark ? { background: "#3b82f6" } : undefined} />
+                  <div className="tile-line--sm" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
+                  <div className="tile-line--md" style={tile.dark ? { background: "#475569" } : undefined} />
                 </div>
               </div>
             </div>
