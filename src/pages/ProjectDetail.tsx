@@ -6,6 +6,7 @@ import Lottie from "lottie-react"
 import logoAnimation from "../logo.json"
 import { getProjectBySlug } from "../lib/contentful"
 import type { ProjectDetailEntry } from "../types/contentful"
+import { GlitchText } from "../components/GlitchText"
 
 // ── Icons (shared with App.tsx visual style) ────────────────────────────────
 
@@ -48,6 +49,13 @@ const BackArrow = () => (
   </svg>
 )
 
+const ResumeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+    <path d="M4 4a2 2 0 0 1 2-2h8l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4z" />
+    <polyline points="14 2 14 8 20 8" />
+  </svg>
+)
+
 // ── Nav for detail pages ─────────────────────────────────────────────────────
 
 interface DetailNavProps {
@@ -57,8 +65,16 @@ interface DetailNavProps {
 
 export function DetailNav({ isDark, toggleDark }: DetailNavProps) {
   const navigate = useNavigate()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
-    <nav>
+    <nav className={scrolled ? "nav--scrolled" : ""}>
       <div
         className="nav-logo"
         onClick={() => navigate("/")}
@@ -73,7 +89,6 @@ export function DetailNav({ isDark, toggleDark }: DetailNavProps) {
         <button
           onClick={() => {
             navigate("/")
-            // Signal the main app to open the About page after navigation
             sessionStorage.setItem("pendingPage", "about")
           }}
         >
@@ -93,7 +108,7 @@ export function DetailNav({ isDark, toggleDark }: DetailNavProps) {
             sessionStorage.setItem("pendingPage", "design-system")
           }}
         >
-          Design system
+          <GlitchText text="Syntax Sugar" />
         </button>
       </div>
 
@@ -106,6 +121,9 @@ export function DetailNav({ isDark, toggleDark }: DetailNavProps) {
         </a>
         <a href="mailto:u.ksiazkiewicz@gmail.com" aria-label="Email">
           <EmailIcon />
+        </a>
+        <a href="#" aria-label="Download resume">
+          <ResumeIcon />
         </a>
       </div>
     </nav>

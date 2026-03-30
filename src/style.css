@@ -654,7 +654,7 @@ mark.highlight-animated {
 }
 
 .project-preview {
-  background: white;
+  background: var(--background);
   position: relative;
   overflow: hidden;
   display: flex;
@@ -1584,8 +1584,7 @@ footer {
   background: rgba(27, 24, 21, 0.92);
 }
 
-[data-theme="dark"] .project-card,
-[data-theme="dark"] .project-preview {
+[data-theme="dark"] .project-card {
   background: var(--background);
 }
 
@@ -3254,11 +3253,10 @@ a.project-card {
 
 /* ── pd-* overrides inside MDX pl-content ──────────────────── */
 
-/* Remove extra pd-hero top padding — pl-content already handles it */
+/* Hero hugs content — pl-content gap handles all spacing */
 /* Also break hero out to match the 1200px image+stats width */
 .pl-content .pd-hero {
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
   --breakout: min(1200px, 100vw - 2rem);
   width: var(--breakout);
   margin-left: calc((var(--breakout) - 100%) / -2);
