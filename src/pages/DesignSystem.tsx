@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from "react"
 import { Palette, Component, Flash, ViewGrid, SunLight, HalfMoon, Copy, Check } from "iconoir-react"
+import CardSortStudy from "../components/dataviz/CardSortStudy"
+import CompetitiveAnalysis from "../components/dataviz/CompetitiveAnalysis"
+import ProcessBoard from "../components/dataviz/ProcessBoard"
+import FlowDiagram from "../components/dataviz/FlowDiagram"
 
 // ── Types ─────────────────────────────────────────────────────────────────
 type MainSection = "foundation" | "components" | "motion" | "patterns"
@@ -38,6 +42,7 @@ const sections: SectionDef[] = [
       { id: "comp-tabs",    label: "Tabs" },
       { id: "comp-cards",   label: "Cards" },
       { id: "comp-avatar",  label: "Avatar pill" },
+      { id: "comp-dataviz", label: "Data Viz" },
     ],
   },
   {
@@ -515,6 +520,164 @@ function ComponentsContent() {
           </div>
         </div>
       </section>
+
+      <div className="ds-section-rule" />
+
+      <section id="comp-dataviz" className="ds-sub-section">
+        <DataVizSection />
+      </section>
+    </div>
+  )
+}
+
+// ── DataViz section ────────────────────────────────────────────────────────
+const datavizComponents = [
+  {
+    name: "CardSortStudy",
+    description: "Displays card sort research results with progress bars, tag chips, and grouped item lists.",
+    props: [
+      { name: "participants", type: "number", desc: "Total participant count shown in header" },
+      { name: "studyLabel", type: "string", desc: 'Study title e.g. "Internal Card Sort Study"' },
+      { name: "results", type: "Array<{ label, percentage, alsoConsidered, itemsGrouped }>", desc: "One entry per category" },
+    ],
+  },
+  {
+    name: "CompetitiveAnalysis",
+    description: "Competitive audit grid — each competitor card shows nav type, top nav items, strengths, and weaknesses.",
+    props: [
+      { name: "competitors", type: "Array<{ name, navType, topNavItems, strengths, weaknesses }>", desc: "One card per competitor" },
+    ],
+  },
+  {
+    name: "ProcessBoard",
+    description: "Kanban-style phase board. Horizontally scrolls on mobile. Each column has a colour-coded dot and task items with optional detail tooltips.",
+    props: [
+      { name: "title", type: "string?", desc: 'Board heading (defaults to "Process")' },
+      { name: "phases", type: "Array<{ label, color, items[] }>", desc: "Each phase is a column" },
+      { name: "phases[].items", type: "Array<{ label, detail? }>", desc: "detail shows a tooltip \u24d8 icon" },
+    ],
+  },
+  {
+    name: "FlowDiagram",
+    description: "User flow / decision tree using React Flow. On mobile it falls back to a vertical list.",
+    props: [
+      { name: "nodes", type: "Array<{ id, label, type, x, y }>", desc: 'type: "action" | "decision" | "outcome" | "start"' },
+      { name: "edges", type: "Array<{ from, to, label?, color? }>", desc: 'color: "green" | "red" or default' },
+    ],
+  },
+]
+
+function DataVizSection() {
+  return (
+    <div>
+      <SectionHeader
+        title="Data Viz"
+        description="Rich components for embedding research findings, competitive audits, process maps, and flow diagrams directly into MDX case study pages. All use design system tokens and support light + dark mode."
+      />
+
+      {/* Prop tables */}
+      <GroupLabel>Components</GroupLabel>
+      <div className="ds-dataviz-prop-list">
+        {datavizComponents.map((comp) => (
+          <div key={comp.name} className="ds-dataviz-prop-card">
+            <div className="ds-dataviz-prop-header">
+              <code className="ds-dataviz-comp-name">{comp.name}</code>
+              <p className="ds-dataviz-comp-desc">{comp.description}</p>
+            </div>
+            <table className="ds-prop-table">
+              <thead>
+                <tr>
+                  <th>Prop</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comp.props.map((p) => (
+                  <tr key={p.name}>
+                    <td><code>{p.name}</code></td>
+                    <td><code className="ds-prop-type">{p.type}</code></td>
+                    <td>{p.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ))}
+      </div>
+
+      <div className="ds-section-rule" />
+
+      {/* Live previews */}
+      <GroupLabel>Live previews</GroupLabel>
+
+      <div className="ds-dataviz-preview">
+        <p className="ds-dataviz-preview-label">CardSortStudy</p>
+        <CardSortStudy
+          participants={32}
+          studyLabel="Internal Card Sort Study"
+          results={[
+            { label: "Vehicles", percentage: 94, alsoConsidered: ["Cars", "Models"], itemsGrouped: "Model S, Model 3, Model X +4 more" },
+            { label: "Charging", percentage: 88, alsoConsidered: ["Supercharger", "Fuel"], itemsGrouped: "Supercharger Network, Home Charging" },
+            { label: "Shop",     percentage: 91, alsoConsidered: ["Store", "Buy"],    itemsGrouped: "Accessories, Apparel, Lifestyle" },
+          ]}
+        />
+      </div>
+
+      <div className="ds-dataviz-preview">
+        <p className="ds-dataviz-preview-label">CompetitiveAnalysis</p>
+        <CompetitiveAnalysis
+          competitors={[
+            {
+              name: "BMW",
+              navType: "Mega Menu",
+              topNavItems: ["Models", "Build", "Shopping", "Electric"],
+              strengths: ["Clear vehicle categorisation", "Dedicated electric section"],
+              weaknesses: ["Dense subcategories", "Separate shopping flow"],
+            },
+            {
+              name: "Rivian",
+              navType: "Dropdown",
+              topNavItems: ["Vehicles", "Charging", "Discover", "Ownership"],
+              strengths: ["Clean minimal structure", "Action-oriented CTAs"],
+              weaknesses: ["Less scalable for larger lineup"],
+            },
+          ]}
+        />
+      </div>
+
+      <div className="ds-dataviz-preview">
+        <p className="ds-dataviz-preview-label">ProcessBoard</p>
+        <ProcessBoard
+          phases={[
+            { label: "Research", color: "purple", items: [{ label: "Audit competitors" }, { label: "Propose IA", detail: "Information architecture proposal" }] },
+            { label: "Design", color: "yellow", items: [{ label: "Create components" }, { label: "Iterate on designs" }] },
+            { label: "Launch", color: "teal", items: [{ label: "Support engineering" }, { label: "Design QA" }] },
+          ]}
+        />
+      </div>
+
+      <div className="ds-dataviz-preview">
+        <p className="ds-dataviz-preview-label">FlowDiagram</p>
+        <FlowDiagram
+          nodes={[
+            { id: "start",    label: "Open Chat",        type: "start",    x: 50,  y: 200 },
+            { id: "buying",   label: "Buying Products",  type: "action",   x: 250, y: 120 },
+            { id: "support",  label: "Get Support",      type: "action",   x: 250, y: 280 },
+            { id: "decision", label: "Advisor Online?",  type: "decision", x: 480, y: 200 },
+            { id: "live",     label: "Live Chat",        type: "outcome",  x: 680, y: 120 },
+            { id: "form",     label: "Contact Form",     type: "outcome",  x: 680, y: 280 },
+          ]}
+          edges={[
+            { from: "start",    to: "buying"   },
+            { from: "start",    to: "support"  },
+            { from: "buying",   to: "decision" },
+            { from: "support",  to: "decision" },
+            { from: "decision", to: "live",  label: "YES", color: "green" },
+            { from: "decision", to: "form",  label: "NO" },
+          ]}
+        />
+      </div>
     </div>
   )
 }

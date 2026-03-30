@@ -7,7 +7,9 @@ import logoAnimation from "./logo.json"
 import logoSplashAnimation from "./logo-splash.json"
 import helloAnimation from "./hello.json"
 import "./style.css"
+import heroImg from "../content/images/homepage-hero.png"
 import { ProjectDetail } from "./pages/ProjectDetail"
+import { ProjectMDXPage } from "./pages/ProjectMDXPage"
 import DesignSystemPage from "./pages/DesignSystem"
 import { getAllProjects } from "./lib/contentful"
 
@@ -17,7 +19,20 @@ interface ProjectStub {
   client: string
   description: string
   imageUrl: string
+  tags?: string[]
 }
+
+// MDX case studies — always shown alongside Contentful projects
+const MDX_PROJECTS: ProjectStub[] = [
+  {
+    slug: "projects/example-project",
+    title: "Operations Composer",
+    client: "Tulip",
+    description: "A modular no-code workflow builder for manufacturing teams. End-to-end product design spanning research, IA, and design systems.",
+    imageUrl: "/operations-composer-cover.webp",
+    tags: ["Product Design", "UX Research", "Design Systems"],
+  },
+]
 
 const FALLBACK_PROJECTS: ProjectStub[] = [
   {
@@ -61,6 +76,7 @@ function clientLogo(client: string) {
   const name = client.toLowerCase()
   if (name.includes("tulip")) return <TulipLogo />
   if (name.includes("companion")) return <CompanionLogo />
+  if (name.includes("tesla")) return <TeslaLogo />
   return null
 }
 
@@ -118,6 +134,16 @@ const ROTATING_PHRASES = [
   "builds AI integrations",
   "builds with Claude Code",
   "pushes code to monorepos",
+]
+
+// Tool icons shown in the hero (Figma CDN URLs, valid 7 days from generation)
+const HERO_TOOLS = [
+  { src: "https://www.figma.com/api/mcp/asset/6331fba1-6bef-43bb-a457-025eff684138", label: "Gemini" },
+  { src: "https://www.figma.com/api/mcp/asset/f02c3a93-c3e2-4124-bba1-e7c6dbe3a3a9", label: "Claude Code" },
+  { src: "https://www.figma.com/api/mcp/asset/1f112691-b8a1-4dc6-9477-c890012d96f7", label: "Lovable" },
+  { src: "https://www.figma.com/api/mcp/asset/a2702b61-1118-4205-b70a-98f605e3ffa9", label: "Replit" },
+  { src: "https://www.figma.com/api/mcp/asset/7602a7f0-e3a5-41c3-ba8e-f58a950ae666", label: "Claude" },
+  { src: "https://www.figma.com/api/mcp/asset/b11a75be-f03d-45d1-9a1b-e4d8184f128a", label: "Figma" },
 ]
 
 // Symbols used during the glitch flash
@@ -344,6 +370,12 @@ const CompanionLogo = () => (
   <img src="/companion-logo.webp" alt="Companion" />
 )
 
+const TeslaLogo = () => (
+  <svg viewBox="0 0 100 125" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-label="Tesla">
+    <path d="M50 125L6.5 16.7C15.3 10.6 28.9 6.8 50 6.8s34.7 3.8 43.5 9.9L50 125zM0 0v6.3s13.7 3.2 21.1 12.1L50 100 78.9 18.4C86.3 9.5 100 6.3 100 6.3V0H0z"/>
+  </svg>
+)
+
 const MockWindow = ({ accentColor }: { accentColor?: string }) => (
   <div className="preview-mock">
     <div className="mock-bar">
@@ -443,8 +475,16 @@ const Footer = () => {
 
 function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: Page) => void; isDark: boolean; toggleDark: (e: React.MouseEvent) => void }) {
   const navigate = useNavigate()
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   return (
-    <nav>
+    <nav className={scrolled ? "nav--scrolled" : ""}>
       <div className="nav-logo" onClick={() => { navigate("/"); setPage("home") }} style={{ width: 80, height: 40, cursor: "pointer" }}>
         <Lottie animationData={logoAnimation} loop={false} autoplay style={{ width: "100%", height: "100%" }} />
       </div>
@@ -474,7 +514,7 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
 
 function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
   const [activeTab, setActiveTab] = useState<"work" | "experience" | "references">("work")
-  const [projects, setProjects] = useState<ProjectStub[]>(FALLBACK_PROJECTS)
+  const [projects, setProjects] = useState<ProjectStub[]>([...MDX_PROJECTS, ...FALLBACK_PROJECTS])
   useScrollReveal([activeTab, projects])
 
   useEffect(() => {
@@ -490,7 +530,7 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
             ? `https:${(e.fields.heroImage as any).fields.file.url}`
             : "",
         }))
-        setProjects(mapped)
+        setProjects([...MDX_PROJECTS, ...mapped])
       })
       .catch(() => {
         // env vars not set – keep fallback data
@@ -498,36 +538,42 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
   }, [])
 
   return (
-    <div className="container">
-      <section className="hero fade-up">
-        <HeroOrbit />
-        <div className="hero-content">
-          <div className="hero-greeting">
-            <h2>Hi, I'm Ula</h2>
-            <div className="hero-pill">
-              <div className="hero-pill-photo">
-                {/* Replace src with your photo: <img src="/avatar.jpg" alt="Ula" /> */}
-                <svg viewBox="0 0 84 84" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="42" cy="34" r="16" fill="#bfdbfe" />
-                  <path d="M8 80c0-18.8 15.2-34 34-34s34 15.2 34 34" fill="#bfdbfe" />
-                </svg>
-              </div>
-              <span className="hero-pill-emoji">👋</span>
+    <>
+      <section className="hero-v2 fade-up">
+        <div className="hero-v2-bg">
+          <img src={heroImg} alt="" aria-hidden="true" />
+        </div>
+        <div className="hero-v2-inner">
+          <div className="hero-v2-content">
+            <div className="hero-v2-byline" style={{ animationDelay: "0.05s" }}>
+              <span>ULA KSIAZKIEWICZ</span>
+              <span className="hero-v2-spark" aria-hidden="true">✦</span>
+              <span>MUNICH, GERMANY</span>
+            </div>
+            <h1 className="hero-v2-heading">
+              {"I'm a senior product designer that".split(" ").map((word, i) => (
+                <React.Fragment key={i}>
+                  <span className="hero-v2-word" style={{ animationDelay: `${0.12 + i * 0.06}s` }}>{word}</span>
+                  {" "}
+                </React.Fragment>
+              ))}
+            </h1>
+            <div className="hero-v2-pill" style={{ animationDelay: "0.65s" }}>
+              <RotatingText phrases={ROTATING_PHRASES} />
             </div>
           </div>
-          <h1>
-            {"I'm a senior product designer that".split(" ").map((word, i) => (
-              <React.Fragment key={i}>
-                <span className="hero-word" style={{ animationDelay: `${0.05 + i * 0.06}s` }}>{word}</span>
-                {" "}
-              </React.Fragment>
-            ))}
-            <RotatingText phrases={ROTATING_PHRASES} />
-          </h1>
-          <p className="hero-subtitle fade-up-delay-1">Experienced in designing web, mobile &amp; desktop solutions for B2B and B2B2C SaaS products.</p>
+        </div>
+        <div className="hero-v2-tools">
+          {HERO_TOOLS.map((tool, i) => (
+            <div key={tool.label} className="hero-v2-tool-card" data-tooltip={tool.label}
+              style={{ animationDelay: `${0.75 + i * 0.07}s` }}>
+              <img src={tool.src} alt={tool.label} />
+            </div>
+          ))}
         </div>
       </section>
 
+      <div className="container">
       <div className="fade-up-delay-2">
         <div className="tabs-nav">
           <button className={`tab-btn${activeTab === "work" ? " active" : ""}`} onClick={() => setActiveTab("work")}>Work</button>
@@ -539,7 +585,7 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
         <div className={`tab-panel${activeTab === "work" ? " active" : ""}`}>
           <div className="projects-list">
             {projects.map((project) => (
-              <Link key={project.slug} to={`/work/${project.slug}`} className="project-card reveal">
+              <Link key={project.slug} to={project.slug.startsWith("projects/") ? `/${project.slug}` : `/work/${project.slug}`} className="project-card reveal">
                 <div className="project-info">
                   <div className="project-company-logo">{clientLogo(project.client)}</div>
                   <div className="project-company">{project.client}.</div>
@@ -548,9 +594,19 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
                 </div>
                 <div className="project-preview">
                   <div className="project-preview-image">
-                    {project.imageUrl && (
-                      <img src={project.imageUrl} alt={`${project.title} project cover`} />
-                    )}
+                    {project.imageUrl
+                      ? <img src={project.imageUrl} alt={`${project.title} project cover`} />
+                      : project.tags && (
+                          <div className="project-preview-tags">
+                            <span className="project-preview-label">Case study</span>
+                            <div className="project-preview-tag-list">
+                              {project.tags.map(tag => (
+                                <span key={tag} className="project-preview-tag">{tag}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )
+                    }
                   </div>
                 </div>
               </Link>
@@ -594,7 +650,8 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
       </div>
 
       <CTA />
-    </div>
+      </div>
+    </>
   )
 }
 
@@ -724,20 +781,14 @@ function ReferencesGrid() {
           <span className="reference-badge">Quote={r.type}</span>
 
           <div className="reference-card">
-            {/* Quote section with bottom border acting as divider */}
+            {/* Quote section */}
             <div className="reference-quote-section">
+              <span className="reference-quote-mark">"</span>
               <TypewriterQuote text={r.quote} highlights={r.highlights} />
             </div>
 
             {/* Author row */}
             <div className="reference-author">
-              <div
-                className="reference-avatar"
-                style={{ background: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
-                aria-hidden="true"
-              >
-                {getInitials(r.author)}
-              </div>
               <div className="reference-author-info">
                 <strong>{r.author}</strong>
                 <span>{r.title}</span>
@@ -747,6 +798,156 @@ function ReferencesGrid() {
 
         </div>
       ))}
+    </div>
+  )
+}
+
+// ── Beans Chat ──────────────────────────────────────────────────────────────
+
+const BEANS_AVATAR = "https://www.figma.com/api/mcp/asset/342bc686-c728-4d2e-93c2-2d5af2447438"
+const BEANS_TRIGGER_CAT = "https://www.figma.com/api/mcp/asset/cd19452f-5413-4007-a4a7-7969fb6ebde7"
+
+const BEANS_RESPONSES = [
+  "I don't know, I'm a cat.",
+  "Meow. That's classified.",
+  "I was asleep when that happened.",
+  "Have you tried knocking everything off the desk? Works for me.",
+  "I could tell you, but then I'd have to nap on your keyboard.",
+  "Purr... what was the question?",
+  "I only answer questions about treats.",
+  "Ask Ula. I'm decorative.",
+  "That information is above my pay grade. I'm a cat.",
+  "I knocked that answer off the shelf. Gone.",
+  "No idea, but I found a bug on the ceiling if you're interested.",
+  "I'm going to need more kibble before I answer that.",
+  "My legal team — also cats — has advised me not to comment.",
+  "If I knew, I'd have forgotten it immediately. Cat brain.",
+  "I'm afraid that's between me and the litter box.",
+  "I was going to answer, but a shadow moved and I had to investigate.",
+  "The answer came to me at 3am. I forgot it by 3:01am.",
+  "I don't speak human. Not today, not ever.",
+  "Interesting question. Anyway, is that a bird outside?",
+  "I'll look into it after my seventh nap. Don't hold your breath.",
+  "I'm a cat. I don't do Q&A. I do chaos.",
+  "My knowledge base is exclusively nap spots and which sunbeam moves when.",
+  "Sorry, I was sitting in a box and couldn't be reached.",
+  "I considered answering, then I licked my paw instead.",
+  "That's a very human thing to wonder about.",
+  "I knocked your question off the counter. Whoops.",
+  "Technically I know the answer. Ethically, I choose silence.",
+  "I'm a cat. My job is to look mysterious, not informative.",
+  "Blink. Blink. No.",
+  "I'll file that under 'not my problem.'",
+  "My attention span ended three seconds ago. Rephrase? Actually don't.",
+  "That sounds like something Ula would know. I just live here.",
+  "The ancient cat wisdom says: go ask someone else.",
+  "I stared into the void for an answer. The void stared back. Neither of us spoke.",
+  "I have no thoughts. Only vibes.",
+  "The internet has answers. I have a fur coat and zero accountability.",
+  "I was going to help but I heard a crinkle and had to investigate immediately.",
+  "Yawn. Was that a question? Yawn.",
+  "I know things. I just don't share them. It's called being a cat.",
+  "Fascinating. Anyway, I need to go sit exactly where I'm not supposed to.",
+]
+
+type BeansMsg = { role: "user" | "beans"; text: string }
+
+function BeansChat() {
+  const [open, setOpen] = useState(false)
+  const [input, setInput] = useState("")
+  const [messages, setMessages] = useState<BeansMsg[]>([])
+  const [loading, setLoading] = useState(false)
+  const bottomRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages, loading])
+
+  const send = () => {
+    const text = input.trim()
+    if (!text || loading) return
+    setInput("")
+    setMessages(prev => [...prev, { role: "user", text }])
+    setLoading(true)
+    const delay = 1100 + Math.random() * 900
+    setTimeout(() => {
+      const resp = BEANS_RESPONSES[Math.floor(Math.random() * BEANS_RESPONSES.length)]
+      setMessages(prev => [...prev, { role: "beans", text: resp }])
+      setLoading(false)
+    }, delay)
+  }
+
+  return (
+    <div className="beans-wrap">
+      {!open ? (
+        <button className="beans-trigger" onClick={() => setOpen(true)}>
+          <svg className="beans-trigger-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span className="beans-trigger-label">Ask Beans</span>
+          <img className="beans-trigger-cat" src={BEANS_TRIGGER_CAT} alt="" />
+        </button>
+      ) : (
+        <div className="beans-panel">
+          <div className="beans-header">
+            <span className="beans-header-title">Ask Beans</span>
+            <button className="beans-close" onClick={() => setOpen(false)} aria-label="Close">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div className="beans-messages">
+            {messages.length === 0 && (
+              <div className="beans-empty">
+                <div className="beans-avatar-wrap">
+                  <img src={BEANS_AVATAR} alt="Beans" />
+                </div>
+                <p>Meow. Ask me anything.</p>
+              </div>
+            )}
+            {messages.map((msg, i) =>
+              msg.role === "user" ? (
+                <div key={i} className="beans-row beans-row--user">
+                  <div className="beans-bubble beans-bubble--user">{msg.text}</div>
+                </div>
+              ) : (
+                <div key={i} className="beans-row beans-row--beans">
+                  <div className="beans-avatar-wrap">
+                    <img src={BEANS_AVATAR} alt="Beans" />
+                  </div>
+                  <div className="beans-bubble beans-bubble--beans">{msg.text}</div>
+                </div>
+              )
+            )}
+            {loading && (
+              <div className="beans-row beans-row--beans">
+                <div className="beans-avatar-wrap">
+                  <img src={BEANS_AVATAR} alt="Beans" />
+                </div>
+                <div className="beans-bubble beans-bubble--beans beans-typing">
+                  <span /><span /><span />
+                </div>
+              </div>
+            )}
+            <div ref={bottomRef} />
+          </div>
+          <div className="beans-input-row">
+            <input
+              className="beans-input"
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") send() }}
+              placeholder="Ask Beans anything..."
+              autoFocus
+            />
+            <button className="beans-send" onClick={send} aria-label="Send">
+              <SendDiagonal width={18} height={18} strokeWidth={2} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -915,7 +1116,7 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
 
 export default function App() {
   const [page, setPage] = useState<Page>("home")
-  const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark")
+  const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") !== "light")
   const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem("splashSeen"))
 
   useEffect(() => {
@@ -957,6 +1158,12 @@ export default function App() {
           element={<ProjectDetail isDark={isDark} toggleDark={toggleDark} />}
         />
 
+        {/* MDX project case studies with dataviz components */}
+        <Route
+          path="/projects/:slug"
+          element={<ProjectMDXPage isDark={isDark} toggleDark={toggleDark} />}
+        />
+
         {/* Main portfolio pages */}
         <Route
           path="*"
@@ -968,6 +1175,7 @@ export default function App() {
               {page === "other-work" && <OtherWorkPage />}
               {page === "design-system" && <DesignSystemPage isDark={isDark} toggleDark={toggleDark} />}
               <Footer />
+              {page === "about" && <BeansChat />}
             </>
           }
         />

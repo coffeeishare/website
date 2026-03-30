@@ -1,0 +1,99 @@
+---
+title: "Operations Composer"
+client: "Tulip"
+summary: "Designing a modular operations platform that empowers frontline workers to build and adapt their own workflows."
+introText: "Operations Composer is a no-code workflow builder for manufacturing and operations teams. This project spanned research, information architecture, and end-to-end product design — making complex factory logic accessible to non-technical users on the shop floor."
+pullQuote: "The best tools don't just solve problems — they give people the confidence to define what the problem is in the first place."
+tags: ["Product Design", "UX Research", "Information Architecture", "Design Systems"]
+year: "2024"
+coverImage: "/operations-composer-cover.webp"
+---
+
+<ProjectHero />
+
+<SectionTitle eyebrow="01 — Research" label="Understanding the Problem" />
+
+This project began with an audit of Tesla's existing navigation patterns and a series of user research activities to validate hypotheses about findability issues.
+
+<SectionTitle eyebrow="02 — Process" label="How We Got Here" />
+
+<ProcessBoard phases={[
+  {
+    label: "Research & Strategy",
+    color: "purple",
+    items: [
+      { label: "Research Key Topics" },
+      { label: "Propose IA" },
+      { label: "Audit Competitors", detail: "Reviewed BMW, Porsche, Rivian, and Lucid navigation patterns" }
+    ]
+  },
+  {
+    label: "Design & Iteration",
+    color: "purple",
+    items: [
+      { label: "Mock Up Key Flows" },
+      { label: "Iterate on Designs" }
+    ]
+  },
+  {
+    label: "Scoping & Approval",
+    color: "yellow",
+    items: [
+      { label: "Define MVP" },
+      { label: "Get Approvals" }
+    ]
+  },
+  {
+    label: "Implementation",
+    color: "teal",
+    items: [
+      { label: "Support Engineering" },
+      { label: "Conduct Design QA" },
+      { label: "Launch It! 🚀" }
+    ]
+  }
+]} />
+
+<SectionTitle eyebrow="03 — Research" label="Competitive Analysis" />
+
+Before defining the new information architecture, I researched navigation patterns across automotive and tech brands.
+
+<CompetitiveAnalysis competitors={[
+  {
+    name: "BMW",
+    navType: "Mega Menu",
+    topNavItems: ["Models", "Build", "Shopping", "Electric", "Owners"],
+    strengths: ["Clear vehicle categorization (SUV, Sedan, Coupe)", "Dedicated electric section"],
+    weaknesses: ["Dense subcategories", "Separate shopping flow"]
+  },
+  {
+    name: "Porsche",
+    navType: "Mega Menu",
+    topNavItems: ["Models", "Experience", "Ownership", "Porsche Finder"],
+    strengths: ["Model-centric navigation", "Lifestyle content integrated"],
+    weaknesses: ["Limited top-level categories", "Complex model variants"]
+  },
+  {
+    name: "Rivian",
+    navType: "Dropdown",
+    topNavItems: ["Vehicles", "Gear Shop", "Charging", "Discover", "Ownership"],
+    strengths: ["Clean, minimal structure", "Action-oriented CTAs per vehicle"],
+    weaknesses: ["Gear shop prominent (e-commerce focus)", "Less scalable for larger lineup"]
+  }
+]} />
+
+<SectionTitle eyebrow="04 — Validation" label="Card Sort Study" />
+
+To validate our proposed navigation structure, we ran an internal card sort study with 32 participants.
+
+<CardSortStudy
+  participants={32}
+  studyLabel="Internal Card Sort Study"
+  results={[
+    { label: "Vehicles", percentage: 94, alsoConsidered: ["Cars", "Models", "Products"], itemsGrouped: "Model S, Model 3, Model X +4 more" },
+    { label: "Energy", percentage: 78, alsoConsidered: ["Solar", "Power", "Home"], itemsGrouped: "Solar Panels, Solar Roof, Powerwall +1 more" },
+    { label: "Charging", percentage: 88, alsoConsidered: ["Supercharger", "Power Up", "Fuel"], itemsGrouped: "Supercharger Network, Home Charging, Charging Calculator" },
+    { label: "Discover", percentage: 72, alsoConsidered: ["Explore", "Learn", "About"], itemsGrouped: "About Tesla, Careers, News +2 more" },
+    { label: "Shop", percentage: 91, alsoConsidered: ["Store", "Buy", "Accessories"], itemsGrouped: "Vehicle Accessories, Apparel, Lifestyle" }
+  ]}
+/>

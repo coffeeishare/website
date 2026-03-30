@@ -55,7 +55,7 @@ interface DetailNavProps {
   toggleDark: (e: React.MouseEvent) => void
 }
 
-function DetailNav({ isDark, toggleDark }: DetailNavProps) {
+export function DetailNav({ isDark, toggleDark }: DetailNavProps) {
   const navigate = useNavigate()
   return (
     <nav>
