@@ -139,6 +139,66 @@ Dark mode: toggled by adding/removing `.dark-mode` on `<html>`. All new componen
 
 ---
 
+## Badge / chip / pill / tag system
+
+**Rule: do not create a new badge class.** Before adding any small label element, pick the canonical class below. If none fit, ask Ula — do not invent a new style.
+
+**Documentation rule: whenever you add or update a component spec in this file, show the exact JSX syntax sugar — not just class names. Examples below are the required pattern.**
+
+### Canonical classes
+
+**`.pd-skill-tag`** — skill/taxonomy keywords (ProjectHero, ProjectDetail)
+```tsx
+<span className="pd-skill-tag">{tag}</span>
+```
+
+**`.project-preview-tag`** — metadata labels on project cards
+```tsx
+<span className="project-preview-tag">{label}</span>
+```
+
+**`.mdx-skill-chip`** — skill attribution inside any MDX evidence component
+```tsx
+{skillDef && <span className="mdx-skill-chip">{skillDef.label}</span>}
+```
+
+**Badge sizing rule:** All badge/chip classes use `width: fit-content` + `align-self: flex-start` so they always hug their content, even when inside a flex-column parent. Never let a badge fill container width.
+
+**`.sf-chip` / `.sf-chip--active`** — interactive filter toggle (`SkillFilterBar` only)
+```tsx
+<button
+  className={`sf-chip${isActive ? ' sf-chip--active' : ''}`}
+  onClick={toggle}
+>
+  {skill.label}
+</button>
+```
+
+**`.project-badge`** — overlay on project cover images
+```tsx
+<span className="project-badge">{text}</span>
+```
+
+**`.ssp-chip`** — colored project chips in `SkillSummaryPanel` only (dynamic palette via inline style)
+```tsx
+<span className="ssp-chip" style={{ background: bg, color }}>
+  {project.title}
+</span>
+```
+
+### Component-scoped — do not reuse outside their component
+`.hero-pill`, `.hero-v2-pill` · `.reference-badge` · `.cs-chip` · `.ds-sidebar-theme-badge`, `.ds-token-tag`, `.ds-card-tag`
+
+### Viz components — skill chip pattern
+All dataviz and research viz components that accept a `skill` prop must render the skill attribution using `.mdx-skill-chip`, not a custom class:
+```tsx
+// Bottom-left of every viz card — DotSurvey, PriorityRanking, ImportanceMatrix,
+// Demographics, SiteMap, RecruitmentSources, StudyResult, Metric, EvidenceQuote
+{skillDef && <span className="mdx-skill-chip">{skillDef.label}</span>}
+```
+
+---
+
 ## CSS conventions
 
 - **No new CSS files.** All styles go in `src/style.css`.
