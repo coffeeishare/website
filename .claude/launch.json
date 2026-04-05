@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "Portfolio Dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite"],
       "port": 5173
     },
     {

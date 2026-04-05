@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.worktreePath // .path // empty' | { read -r p; [ -n \"$p\" ] && ln -sf ../../../.env.local \"$p/.env.local\"; } 2>/dev/null || true",
+            "statusMessage": "Linking .env.local..."
+          }
+        ]
+      }
+    ]
+  }
+}

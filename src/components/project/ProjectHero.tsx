@@ -85,13 +85,7 @@ export default function ProjectHero({ title, summary, tags, year, coverImage, cl
       )}
       </div>
 
-      {/* ── Pull quote ── */}
-      {pullQuote && (
-        <blockquote className="pd-pull-quote">
-          <span className="pd-quote-mark">"</span>
-          <p>{pullQuote}</p>
-        </blockquote>
-      )}
+      {/* Pull quote is rendered in the body, not here */}
     </>
   )
 }

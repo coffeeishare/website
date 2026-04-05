@@ -13,6 +13,8 @@ import { ProjectMDXPage } from "./pages/ProjectMDXPage"
 import DesignSystemPage from "./pages/DesignSystem"
 import { GlitchText } from "./components/GlitchText"
 import { getAllProjects } from "./lib/contentful"
+import { SkillFilterBar } from "./components/filter/SkillFilterBar"
+import { FilteredProjectGrid } from "./components/filter/FilteredProjectGrid"
 
 interface ProjectStub {
   slug: string
@@ -453,30 +455,8 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
   )
 }
 
-function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
-  const [activeTab, setActiveTab] = useState<"work" | "experience" | "references">("work")
-  const [projects, setProjects] = useState<ProjectStub[]>([...MDX_PROJECTS, ...FALLBACK_PROJECTS])
-  useScrollReveal([activeTab, projects])
-
-  useEffect(() => {
-    getAllProjects()
-      .then((entries) => {
-        if (!entries.length) return
-        const mapped: ProjectStub[] = entries.map((e) => ({
-          slug: e.fields.slug,
-          title: e.fields.title,
-          client: e.fields.client,
-          description: (e.fields as any).introText ?? "",
-          imageUrl: (e.fields.heroImage as any)?.fields?.file?.url
-            ? `https:${(e.fields.heroImage as any).fields.file.url}`
-            : "",
-        }))
-        setProjects([...MDX_PROJECTS, ...mapped])
-      })
-      .catch(() => {
-        // env vars not set – keep fallback data
-      })
-  }, [])
+function HomePage() {
+  useScrollReveal()
 
   return (
     <>
@@ -514,83 +494,13 @@ function HomePage({ onOtherWork }: { onOtherWork: () => void }) {
         </div>
       </section>
 
+      <section className="sf-section">
+        <SkillFilterBar />
+      </section>
+
       <div className="container">
-      <div className="fade-up-delay-2">
-        <div className="tabs-nav">
-          <button className={`tab-btn${activeTab === "work" ? " active" : ""}`} onClick={() => setActiveTab("work")}>Work</button>
-          <button className={`tab-btn${activeTab === "experience" ? " active" : ""}`} onClick={() => setActiveTab("experience")}>Experience</button>
-          <button className={`tab-btn${activeTab === "references" ? " active" : ""}`} onClick={() => setActiveTab("references")}>References</button>
-        </div>
-
-        {/* WORK TAB */}
-        <div className={`tab-panel${activeTab === "work" ? " active" : ""}`}>
-          <div className="projects-list">
-            {projects.map((project) => (
-              <Link key={project.slug} to={project.slug.startsWith("projects/") ? `/${project.slug}` : `/work/${project.slug}`} className="project-card reveal">
-                <div className="project-info">
-                  <div className="project-company-logo">{clientLogo(project.client)}</div>
-                  <div className="project-company">{project.client}.</div>
-                  <h3 className="project-title">{project.title}</h3>
-                  <p className="project-desc">{project.description}</p>
-                </div>
-                <div className="project-preview">
-                  <div className="project-preview-image">
-                    {project.imageUrl
-                      ? <img src={project.imageUrl} alt={`${project.title} project cover`} />
-                      : project.tags && (
-                          <div className="project-preview-tags">
-                            <span className="project-preview-label">Case study</span>
-                            <div className="project-preview-tag-list">
-                              {project.tags.map(tag => (
-                                <span key={tag} className="project-preview-tag">{tag}</span>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                    }
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="see-more">
-            <button onClick={onOtherWork}>…there's more &nbsp; See more work →</button>
-          </div>
-        </div>
-
-        {/* EXPERIENCE TAB */}
-        <div className={`tab-panel${activeTab === "experience" ? " active" : ""}`}>
-          <div className="experience-list">
-            {[
-              { role: "Senior Product Designer.", company: "Tulip Interfaces.", date: "Jul 2024 – Present" },
-              { role: "Lead Product Designer.", company: "Companion.", date: "Sep 2022 – Jul 2024" },
-              { role: "Lead Product Designer.", company: "383 Project.", date: "Aug 2021 – Sep 2022" },
-              { role: "Senior Designer.", company: "Marks.", date: "May 2019 – Aug 2021" },
-              { role: "Product Designer.", company: "Euro Packaging.", date: "Oct 2017 – May 2019" },
-            ].map((item) => (
-              <div className="experience-item" key={item.date}>
-                <div className="experience-left">
-                  <span className="experience-role">{item.role}</span>
-                  <span className="experience-company">{item.company}</span>
-                </div>
-                <span className="experience-date">{item.date}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* REFERENCES TAB */}
-        <div className={`tab-panel${activeTab === "references" ? " active" : ""}`}>
-          <ReferencesGrid />
-          <a href="https://www.linkedin.com/in/ulaksiazkiewicz/" target="_blank" rel="noreferrer" className="linkedin-link">
-            <LinkedInIconFilled />
-            Full quotes available on LinkedIn
-          </a>
-        </div>
-      </div>
-
-      <CTA />
+        <FilteredProjectGrid />
+        <CTA />
       </div>
     </>
   )
@@ -975,6 +885,27 @@ function AboutPage() {
         <p>I'm always exploring new areas of craft and believe that what I do outside of work deeply informs my design practice. Whether it's photography, video editing, or travel, these hobbies keep my creative thinking sharp and help me connect with new perspectives. I actively seek out community through these interests and carry that same mindset into my work. I care deeply about inclusivity and accessibility – values that can only be achieved by designing with, and learning from, people of diverse backgrounds.</p>
       </section>
 
+      <section className="about-section">
+        <h2>Experience</h2>
+        <div className="experience-list">
+          {[
+            { role: "Senior Product Designer.", company: "Tulip Interfaces.", date: "Jul 2024 – Present" },
+            { role: "Lead Product Designer.", company: "Companion.", date: "Sep 2022 – Jul 2024" },
+            { role: "Lead Product Designer.", company: "383 Project.", date: "Aug 2021 – Sep 2022" },
+            { role: "Senior Designer.", company: "Marks.", date: "May 2019 – Aug 2021" },
+            { role: "Product Designer.", company: "Euro Packaging.", date: "Oct 2017 – May 2019" },
+          ].map((item) => (
+            <div className="experience-item" key={item.date}>
+              <div className="experience-left">
+                <span className="experience-role">{item.role}</span>
+                <span className="experience-company">{item.company}</span>
+              </div>
+              <span className="experience-date">{item.date}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <section className="references-section">
         <h2>Colleague's references</h2>
         <ReferencesGrid />
@@ -1111,7 +1042,7 @@ export default function App() {
           element={
             <>
               <Nav page={page} setPage={setPage} isDark={isDark} toggleDark={toggleDark} />
-              {page === "home" && <HomePage onOtherWork={() => setPage("other-work")} />}
+              {page === "home" && <HomePage />}
               {page === "about" && <AboutPage />}
               {page === "other-work" && <OtherWorkPage />}
               {page === "design-system" && <DesignSystemPage isDark={isDark} toggleDark={toggleDark} />}

@@ -1,0 +1,152 @@
+---
+title: "AI App Generation"
+client: "Tulip"
+summary: "Using generative AI to help manufacturing teams create structured work instructions in minutes — not hours."
+introText: "AI Composer is a new product at Tulip, built in close collaboration with ML engineering. Its aim is to use generative AI to help manufacturing teams create structured, compliant work instructions in minutes, not hours. I led UX design from zero to prototype, shaping the vision despite major unknowns about what was technically feasible."
+pullQuote: "Users wanted help, not hand-holding. Finding that line — between automation and control — was the central design challenge."
+tags: ["AI", "Product Design", "UX Research", "Prototyping"]
+year: "2024"
+coverImage: "/ai-composer-cover.webp"
+
+skills:
+  - ai-integration
+  - interaction
+  - prototyping
+  - user-research
+  - systems-thinking
+
+evidence:
+  - type: metric
+    skill: ai-integration
+    label: "Faster app creation"
+    value: "75%"
+    context: "Measured in internal testing vs. the manual workflow"
+  - type: metric
+    skill: user-research
+    label: "Customer work instructions reviewed"
+    value: "100+"
+    context: "To map standard formats and surface edge cases before designing output structure"
+  - type: quote
+    skill: user-research
+    text: "I'm responsible for building over 200 apps, and the process is incredibly time-consuming and repetitive. With the current app editor, it's difficult to scale up and manage this volume efficiently."
+  - type: quote
+    skill: ai-integration
+    text: "I've already created a couple apps using the Composer AI and the translation is perfect."
+    attribution: "Customer, post-launch"
+  - type: artifact
+    skill: prototyping
+    label: "Interaction-first Figma prototype — co-designed with ML engineering across weekly sessions"
+---
+
+<ProjectHero />
+
+<SectionTitle eyebrow="01 — Problem" label="The scale problem nobody talks about" />
+
+Some customers need to digitise over 200 work instructions on Tulip — step-by-step guides that are critical for quality, compliance, and training on the shop floor. Building each one manually in Tulip's app editor is time-intensive, inconsistent, and nearly impossible to scale. AI Composer was created to solve this: turning natural language inputs into structured app logic in minutes.
+
+<EvidenceQuote
+  skill="user-research"
+  text="I'm responsible for building over 200 apps, and the process is incredibly time-consuming and repetitive. With the current app editor, it's difficult to scale up and manage this volume efficiently."
+/>
+
+The challenge wasn't just speed. Customers lacked a consistent, repeatable structure for what a good work instruction looked like. Before designing anything, we needed to understand what the work actually was — and what realistic AI generation could produce.
+
+<SectionTitle eyebrow="02 — Research" label="Understanding the work before designing the tool" />
+
+We ran **internal interviews with solutions engineers** to understand where app-building workflows broke down and where time was being lost. We then conducted a **workflow audit across 100+ real customer work instructions** to identify standard formats, common patterns, and edge cases the model would need to handle.
+
+<Metric
+  skill="user-research"
+  value="100+"
+  label="Real customer work instructions reviewed"
+  context="To map standard formats and surface edge cases before designing output structure"
+/>
+
+<StudyResult
+  skill="user-research"
+  participants={0}
+  label="Workflow audit — patterns identified across 100+ customer work instructions"
+  options={[
+    { label: "Followed a standard step-by-step format", percentage: 80 },
+    { label: "Contained edge cases requiring bespoke handling", percentage: 40 },
+  ]}
+  variant="with-icon"
+/>
+
+I worked directly with ML engineering to map the capabilities and limitations of early model output — understanding where generation was reliable, where it hallucinated, and what that meant for the interaction model. We then ran **usability testing with 12 internal builders and external early adopters** to gauge predictability and trust.
+
+<StudyResult
+  skill="user-research"
+  participants={12}
+  label="Internal builders + external early adopters — usability testing"
+  options={[
+    { label: "Struggled to predict what the AI would generate", percentage: 75 },
+    { label: "Wanted control over AI output, not just acceptance/rejection", percentage: 83 },
+    { label: "Trusted output more when rationale was shown", percentage: 90 },
+  ]}
+  variant="with-icon"
+/>
+
+<SectionTitle eyebrow="03 — Strategy" label="Clarity over magic" />
+
+We grounded the product in a deliberate philosophy: **clarity over magic**. Generative AI interfaces often optimise for the wow moment. We optimised for trust — because in a manufacturing environment, an operator acting on a bad work instruction has real consequences.
+
+That meant earning trust through transparency and user control rather than hiding the seams of how generation worked. To stay lean and responsive, we scoped tightly for initial value, then expanded through real-time collaboration between design and ML engineering in weekly co-design sessions.
+
+<EvidenceQuote
+  skill="systems-thinking"
+  text="We held weekly co-design sessions with ML engineering — designing and prototyping directly alongside model evolution. The UX had to flex as the model's capabilities shifted week to week."
+/>
+
+Our three strategic principles:
+
+**Start simple.** One clear use case, shipped early, before expanding scope. **Explain the output.** Rationale built directly into the UI, not added as an afterthought. **Fail gracefully.** Escape routes and overrides designed for every AI suggestion — not just the happy path.
+
+<SectionTitle eyebrow="04 — Design decisions" label="Where we drew the line between help and hand-holding" />
+
+The central tension in every decision was the same: how much should the AI do, and how much control should stay with the user? Each of the four key decisions below represents a point where we made that call explicitly.
+
+**Prompt to structure, not prompt to finish.** A lightweight input field generated app steps live, giving structure without taking over. Users retained full editing rights at every point — the AI proposed, the user decided.
+
+**Editable generation panel.** We gave users control over AI output through an editable suggestions pane. This directly addressed the anxiety researchers identified around black-box automation. Seeing the output as editable — rather than as a finished artefact — shifted the mental model from "I'm trusting a machine" to "I'm reviewing a draft."
+
+<EvidenceQuote
+  skill="interaction"
+  text="Showing the output as editable rather than finished shifted the mental model from 'I'm trusting a machine' to 'I'm reviewing a draft.' That reframe was more effective than any trust indicator we tested."
+/>
+
+**Scaffold-first model.** We prioritised partial, useful structures over complete app generation. The alternative — generating a finished app — tested poorly: users felt responsible for output they hadn't authored and were reluctant to trust it. A good scaffold they could complete was more valuable than a complete output they didn't own. This reduced cognitive overload and supported iterative, confident workflows.
+
+**Confidence indicators.** Visual trust cues — showing certainty levels for generated content — helped users assess and validate AI output with informed scepticism rather than blind acceptance or reflexive rejection. We chose this over hiding uncertainty: surfacing it explicitly turned out to build more trust, not less.
+
+<SectionTitle eyebrow="05 — Prototyping" label="Designing in motion, not in static" />
+
+Given the novelty of the problem, static mockups weren't enough. I built interaction-first Figma prototypes that simulated the generation experience — including loading states, partial output, and error conditions — to test with users and co-design with ML engineering in real time.
+
+<Metric
+  skill="prototyping"
+  value="Weekly"
+  label="Prototype iteration cadence"
+  context="Co-designed with ML engineering as model capabilities evolved — specs and interactions updated in lockstep"
+/>
+
+Prototyping this way also meant the engineering handoff was based on tested interaction patterns, not theoretical ones. Edge cases were already designed because we'd already broken them in testing.
+
+<SectionTitle eyebrow="06 — Impact" label="75% faster, and a new product line" />
+
+<Metric
+  skill="ai-integration"
+  value="75%"
+  label="Faster app creation"
+  context="Measured in internal testing against the manual workflow"
+/>
+
+AI Composer launched as a new AI-native product line, aligned with Tulip's 2025 strategy. It set the UX patterns for future AI tools across Tulip's platform and was elevated as a key offering in external marketing.
+
+Beyond the numbers: the project gained strong buy-in from engineering and product leadership — paving the way to ship the MVP. The interaction patterns established here became the foundation for how Tulip approaches AI-assisted creation more broadly.
+
+<EvidenceQuote
+  skill="ai-integration"
+  text="I've already created a couple apps using the Composer AI and the translation is perfect and I love how it works. Thank you Tulip for this great new feature."
+  attribution="Customer, post-launch"
+/>
