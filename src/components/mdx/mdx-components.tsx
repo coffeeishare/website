@@ -4,6 +4,9 @@ import ProcessBoard from "../dataviz/ProcessBoard"
 import FlowDiagram from "../dataviz/FlowDiagram"
 import SectionTitle from "../project/SectionTitle"
 import ProjectHero from "../project/ProjectHero"
+import { Metric } from "./Metric"
+import { EvidenceQuote } from "./EvidenceQuote"
+import { StudyResult } from "./StudyResult"
 
 export const mdxComponents = {
   CardSortStudy,
@@ -12,4 +15,7 @@ export const mdxComponents = {
   FlowDiagram,
   SectionTitle,
   ProjectHero,
+  Metric,
+  EvidenceQuote,
+  StudyResult,
 }

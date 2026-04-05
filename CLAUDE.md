@@ -1,24 +1,113 @@
-# CLAUDE.md — Portfolio Project Pages
+# CLAUDE.md — Portfolio Site
 
-## What We're Building
+## Stack (read this first)
 
-Adding a **project case study system** to an existing Next.js portfolio site. Each project page is authored in **MDX** — prose is written directly in the file, and rich custom components are embedded wherever needed. No CMS involved.
+This is a **Vite + React 18 + TypeScript** single-page application. It is **not Next.js**. Do not use `next-mdx-remote`, `app/` routing, or any Next.js APIs.
 
-The goal is a system where:
-- New project pages can be created by adding a new `.mdx` file
-- Rich data-viz components (card sort, competitive analysis, etc.) can be dropped in with props
-- All components use the existing design system tokens
-- Everything is fully responsive: mobile (< 768px), tablet (768–1024px), desktop (> 1024px)
+| Layer | Technology |
+|---|---|
+| Build | Vite 5 |
+| Framework | React 18 + TypeScript |
+| Routing | React Router DOM 6 — `src/main.tsx` wraps app in `<BrowserRouter>` |
+| Styles | Single file: `src/style.css` — vanilla CSS, no preprocessor, no CSS-in-JS |
+| MDX | `@mdx-js/rollup` in `vite.config.ts` + `remark-frontmatter` + `remark-mdx-frontmatter` |
+| MDX loading | `import.meta.glob("../../content/projects/*.mdx")` — build-time, no server |
+| Dark mode | `.dark-mode` class on `<html>` — **not** `data-theme` |
+| Entry point | `src/App.tsx` — contains homepage, routing logic, and all page-level components |
+
+No server. No API. No Contentful (ignore `src/lib/contentful.ts` — legacy, unused).
 
 ---
 
-## Existing Design System
+## What's already built
 
-All components **must** use these CSS custom properties. Do not hardcode colour or spacing values.
+```
+src/
+  App.tsx                          ← homepage, router, all routes
+  style.css                        ← all styles (~90KB), design tokens, dark mode
+  components/
+    dataviz/
+      CardSortStudy.tsx
+      CompetitiveAnalysis.tsx
+      ProcessBoard.tsx
+      FlowDiagram.tsx
+    project/
+      ProjectLayout.tsx
+      ProjectHero.tsx
+      SectionTitle.tsx
+    mdx/
+      mdx-components.tsx           ← component map passed to MDX renderer
+  pages/
+    ProjectMDXPage.tsx             ← renders a .mdx file by slug
+    DesignSystem.tsx               ← component showcase
+  lib/
+    contentful.ts                  ← ignore, legacy
+  types/
+    contentful.ts                  ← ignore, legacy
+    mdx.d.ts
+
+content/
+  projects/
+    example-project.mdx            ← original template
+    ai-composer.mdx                ← first migrated case study (use as reference)
+```
+
+---
+
+## Active feature: Skill Evidence Filter
+
+Full spec in **`PRD-skill-filter.md`** — read it before building anything in this feature.
+Content migration plan in **`CONTENT-MIGRATION.md`** — maps all 6 projects to skills, evidence, and component placements.
+Working MDX example in **`content/projects/ai-composer.mdx`** — shows the target frontmatter structure and inline component usage.
+
+### What needs building (in order)
+
+```
+src/
+  types/
+    filter.ts                      ← FilterableProject, EvidenceItem types
+  lib/
+    skills-taxonomy.ts             ← SKILL_TAXONOMY array (8 skills, no facilitation)
+    parse-mdx-projects.ts          ← MDX glob → FilterableProject[]
+  hooks/
+    useSkillFilter.ts              ← filter state, URL sync, toggle logic
+  components/
+    filter/
+      SkillFilterBar.tsx           ← chip row, reads/writes ?skills= URL param
+      SkillSummaryPanel.tsx        ← ⚠️ UNSTYLED SHELL ONLY — design pending from Ula
+      EvidenceCard.tsx             ← quote / metric / artifact variants
+      FilteredProjectGrid.tsx      ← filter-aware project grid
+    mdx/
+      StudyResult.tsx              ← research study card (basic / with-icon / gradient)
+      Metric.tsx                   ← single stat block
+      EvidenceQuote.tsx            ← skill-tagged pull quote
+      DotSurvey.tsx                ← dot matrix isotype chart + N/total stat row
+      PriorityRanking.tsx          ← most important / least important two-column list
+      ImportanceMatrix.tsx         ← attribute × importance-level table with % values
+      Demographics.tsx             ← person silhouette icons with % + age range labels
+      SiteMap.tsx                  ← sticky-note style IA / sitemap spatial layout
+      RecruitmentSources.tsx       ← horizontal bar chart with platform icons + %
+```
+
+All MDX components accept a `skill` prop (`SkillKey`) for filter indexing.
+
+Then modify:
+- `src/App.tsx` — add `<SkillFilterBar>` and `<FilteredProjectGrid>` to homepage
+- `src/style.css` — append new styles under `/* === SKILL FILTER === */`
+- `src/components/mdx/mdx-components.tsx` — register all new MDX components
+
+### SkillSummaryPanel — build shell only
+
+Do **not** invent styles for `SkillSummaryPanel`. Build the component structure and logic (reads taxonomy summary, shows project count, exposes `onClear`), but leave it unstyled. Ula will provide the design separately.
+
+---
+
+## Design system
+
+All components must use these CSS custom properties. No hardcoded colour or spacing values.
 
 ```css
 :root {
-  /* Colour */
   --background:         #ffffff;
   --background-subtle:  #fafafa;
   --bg-card:            #f0f4f8;
@@ -28,16 +117,12 @@ All components **must** use these CSS custom properties. Do not hardcode colour 
   --accent-yellow:      rgba(255, 210, 100, 0.45);
   --accent-secondary:   #dbeafe;
   --border:             #e5e7eb;
-
-  /* Typography */
-  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* Layout */
-  --max-width:   1400px;
-  --nav-height:  64px;
+  --font-body:          'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --max-width:          1400px;
+  --nav-height:         64px;
 }
 
-[data-theme="dark"] {
+.dark-mode {
   --background:         #1E1E1E;
   --background-subtle:  #1a1917;
   --bg-card:            #1e1d1b;
@@ -50,412 +135,364 @@ All components **must** use these CSS custom properties. Do not hardcode colour 
 }
 ```
 
-Dark mode is toggled via `data-theme="dark"` on the `<html>` element. All components must support both themes automatically via CSS variables.
+Dark mode: toggled by adding/removing `.dark-mode` on `<html>`. All new components get dark mode for free if they only use CSS vars.
 
 ---
 
-## File Structure to Create
+## CSS conventions
 
+- **No new CSS files.** All styles go in `src/style.css`.
+- New filter feature styles go under the `/* === SKILL FILTER === */` section header.
+- Class prefix for new components: `.sf-` (filter bar/chips), `.ev-` (evidence cards).
+- Follow mobile-first breakpoints already used in the file:
+
+```css
+/* base = mobile < 768px */
+@media (min-width: 768px)  { /* tablet  */ }
+@media (min-width: 1024px) { /* desktop */ }
 ```
-content/
-  projects/
-    example-project.mdx        ← example/template file
 
-components/
-  mdx/
-    MDXRenderer.jsx             ← renders MDX with component map
-    mdx-components.js           ← exports all MDX-available components
-
-  project/
-    ProjectLayout.jsx           ← wraps every project page (header, nav, spacing)
-    ProjectHero.jsx             ← title, tags, cover image, metadata row
-    RichText.jsx                ← styled prose wrapper (headings, p, ul, etc.)
-    SectionTitle.jsx            ← labelled section divider used between components
-
-  dataviz/
-    CardSortStudy.jsx           ← card sort results with progress bars
-    CompetitiveAnalysis.jsx     ← competitor table with strengths/weaknesses
-    ProcessBoard.jsx            ← kanban-style phase board
-    FlowDiagram.jsx             ← user flow / decision tree diagram
-
-app/
-  projects/
-    [slug]/
-      page.jsx                  ← dynamic route, reads MDX by slug
-```
+- Use the existing `.reveal` class + IntersectionObserver pattern for scroll animations — search `reveal` in `App.tsx` to see how it's wired.
 
 ---
 
-## Page & Routing Setup
+## MDX frontmatter shape
 
-### `app/projects/[slug]/page.jsx`
-
-- Read the MDX file from `content/projects/[slug].mdx`
-- Use `next-mdx-remote/rsc` for server-side MDX rendering
-- Pass all components from `mdx-components.js` to `MDXRemote`
-- Wrap output in `<ProjectLayout>`
-- Generate static params from all files in `content/projects/`
-
-```bash
-npm install next-mdx-remote gray-matter
-```
-
-### Frontmatter shape (every `.mdx` file starts with this)
+Every case study MDX file uses this structure. The `skills` and `evidence` fields power the filter system.
 
 ```yaml
 ---
 title: "Project Title"
+client: "Company"
 summary: "One sentence description"
-tags: ["UX Research", "Information Architecture"]
+introText: "Longer intro shown in ProjectHero"
+pullQuote: "Standalone quote — must work out of context"
+tags: ["Product Design", "UX Research"]
 year: "2024"
-coverImage: "/images/projects/cover.jpg"   # optional
+coverImage: "/cover.webp"
+
+skills:
+  - user-research
+  - interaction
+
+evidence:
+  - type: quote
+    skill: user-research
+    text: "Exact quote text."
+  - type: metric
+    skill: interaction
+    label: "Stat label"
+    value: "47%"
+    context: "Optional explanatory line"
+  - type: artifact
+    skill: prototyping
+    label: "Artifact label"
+    image: "/images/artifact.webp"
 ---
+```
+
+See `content/projects/ai-composer.mdx` for a complete working example.
+
+---
+
+## Inline MDX evidence components
+
+These are the three new components available for use inside case study MDX files:
+
+```tsx
+<Metric
+  skill="interaction"
+  value="47%"
+  label="Builder adoption rate"
+  context="Within 60 days of launch"
+/>
+
+<StudyResult
+  skill="user-research"
+  participants={12}
+  label="Agency user interviews"
+  options={[
+    { label: "Switched to external tools", percentage: 72 },
+  ]}
+  variant="with-icon"   // "basic" | "with-icon" | "gradient"
+/>
+
+<EvidenceQuote
+  skill="strategy"
+  text="Quote text here."
+  attribution="Optional source"
+/>
 ```
 
 ---
 
-## Component Specs
+## Research visualisation MDX components
 
-### `ProjectLayout.jsx`
-- Max width: `var(--max-width)`, horizontally centred, padded
-- Top padding accounts for `var(--nav-height)`
-- Single column layout
-- Responsive padding: `1rem` mobile, `2rem` tablet, `4rem` desktop
+These components are purpose-built for embedding research findings inline in case studies. All accept a `skill: SkillKey` prop — the skill key is rendered as a pill chip at the bottom-left of the card.
 
-### `ProjectHero.jsx`
-Props: `title`, `summary`, `tags[]`, `year`, `coverImage?`
-- Large title (display size), summary in `--text-secondary`
-- Tags rendered as small pill chips using `--bg-card` + `--border`
-- Cover image full-width with `border-radius`, optional
-- On mobile: stacks vertically, image below text
+`StudyResult` has full visual design spec below. The remaining five components (`DotSurvey`, `PriorityRanking`, `ImportanceMatrix`, `Demographics`, `SiteMap`, `RecruitmentSources`) — build structure and logic only, Ula will provide design separately.
 
-### `SectionTitle.jsx`
-Props: `label`, `eyebrow?`
-- Small spaced uppercase eyebrow in `--text-light`
-- Larger section heading in `--text-primary`
-- Subtle top border using `--border`
+### `<StudyResult>`
 
----
+The primary evidence card. Four visual variants, controlled by the `variant` prop. All share the same outer card shape: `border-radius: 16px`, dark background, `padding: 1.5rem`.
 
-## Dataviz Component Specs
+**Variant: `with-icon`** *(screenshot 1)*
+- Header row: yellow circle (~48px) with white people SVG icon (use `UsersIcon` from `iconoir-react`), then "**N Participants**" bold white + subtitle in `--text-light` monospace
+- Body: stacked rows — each row is `[label] [percentage in yellow] [progress bar]`
+  - Progress bar: full width, ~8px tall, yellow fill (`rgba(255, 210, 100, 1)`) on `--bg-card` track, `border-radius: 4px`
+  - Percentage value: monospace, yellow
+  - Label: monospace, `--text-primary`
+- Background: `--background` (plain dark)
+- Skill chip at bottom-left: `border: 1px solid var(--border)`, monospace, small, `border-radius: 6px`
 
-All dataviz components share these rules:
-- Background: `var(--bg-card)`
-- Border: `1px solid var(--border)`
-- Border radius: `12px`
-- Padding: `1.5rem` desktop, `1rem` mobile
-- All text uses design system colour tokens
-- Full width within their container
-- Must work in both light and dark mode
+**Variant: `basic`** *(screenshot 2, top)*
+- Header: "**N Participants**" bold + subtitle monospace, no icon
+- Body: 2-column card grid — each card is `--bg-card` background, `border-radius: 12px`, padding `1rem`, with a bold title and muted body text
+- Background: colorful noise/grain mesh gradient (see gradient spec below)
+- No skill chip on this variant
 
----
+**Variant: `gradient`** *(screenshot 2, middle)*
+- Same layout as `with-icon` (icon + participant count + progress bars + skill chip)
+- Background: colorful noise/grain mesh gradient instead of plain dark
 
-### `CardSortStudy.jsx`
+**Variant: `gradient-cards`** *(screenshot 2, bottom)*
+- Same layout as `basic` (2-column card grid, no icon)
+- Background: colorful noise/grain mesh gradient
+- Lighter gradient saturation than `gradient`
 
-Displays results of a card sort user research study.
-
-**Props:**
-```js
-participants: number
-studyLabel: string          // e.g. "Internal Card Sort Study"
-results: Array<{
-  label: string             // category name e.g. "Vehicles"
-  percentage: number        // agreement percentage 0–100
-  alsoConsidered: string[]  // alternative names considered
-  itemsGrouped: string      // comma-separated items in this group
-}>
-```
-
-**Visual design (based on screenshot):**
-- Header row: participant count (large, bold) + study label (small caps, `--text-light`)
-- Each result row is a card with:
-  - Left: category label in quotes + percentage in `--accent-yellow` (or a purple/violet tint)
-  - Progress bar: filled portion uses accent colour, track uses `--border`, full width
-  - Middle: "ALSO CONSIDERED" label (small caps) + tags as dark pill chips
-  - Right: "ITEMS GROUPED" label (small caps) + item list in `--text-secondary`
-- On mobile: stack middle and right columns below the progress bar
-- On tablet: middle and right side by side below bar
-- On desktop: three columns in one row
-
----
-
-### `CompetitiveAnalysis.jsx`
-
-Displays a competitive audit across multiple companies.
-
-**Props:**
-```js
-competitors: Array<{
-  name: string              // e.g. "BMW"
-  navType: string           // e.g. "Mega Menu", "Dropdown"
-  topNavItems: string[]     // navigation labels
-  strengths: string[]
-  weaknesses: string[]
-}>
-```
-
-**Visual design (based on screenshot):**
-- Section heading: "Competitive Analysis" with optional intro text slot
-- Each competitor is a card containing:
-  - Left column: company name (large) + nav type label (small caps, `--text-light`)
-  - Top nav items: rendered as dark pill chips in a row
-  - Two columns below: Strengths (green dot + label) and Weaknesses (red dot + label)
-- Cards separated by visible border
-- On mobile: everything stacks to single column
-- Strength/weakness columns stack on mobile
-
----
-
-### `ProcessBoard.jsx`
-
-Kanban-style board showing project phases and tasks.
-
-**Props:**
-```js
-title?: string              // defaults to "Process"
-phases: Array<{
-  label: string             // e.g. "Research & Strategy"
-  color: string             // dot colour: "purple" | "yellow" | "teal" | string hex
-  items: Array<{
-    label: string           // task name
-    detail?: string         // optional tooltip/info content
-  }>
-}>
-```
-
-**Visual design (based on screenshot):**
-- Title: large "Process" heading
-- Horizontal scroll container on mobile (snap scroll between columns)
-- Each phase is a column card with:
-  - Header: coloured dot + phase label in small caps
-  - Items: each item is a card with label + optional info icon (ⓘ)
-  - Info icon opens a small tooltip/popover with `detail` text
-- Columns equal width on desktop, full width stacked or horizontal scroll on mobile
-- Column border: `1px solid var(--border)`, rounded `12px`
-
----
-
-### `FlowDiagram.jsx`
-
-Renders a user flow / decision tree using React Flow or a lightweight SVG-based approach.
-
-**Props:**
-```js
-nodes: Array<{
-  id: string
-  label: string
-  type: "action" | "decision" | "outcome" | "start"
-  x: number                 // position
-  y: number
-}>
-edges: Array<{
-  from: string              // node id
-  to: string                // node id
-  label?: string            // e.g. "YES", "NO"
-  color?: string            // e.g. "green" | "red" | default
-}>
-```
-
-**Visual design (based on screenshot):**
-- Dark card background for nodes
-- Action nodes: rounded rectangles, `--bg-card` fill, purple/indigo tint for primary actions
-- Decision nodes: diamond shape
-- Edges: lines with optional labels, coloured green/red for yes/no paths
-- Link icon on nodes that have external destinations
-- On mobile: render a simplified vertical list view instead of the spatial diagram (diagram layout is complex on small screens)
-- Recommend using **React Flow** (`@xyflow/react`) for this component:
-
-```bash
-npm install @xyflow/react
-```
-
----
-
-## MDX Component Map
-
-`components/mdx/mdx-components.js` should export all available components:
-
-```js
-import CardSortStudy from '@/components/dataviz/CardSortStudy'
-import CompetitiveAnalysis from '@/components/dataviz/CompetitiveAnalysis'
-import ProcessBoard from '@/components/dataviz/ProcessBoard'
-import FlowDiagram from '@/components/dataviz/FlowDiagram'
-import SectionTitle from '@/components/project/SectionTitle'
-import ProjectHero from '@/components/project/ProjectHero'
-
-export const mdxComponents = {
-  CardSortStudy,
-  CompetitiveAnalysis,
-  ProcessBoard,
-  FlowDiagram,
-  SectionTitle,
-  ProjectHero,
+**Gradient background spec:**
+The gradient is a noise-textured mesh — multiple radial gradients composited with a grain overlay. Implement as:
+```css
+.sr-gradient {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(120, 80, 180, 0.6) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(60, 120, 180, 0.5) 0%, transparent 55%),
+    radial-gradient(ellipse at 60% 80%, rgba(80, 140, 80, 0.4) 0%, transparent 50%),
+    var(--background);
+  position: relative;
+}
+.sr-gradient::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,..."); /* SVG noise filter */
+  opacity: 0.15;
+  border-radius: inherit;
+  pointer-events: none;
 }
 ```
 
----
+**Full prop interface:**
+```tsx
+interface StudyResultProps {
+  skill: SkillKey
+  participants: number
+  label: string                          // subtitle / study description
+  variant: 'with-icon' | 'basic' | 'gradient' | 'gradient-cards'
+  // for with-icon / gradient variants (progress bars):
+  options?: Array<{
+    label: string
+    percentage: number
+  }>
+  // for basic / gradient-cards variants (card grid):
+  cards?: Array<{
+    title: string
+    description: string
+  }>
+}
+```
 
-## Example MDX File
-
-Create this as `content/projects/example-project.mdx` as a working template:
-
-```mdx
----
-title: "Tesla Mega Menu Redesign"
-summary: "Redesigning Tesla's navigation to improve information architecture and findability."
-tags: ["UX Research", "Information Architecture", "Navigation"]
-year: "2024"
-coverImage: "/images/projects/tesla-cover.jpg"
----
-
-<ProjectHero />
-
-<SectionTitle eyebrow="01 — Research" label="Understanding the Problem" />
-
-This project began with an audit of Tesla's existing navigation patterns and a series of user research activities to validate hypotheses about findability issues.
-
-<SectionTitle eyebrow="02 — Process" label="How We Got Here" />
-
-<ProcessBoard phases={[
-  {
-    label: "Research & Strategy",
-    color: "purple",
-    items: [
-      { label: "Research Key Topics" },
-      { label: "Create Automations" },
-      { label: "Propose IA" },
-      { label: "Audit Competitors", detail: "Reviewed BMW, Porsche, Rivian, and Lucid navigation patterns" }
-    ]
-  },
-  {
-    label: "Design & Iteration",
-    color: "purple",
-    items: [
-      { label: "Consolidate Chat UI" },
-      { label: "Create Chat Components" },
-      { label: "Mock Up Key Flows" },
-      { label: "Align on Copy" },
-      { label: "Iterate on Designs" }
-    ]
-  },
-  {
-    label: "Scoping & Approval",
-    color: "yellow",
-    items: [
-      { label: "Define MVP" },
-      { label: "Get Approvals" }
-    ]
-  },
-  {
-    label: "Implementation",
-    color: "teal",
-    items: [
-      { label: "Support Engineering" },
-      { label: "Conduct Design QA" },
-      { label: "Launch It! 🚀" }
-    ]
-  }
-]} />
-
-<SectionTitle eyebrow="03 — Research" label="Competitive Analysis" />
-
-Before defining the new information architecture, I researched navigation patterns across automotive and tech brands.
-
-<CompetitiveAnalysis competitors={[
-  {
-    name: "BMW",
-    navType: "Mega Menu",
-    topNavItems: ["Models", "Build", "Shopping", "Electric", "Owners"],
-    strengths: ["Clear vehicle categorization (SUV, Sedan, Coupe)", "Dedicated electric section"],
-    weaknesses: ["Dense subcategories", "Separate shopping flow"]
-  },
-  {
-    name: "Porsche",
-    navType: "Mega Menu",
-    topNavItems: ["Models", "Experience", "Ownership", "Porsche Finder"],
-    strengths: ["Model-centric navigation", "Lifestyle content integrated"],
-    weaknesses: ["Limited top-level categories", "Complex model variants"]
-  },
-  {
-    name: "Rivian",
-    navType: "Dropdown",
-    topNavItems: ["Vehicles", "Gear Shop", "Charging", "Discover", "Ownership"],
-    strengths: ["Clean, minimal structure", "Action-oriented CTAs per vehicle"],
-    weaknesses: ["Gear shop prominent (e-commerce focus)", "Less scalable for larger lineup"]
-  }
-]} />
-
-<SectionTitle eyebrow="04 — Validation" label="Card Sort Study" />
-
-To validate our proposed navigation structure, we ran an internal card sort study with 32 participants.
-
-<CardSortStudy
-  participants={32}
-  studyLabel="Internal Card Sort Study"
-  results={[
-    { label: "Vehicles", percentage: 94, alsoConsidered: ["Cars", "Models", "Products"], itemsGrouped: "Model S, Model 3, Model X +4 more" },
-    { label: "Energy", percentage: 78, alsoConsidered: ["Solar", "Power", "Home"], itemsGrouped: "Solar Panels, Solar Roof, Powerwall +1 more" },
-    { label: "Charging", percentage: 88, alsoConsidered: ["Supercharger", "Power Up", "Fuel"], itemsGrouped: "Supercharger Network, Home Charging, Charging Calculator" },
-    { label: "Discover", percentage: 72, alsoConsidered: ["Explore", "Learn", "About"], itemsGrouped: "About Tesla, Careers, News +2 more" },
-    { label: "Shop", percentage: 91, alsoConsidered: ["Store", "Buy", "Accessories"], itemsGrouped: "Vehicle Accessories, Apparel, Lifestyle" }
+```tsx
+// Progress bar variant
+<StudyResult
+  skill="user-research"
+  participants={5}
+  label="Subtitle goes here and explains what this content portrays"
+  variant="with-icon"
+  options={[
+    { label: "Option 1 goes here", percentage: 24 },
+    { label: "Option 2 goes here", percentage: 24 },
   ]}
 />
 
-<SectionTitle eyebrow="05 — Design" label="Chat Flow Architecture" />
-
-<FlowDiagram
-  nodes={[
-    { id: "start", label: "Open Chat", type: "start", x: 50, y: 300 },
-    { id: "prev", label: "Help With Previous Purchases", type: "action", x: 250, y: 150 },
-    { id: "buying", label: "Buying Tesla Products", type: "action", x: 250, y: 300 },
-    { id: "delivery", label: "Questions About Delivery", type: "action", x: 250, y: 480 },
-    { id: "demo", label: "Schedule Demo Drive", type: "action", x: 250, y: 650 },
-    { id: "advisor", label: "Advisor Online?", type: "decision", x: 520, y: 225 },
-    { id: "contact", label: "Contact Form", type: "outcome", x: 750, y: 150 },
-    { id: "redirect", label: "Advisor Redirect", type: "outcome", x: 750, y: 300 }
-  ]}
-  edges={[
-    { from: "start", to: "prev" },
-    { from: "start", to: "buying" },
-    { from: "start", to: "delivery" },
-    { from: "start", to: "demo" },
-    { from: "prev", to: "advisor", color: "green" },
-    { from: "buying", to: "advisor", color: "green" },
-    { from: "advisor", to: "contact", label: "NO" },
-    { from: "advisor", to: "redirect", label: "YES" }
+// Card grid variant
+<StudyResult
+  skill="user-research"
+  participants={5}
+  label="Subtitle goes here and explains what this content portrays"
+  variant="gradient"
+  cards={[
+    { title: "Option 1", description: "Subtitle goes here and explains what this content portrays" },
+    { title: "Option 2", description: "Subtitle goes here and explains what this content portrays" },
   ]}
 />
 ```
 
 ---
 
-## Responsive Breakpoints
+### `<DotSurvey>`
 
-Use these consistently across all components:
+Isotype dot-matrix chart. Shows participant count as a grid of filled/unfilled dots, with a row of N/total stat cards below and an optional description.
 
-```css
-/* Mobile first */
-/* Base styles: mobile < 768px */
+```tsx
+<DotSurvey
+  skill="user-research"
+  participants={29}
+  description="From our survey of 29 participants, we found that a large majority engage in online communities and access them using their mobile device."
+  stats={[
+    { value: 26, label: "Engage in online communities" },
+    { value: 25, label: "Access via mobile device" },
+    { value: 17, label: "Would meet nearby members" },
+  ]}
+/>
+```
 
-@media (min-width: 768px) { /* Tablet */ }
-@media (min-width: 1024px) { /* Desktop */ }
+Each stat renders as `N / {participants}` with the label below. Dots fill left-to-right proportionally to N.
+
+---
+
+### `<PriorityRanking>`
+
+Two-column ranked list: most important items on the left (filled star icon), least important on the right (outline star icon).
+
+```tsx
+<PriorityRanking
+  skill="user-research"
+  mostImportant={[
+    "Discuss specific diagnosis",
+    "Educational resources",
+    "Safe space to share ideas",
+    "Check any time",
+    "Low sodium diet info",
+  ]}
+  leastImportant={[
+    "Intimacy discussions",
+    "Religious support",
+    "Unmoderated community",
+  ]}
+/>
 ```
 
 ---
 
-## Packages to Install
+### `<ImportanceMatrix>`
 
-```bash
-npm install next-mdx-remote gray-matter @xyflow/react
+Table showing attributes rated across importance levels. Rows = attributes, columns = importance tiers. Cells contain percentage values; highlighted cells indicate the dominant tier for each row.
+
+```tsx
+<ImportanceMatrix
+  skill="user-research"
+  label="Top 8 Community Attributes"
+  columns={["Very Important", "Important", "Somewhat Important", "Least Important", "Unsorted"]}
+  rows={[
+    { label: "Ability to discuss your diagnosis", values: [60, 27, 7, 7, 7], highlight: 0 },
+    { label: "Educational resources",             values: [57, 40, 3, null, null], highlight: 0 },
+    { label: "Health advice",                     values: [53, 23, 10, 10, 10], highlight: 0 },
+    { label: "Safe space to share ideas",         values: [53, 27, 10, 10, null], highlight: 0 },
+    { label: "An accessible online community",    values: [50, 23, 10, 10, 10], highlight: 0 },
+    { label: "Sharing personal health experiences", values: [43, 33, 20, 3, null], highlight: 0 },
+    { label: "Low-sodium recipes",                values: [20, 40, 30, 10, null], highlight: 1 },
+    { label: "Friendships",                       values: [20, 37, 27, 13, 3], highlight: 1 },
+  ]}
+/>
+```
+
+`highlight` is the column index to emphasise for that row.
+
+---
+
+### `<Demographics>`
+
+Person-silhouette icon row showing audience age/demographic breakdown. The highlighted group uses an accent colour; others are muted.
+
+```tsx
+<Demographics
+  skill="user-research"
+  groups={[
+    { label: "Age 19–34", percentage: 5.1 },
+    { label: "Age 35–39", percentage: 7.6 },
+    { label: "Age 40–54", percentage: 48.7, highlight: true },
+    { label: "Age 55–75", percentage: 38.4 },
+  ]}
+/>
 ```
 
 ---
 
-## Definition of Done
+### `<SiteMap>`
 
-- [ ] `app/projects/[slug]/page.jsx` renders any MDX file from `content/projects/`
-- [ ] All 4 dataviz components render correctly with the example data above
-- [ ] All components support light and dark mode via CSS variables
-- [ ] All components are responsive at mobile (375px), tablet (768px), desktop (1440px)
-- [ ] `content/projects/example-project.mdx` renders as a complete working page
-- [ ] No hardcoded colours — all values use `var(--token-name)`
+Sticky-note style IA map with named sections and grouped items. Renders as a spatial grid on desktop, stacked sections on mobile.
+
+```tsx
+<SiteMap
+  skill="information-architecture"
+  sections={[
+    {
+      label: "Universal Features",
+      color: "yellow",
+      items: ["Search", "Chat"],
+    },
+    {
+      label: "Pages",
+      color: "teal",
+      items: ["Messages (Inbox)", "Community", "Resources", "Home", "Account",
+              "Meet-up / Interest Groups", "Articles", "Settings", "User Info",
+              "Forum", "Recipes", "Profile"],
+    },
+    {
+      label: "Onboarding",
+      color: "pink",
+      items: ["Welcome Screen with Topics", "Suggestions to Similar Users"],
+    },
+  ]}
+/>
+```
+
+`color` maps to a sticky-note background tint — use CSS vars, not hardcoded values.
+
+---
+
+### `<RecruitmentSources>`
+
+Horizontal bar chart showing where research participants were recruited from. Each row has a platform icon, label, and percentage bar.
+
+```tsx
+<RecruitmentSources
+  skill="user-research"
+  label="Where we recruited participants"
+  sources={[
+    { label: "Facebook Groups",       icon: "facebook",  percentage: 55 },
+    { label: "Reddit",                icon: "reddit",    percentage: 31 },
+    { label: "Personal Networks",     icon: "people",    percentage: 10 },
+    { label: "Catalia Health Patients", icon: "heart",   percentage: 4  },
+  ]}
+/>
+```
+
+`icon` accepts a string key mapped to an icon from the existing Iconoir React library already installed (`iconoir-react`).
+
+---
+
+## Packages already installed
+
+```
+@mdx-js/rollup
+@mdx-js/react
+remark-frontmatter
+remark-mdx-frontmatter
+react-router-dom
+```
+
+Do not install `next-mdx-remote`, `gray-matter`, or any Next.js packages.
+
+---
+
+## Model recommendations
+
+| Task | Model |
+|---|---|
+| Types, hooks, filter logic | `claude-sonnet-4-6` |
+| Component JSX + CSS | `claude-sonnet-4-6` |
+| Adding frontmatter to MDX files in bulk | `claude-haiku-4-5-20251001` |
+| File exploration / reading code | `claude-haiku-4-5-20251001` |
+| Major architectural decisions only | `claude-opus-4-6` |

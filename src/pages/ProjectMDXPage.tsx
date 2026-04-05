@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom"
 import { MDXProvider } from "@mdx-js/react"
 import { mdxComponents } from "../components/mdx/mdx-components"
 import { DetailNav } from "./ProjectDetail"
+import { ProjectSideNav } from "../components/project/ProjectSideNav"
 
 // Eagerly register all MDX project files so Vite bundles them
 const projectModules = import.meta.glob("../../content/projects/*.mdx")
@@ -70,20 +71,36 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
   const MDXContent = mod.default
   const fm = mod.frontmatter ?? {}
 
-  // Inject frontmatter into ProjectHero automatically
-  const components = {
+  // Hero renders above the grid — suppress it inside MDX to avoid duplication
+  const bodyComponents = {
     ...mdxComponents,
-    ProjectHero: () => <mdxComponents.ProjectHero {...fm} />,
+    ProjectHero: () => null,
   }
 
   return (
     <div className="pl-wrapper">
       <DetailNav isDark={isDark} toggleDark={toggleDark} />
-      <main className="pl-content">
-        <MDXProvider components={components}>
-          <MDXContent />
-        </MDXProvider>
-      </main>
+
+      {/* Hero: full-width, outside the sidebar grid */}
+      <div className="pl-hero-zone">
+        <mdxComponents.ProjectHero {...fm} />
+      </div>
+
+      {/* Body: sidebar + case study sections */}
+      <div className="pl-page-body">
+        <ProjectSideNav ready={true} />
+        <main className="pl-content pl-body-content">
+          {fm.pullQuote && (
+            <blockquote className="pd-pull-quote">
+              <span className="pd-quote-mark">"</span>
+              <p>{fm.pullQuote}</p>
+            </blockquote>
+          )}
+          <MDXProvider components={bodyComponents}>
+            <MDXContent />
+          </MDXProvider>
+        </main>
+      </div>
     </div>
   )
 }
