@@ -687,40 +687,7 @@ mark.highlight-animated {
   border-top-left-radius: 12px;
 }
 
-.project-preview-tags {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  align-items: flex-start;
-}
 
-.project-preview-label {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-light);
-}
-
-.project-preview-tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.project-preview-tag {
-  display: inline-block;
-  align-self: flex-start;
-  width: fit-content;
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 5px 12px;
-}
 
 .preview-mock {
   background: white;
@@ -1807,20 +1774,6 @@ a.project-card {
   gap: 6px;
 }
 
-.pd-skill-tag {
-  display: inline-block;
-  align-self: flex-start;
-  width: fit-content;
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  font-weight: 450;
-  color: var(--text-secondary);
-  background: #f3f4f6;
-  border-radius: var(--radius-full);
-  padding: 4px 12px;
-  white-space: nowrap;
-  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
 /* ── Article content ─────────────────────────────────────────────── */
 .pd-content {
@@ -2127,9 +2080,6 @@ a.project-card {
   background: var(--bg-card);
 }
 
-[data-theme="dark"] .pd-skill-tag {
-  background: #2d2b28;
-}
 
 [data-theme="dark"] .pd-related-card:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -3511,16 +3461,6 @@ a.project-card {
   gap: var(--space-1);
 }
 
-.cs-chip {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--text-primary);
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 2px var(--space-3);
-  letter-spacing: 0.01em;
-}
 
 .cs-items-text {
   font-size: 13px;
@@ -4549,6 +4489,7 @@ a.project-card {
   flex-wrap: wrap;
 }
 
+/* General-purpose tag/chip — default + named colour variants */
 .ssp-chip {
   display: inline-block;
   align-self: flex-start;
@@ -4558,10 +4499,26 @@ a.project-card {
   font-weight: 400;
   font-style: normal;
   line-height: 1.6;
-  padding: 2px 6px;
+  padding: 2px 8px;
   border-radius: 4px;
   white-space: nowrap;
+  /* Default appearance — works in light and dark mode */
+  background: var(--bg-card);
+  color: var(--text-secondary);
 }
+
+/* Named colour variants */
+.ssp-chip--olive   { background: #343E0A; color: #f0ede8; }
+.ssp-chip--maroon  { background: #4B3130; color: #f0ede8; }
+.ssp-chip--violet  { background: #5830CF; color: #ffffff; }
+.ssp-chip--sky     { background: #729DE1; color: #1a1a1a; }
+.ssp-chip--mauve   { background: #7E5475; color: #f0ede8; }
+.ssp-chip--slate   { background: #8C9DB1; color: #1a1a1a; }
+.ssp-chip--crimson { background: #940000; color: #f0ede8; }
+.ssp-chip--amber   { background: #BA7008; color: #f0ede8; }
+.ssp-chip--sand    { background: #BEA68C; color: #1a1a1a; }
+.ssp-chip--rose    { background: #D88A9C; color: #1a1a1a; }
+.ssp-chip--gold    { background: #F1D278; color: #1a1a1a; }
 
 /* === MDX INLINE COMPONENTS === */
 

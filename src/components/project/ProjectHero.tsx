@@ -76,7 +76,7 @@ export default function ProjectHero({ title, summary, tags, year, coverImage, cl
               <span className="pd-stats-label">Skills</span>
               <div className="pd-skills">
                 {tags.map((tag) => (
-                  <span key={tag} className="pd-skill-tag">{tag}</span>
+                  <span key={tag} className="ssp-chip">{tag}</span>
                 ))}
               </div>
             </div>

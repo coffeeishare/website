@@ -35,7 +35,7 @@ export default function CardSortStudy({ participants, studyLabel, results }: Car
                 <span className="cs-col-label">Also Considered</span>
                 <div className="cs-tags">
                   {result.alsoConsidered.map((tag) => (
-                    <span key={tag} className="cs-chip">{tag}</span>
+                    <span key={tag} className="ssp-chip">{tag}</span>
                   ))}
                 </div>
               </div>

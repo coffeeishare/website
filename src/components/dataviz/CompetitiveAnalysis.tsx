@@ -24,7 +24,7 @@ export default function CompetitiveAnalysis({ competitors }: CompetitiveAnalysis
             </div>
             <div className="ca-nav-items">
               {competitor.topNavItems.map((item) => (
-                <span key={item} className="project-preview-tag">{item}</span>
+                <span key={item} className="ssp-chip">{item}</span>
               ))}
             </div>
           </div>
