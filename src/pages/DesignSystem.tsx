@@ -39,6 +39,7 @@ const sections: SectionDef[] = [
     icon: <Component width={16} height={16} strokeWidth={1.6} />,
     children: [
       { id: "comp-buttons", label: "Buttons" },
+      { id: "comp-badges",  label: "Badges & chips" },
       { id: "comp-tabs",    label: "Tabs" },
       { id: "comp-cards",   label: "Cards" },
       { id: "comp-avatar",  label: "Avatar pill" },
@@ -61,6 +62,7 @@ const sections: SectionDef[] = [
     children: [
       { id: "patterns-layout",      label: "Layout" },
       { id: "patterns-interaction", label: "Interaction" },
+      { id: "patterns-filter",      label: "Skill filter" },
     ],
   },
 ]
@@ -478,6 +480,52 @@ function ComponentsContent() {
 
       <div className="ds-section-rule" />
 
+      <section id="comp-badges" className="ds-sub-section">
+        <SectionHeader title="Badges & chips" description="All label elements in the system. Pick the canonical class — do not create new badge styles." />
+
+        <GroupLabel>Metadata tag · .project-preview-tag</GroupLabel>
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {["Product Design", "UX Research", "2024"].map((tag) => (
+            <span key={tag} className="project-preview-tag">{tag}</span>
+          ))}
+        </div>
+
+        <GroupLabel>Skill keyword · .pd-skill-tag</GroupLabel>
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {["User Research", "Interaction Design", "Strategy"].map((tag) => (
+            <span key={tag} className="pd-skill-tag">{tag}</span>
+          ))}
+        </div>
+
+        <GroupLabel>MDX skill attribution · .mdx-skill-chip</GroupLabel>
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {["user-research", "interaction", "prototyping"].map((s) => (
+            <span key={s} className="mdx-skill-chip">{s}</span>
+          ))}
+        </div>
+
+        <GroupLabel>Cover image overlay · .project-badge</GroupLabel>
+        <div className="ds-component-canvas" style={{ position: "relative", height: 64 }}>
+          <span className="project-badge">Work · 2024</span>
+        </div>
+
+        <GroupLabel>Summary panel project chip · .ssp-chip</GroupLabel>
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {(
+            [
+              { label: "AI App Generation", bg: "#f1d278", color: "var(--background)" },
+              { label: "Heart Failure Hub",  bg: "#7e5475", color: "#f0ede8" },
+              { label: "Tesla Navigation",   bg: "#3d7a6a", color: "#f0ede8" },
+              { label: "Clawd",              bg: "#4a6898", color: "#f0ede8" },
+            ] as { label: string; bg: string; color: string }[]
+          ).map(({ label, bg, color }) => (
+            <span key={label} className="ssp-chip" style={{ background: bg, color }}>{label}</span>
+          ))}
+        </div>
+      </section>
+
+      <div className="ds-section-rule" />
+
       <section id="comp-tabs" className="ds-sub-section">
         <SectionHeader title="Tabs" description="Filter controls used in the work grid and project detail pages." />
         <div className="ds-component-canvas">
@@ -767,6 +815,18 @@ function PatternsContent() {
               <span className="ds-pattern-name">{p.name}</span>
               <p className="ds-pattern-desc">{p.desc}</p>
             </div>
+          ))}
+        </div>
+      </section>
+
+      <div className="ds-section-rule" />
+
+      <section id="patterns-filter" className="ds-sub-section">
+        <SectionHeader title="Skill filter" description="Toggle chips that filter the project grid by skill. URL-synced via ?skills= param. Use .sf-chip and .sf-chip--active — do not use these classes outside SkillFilterBar." />
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button className="sf-chip sf-chip--active">All</button>
+          {["User Research", "Interaction Design", "Strategy", "Prototyping", "Systems Thinking"].map((s) => (
+            <button key={s} className="sf-chip">{s}</button>
           ))}
         </div>
       </section>

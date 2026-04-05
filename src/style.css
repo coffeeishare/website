@@ -641,6 +641,7 @@ mark.highlight-animated {
   gap: 6px;
   background: #111;
   color: #fff;
+  font-family: 'DM Mono', monospace;
   font-size: 12px;
   font-weight: 500;
   padding: 6px 14px;
@@ -708,6 +709,10 @@ mark.highlight-animated {
 }
 
 .project-preview-tag {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
+  font-family: 'DM Mono', monospace;
   font-size: 12px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -1803,6 +1808,9 @@ a.project-card {
 }
 
 .pd-skill-tag {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   font-weight: 450;
@@ -3572,17 +3580,7 @@ a.project-card {
   align-items: flex-start;
 }
 
-.ca-chip {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-primary);
-  background: var(--background);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-full);
-  padding: 3px var(--space-3);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
+
 
 .ca-card-body {
   display: grid;
@@ -4242,7 +4240,7 @@ a.project-card {
   border: 1px solid var(--border);
   background: transparent;
   color: var(--text-secondary);
-  font-family: var(--font-body);
+  font-family: 'DM Mono', monospace;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -4552,6 +4550,9 @@ a.project-card {
 }
 
 .ssp-chip {
+  display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
   font-family: 'DM Mono', monospace;
   font-size: 12px;
   font-weight: 400;
@@ -4567,6 +4568,8 @@ a.project-card {
 /* Shared skill chip used by Metric, EvidenceQuote, StudyResult */
 .mdx-skill-chip {
   display: inline-block;
+  align-self: flex-start;
+  width: fit-content;
   margin-top: 12px;
   font-family: 'DM Mono', monospace;
   font-size: 11px;
@@ -4863,7 +4866,7 @@ a.project-card {
 .pl-body-content {
   max-width: none;
   margin: 0;
-  padding: var(--space-12) 0 var(--space-20) !important;
+  padding: 0 0 var(--space-20) !important;
 }
 
 /* Sidebar */
