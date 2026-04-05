@@ -8,6 +8,12 @@
       "port": 5173
     },
     {
+      "name": "Portfolio Dev (condescending-sanderson)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/condescending-sanderson", "run", "dev", "--", "--port", "5174"],
+      "port": 5174
+    },
+    {
       "name": "Portfolio Dev (branch)",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/optimistic-chebyshev", "run", "dev"],

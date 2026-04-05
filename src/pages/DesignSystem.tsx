@@ -521,18 +521,19 @@ function ComponentsContent() {
       <div className="ds-section-rule" />
 
       <section id="comp-cards" className="ds-sub-section">
-        <SectionHeader title="Cards" description="Project card used in the main grid. Hover reveals the arrow link." />
-        <div className="ds-component-canvas">
-          <div className="ds-project-card-preview">
-            <div className="ds-card-image"><span>Cover image</span></div>
-            <div className="ds-card-body">
-              <div style={{ display: "flex", gap: 6, marginBottom: 10 }}>
-                {["Product design", "2024"].map((tag) => (
-                  <span key={tag} className="ds-card-tag">{tag}</span>
-                ))}
+        <SectionHeader title="Cards" description="Project card used in the main grid. Two-column grid: info left, cover image right." />
+        <div className="ds-component-canvas" style={{ padding: 0, overflow: "hidden", borderRadius: "var(--radius-md)" }}>
+          <div className="project-card" style={{ pointerEvents: "none", minHeight: 280 }}>
+            <div className="project-info">
+              <div className="project-company-logo" />
+              <div className="project-company">Client name.</div>
+              <h3 className="project-title">Project title</h3>
+              <p className="project-desc">Short description of the project and the problem it solves for users.</p>
+            </div>
+            <div className="project-preview">
+              <div className="project-preview-image" style={{ background: "var(--bg-card)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--text-light)" }}>Cover image</span>
               </div>
-              <p className="ds-card-title">Project title</p>
-              <p className="ds-card-desc">Short description of the project and the problem it solves for users.</p>
             </div>
           </div>
         </div>
