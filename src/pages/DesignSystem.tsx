@@ -481,19 +481,19 @@ function ComponentsContent() {
       <div className="ds-section-rule" />
 
       <section id="comp-badges" className="ds-sub-section">
-        <SectionHeader title="Badges & chips" description="All label elements in the system. Pick the canonical class — do not create new badge styles." />
+        <SectionHeader title="Tags" description="Two tag styles in the system. Do not create new badge classes." />
 
-        <GroupLabel>Metadata tag · .project-preview-tag</GroupLabel>
+        <GroupLabel>Default · .ssp-chip</GroupLabel>
         <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {["Product Design", "UX Research", "2024"].map((tag) => (
-            <span key={tag} className="project-preview-tag">{tag}</span>
+          {["Design", "Research", "Prototyping"].map((tag) => (
+            <span key={tag} className="ssp-chip">{tag}</span>
           ))}
         </div>
 
-        <GroupLabel>Skill keyword · .pd-skill-tag</GroupLabel>
+        <GroupLabel>Coloured · .ssp-chip--{"{colour}"}</GroupLabel>
         <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {["User Research", "Interaction Design", "Strategy"].map((tag) => (
-            <span key={tag} className="pd-skill-tag">{tag}</span>
+          {(["olive","maroon","violet","sky","mauve","slate","crimson","amber","sand","rose","gold"] as const).map((c) => (
+            <span key={c} className={`ssp-chip ssp-chip--${c}`}>{c}</span>
           ))}
         </div>
 
@@ -501,25 +501,6 @@ function ComponentsContent() {
         <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {["user-research", "interaction", "prototyping"].map((s) => (
             <span key={s} className="mdx-skill-chip">{s}</span>
-          ))}
-        </div>
-
-        <GroupLabel>Cover image overlay · .project-badge</GroupLabel>
-        <div className="ds-component-canvas" style={{ position: "relative", height: 64 }}>
-          <span className="project-badge">Work · 2024</span>
-        </div>
-
-        <GroupLabel>Summary panel project chip · .ssp-chip</GroupLabel>
-        <div className="ds-component-canvas" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {(
-            [
-              { label: "AI App Generation", bg: "#f1d278", color: "var(--background)" },
-              { label: "Heart Failure Hub",  bg: "#7e5475", color: "#f0ede8" },
-              { label: "Tesla Navigation",   bg: "#3d7a6a", color: "#f0ede8" },
-              { label: "Clawd",              bg: "#4a6898", color: "#f0ede8" },
-            ] as { label: string; bg: string; color: string }[]
-          ).map(({ label, bg, color }) => (
-            <span key={label} className="ssp-chip" style={{ background: bg, color }}>{label}</span>
           ))}
         </div>
       </section>

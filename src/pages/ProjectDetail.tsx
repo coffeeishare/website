@@ -337,7 +337,7 @@ function ProjectContent({ project }: { project: ProjectDetailEntry }) {
               <span className="pd-stats-label">Skills</span>
               <div className="pd-skills">
                 {skills.map((skill) => (
-                  <span key={skill} className="pd-skill-tag">{skill}</span>
+                  <span key={skill} className="ssp-chip">{skill}</span>
                 ))}
               </div>
             </div>

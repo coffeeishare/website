@@ -139,30 +139,29 @@ Dark mode: toggled by adding/removing `.dark-mode` on `<html>`. All new componen
 
 ---
 
-## Badge / chip / pill / tag system
+## Tag / chip system
 
-**Rule: do not create a new badge class.** Before adding any small label element, pick the canonical class below. If none fit, ask Ula — do not invent a new style.
+**Rule: do not create a new badge class.** Two canonical tag classes exist. If neither fits, ask Ula.
 
-**Documentation rule: whenever you add or update a component spec in this file, show the exact JSX syntax sugar — not just class names. Examples below are the required pattern.**
+**Documentation rule: whenever you add or update a component spec in this file, show the exact JSX syntax — not just class names.**
 
 ### Canonical classes
 
-**`.pd-skill-tag`** — skill/taxonomy keywords (ProjectHero, ProjectDetail)
+**`.ssp-chip`** — general-purpose tag/chip. Default appearance uses CSS vars (works in light + dark). Apply a colour modifier class for named palette colours.
 ```tsx
-<span className="pd-skill-tag">{tag}</span>
+{/* default */}
+<span className="ssp-chip">{label}</span>
+
+{/* coloured — modifier classes: olive · maroon · violet · sky · mauve · slate · crimson · amber · sand · rose · gold */}
+<span className="ssp-chip ssp-chip--gold">{label}</span>
 ```
 
-**`.project-preview-tag`** — metadata labels on project cards
-```tsx
-<span className="project-preview-tag">{label}</span>
-```
-
-**`.mdx-skill-chip`** — skill attribution inside any MDX evidence component
+**`.mdx-skill-chip`** — skill attribution inside any MDX evidence component (bottom-left of viz cards)
 ```tsx
 {skillDef && <span className="mdx-skill-chip">{skillDef.label}</span>}
 ```
 
-**Badge sizing rule:** All badge/chip classes use `width: fit-content` + `align-self: flex-start` so they always hug their content, even when inside a flex-column parent. Never let a badge fill container width.
+**Tag sizing rule:** Both classes use `width: fit-content` + `align-self: flex-start`. Never let a tag fill container width.
 
 **`.sf-chip` / `.sf-chip--active`** — interactive filter toggle (`SkillFilterBar` only)
 ```tsx
@@ -174,23 +173,16 @@ Dark mode: toggled by adding/removing `.dark-mode` on `<html>`. All new componen
 </button>
 ```
 
-**`.project-badge`** — overlay on project cover images
+**`.project-badge`** — overlay on project cover images (component-scoped)
 ```tsx
 <span className="project-badge">{text}</span>
 ```
 
-**`.ssp-chip`** — colored project chips in `SkillSummaryPanel` only (dynamic palette via inline style)
-```tsx
-<span className="ssp-chip" style={{ background: bg, color }}>
-  {project.title}
-</span>
-```
-
 ### Component-scoped — do not reuse outside their component
-`.hero-pill`, `.hero-v2-pill` · `.reference-badge` · `.cs-chip` · `.ds-sidebar-theme-badge`, `.ds-token-tag`, `.ds-card-tag`
+`.hero-pill`, `.hero-v2-pill` · `.reference-badge` · `.ds-sidebar-theme-badge`, `.ds-token-tag`, `.ds-card-tag` · `.project-badge`
 
 ### Viz components — skill chip pattern
-All dataviz and research viz components that accept a `skill` prop must render the skill attribution using `.mdx-skill-chip`, not a custom class:
+All dataviz and research viz components that accept a `skill` prop must render the skill attribution using `.mdx-skill-chip`:
 ```tsx
 // Bottom-left of every viz card — DotSurvey, PriorityRanking, ImportanceMatrix,
 // Demographics, SiteMap, RecruitmentSources, StudyResult, Metric, EvidenceQuote
