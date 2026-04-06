@@ -3211,16 +3211,7 @@ a.project-card {
 
 /* ── pd-* overrides inside MDX pl-content ──────────────────── */
 
-/* Hero hugs content — pl-content gap handles all spacing */
-/* Also break hero out to match the 1200px image+stats width */
-.pl-content .pd-hero {
-  padding: 0;
-  --breakout: min(1200px, 100vw - 2rem);
-  width: var(--breakout);
-  margin-left: calc((var(--breakout) - 100%) / -2);
-}
-
-/* Stats bar: use 2-col when no intro, 3-col when intro present */
+/* Stats bar: no extra margin — gap handles spacing */
 .pl-content .pd-stats-bar {
   margin-bottom: 0;
 }
@@ -3229,21 +3220,6 @@ a.project-card {
 .pl-content .pd-pull-quote {
   margin-top: 0;
   margin-bottom: 0;
-}
-
-/* Hero image + stats: break out wider than the 1000px content column */
-.ph-image-stats {
-  --breakout: min(1200px, 100vw - 2rem);
-  width: var(--breakout);
-  margin-left: calc((var(--breakout) - 100%) / -2);
-}
-
-/* MDX prose body text */
-.pl-content p {
-  font-size: 17px;
-  line-height: 1.75;
-  color: var(--text-primary);
-  margin: 0;
 }
 
 /* ── ProjectHero ────────────────────────────────────────────── */
@@ -3338,7 +3314,6 @@ a.project-card {
   font-size: 16px;
   line-height: 1.7;
   color: var(--text-secondary);
-  max-width: 680px;
 }
 
 /* ============================================================
@@ -4544,7 +4519,6 @@ a.project-card {
   background: var(--bg-card);
   border-radius: 16px;
   padding: 1.5rem 2rem;
-  margin: 1.5rem 0;
   max-width: 420px;
 }
 
@@ -4575,7 +4549,6 @@ a.project-card {
 
 /* --- EvidenceQuote --- */
 .mdx-quote {
-  margin: 1.5rem 0;
   padding: 1.25rem 1.5rem;
   border-left: 3px solid rgba(255, 210, 100, 0.8);
   background: var(--bg-card);
@@ -4604,7 +4577,6 @@ a.project-card {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 1.5rem;
-  margin: 1.5rem 0;
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -4811,17 +4783,18 @@ a.project-card {
 @media (min-width: 1024px) {
   .pl-page-body {
     display: grid;
-    grid-template-columns: 160px 1fr;
+    grid-template-columns: 160px 680px;
     gap: 0 2.5rem;
-    max-width: 1100px;
+    max-width: none;
     padding: 0 2rem;
     align-items: start;
+    justify-content: center;
   }
 }
 
-/* Body content: override base pl-content padding — hero is already above */
+/* Body content: fixed 680px — same width as prose */
 .pl-body-content {
-  max-width: none;
+  max-width: 680px;
   margin: 0;
   padding: 0 0 var(--space-20) !important;
 }
