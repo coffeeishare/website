@@ -1,0 +1,130 @@
+---
+title: "Influencer Data & Metrics"
+client: "Companion"
+summary: "Redesigning the influencer profile viewer to surface decision-relevant signals and eliminate the need to leave the platform for research."
+introText: "Despite a wealth of influencer data already in Companion, campaign managers routinely opened CreatorIQ, Upfluence, and spreadsheets to do the research they were supposed to do inside the platform. The data existed. The presentation made it unusable. I redesigned the profile viewer from a data dump into a decision tool — and used the project to introduce design system patterns that later spread across Companion's campaign builder and analytics views."
+pullQuote: "I used to jump into other platforms for serious research, but now I can get what I need right here. It's faster, clearer, and just works better for planning."
+tags: ["Product Design", "UX Research", "Design Systems"]
+year: "2024"
+coverImage: "/influencer-data-metrics-cover.webp"
+
+skills:
+  - interaction
+  - research
+  - architecture
+  - design-system
+
+evidence:
+  - type: metric
+    skill: interaction
+    label: "Increase in internal profile viewer use"
+    value: "62%"
+    context: "During campaign planning, within first two months of release"
+  - type: metric
+    skill: research
+    label: "Reduction in third-party tool switching"
+    value: "36%"
+    context: "Users switching to CreatorIQ and Upfluence for research"
+  - type: metric
+    skill: design-system
+    label: "Profile insights adoption growth"
+    value: "28%"
+    context: "Within first two months; UI patterns reused across campaign builder and analytics"
+  - type: quote
+    skill: research
+    text: "I'm constantly jumping between tools just to figure out if someone's a good fit. It's hard to tell at a glance what really matters, and honestly, I'm not even sure I trust half the metrics I'm seeing."
+  - type: quote
+    skill: interaction
+    text: "I used to jump into other platforms for serious research, but now I can get what I need right here. It's faster, clearer, and just works better for planning."
+    attribution: "Campaign manager, post-launch"
+  - type: quote
+    skill: design-system
+    text: "This project marked a pivotal shift toward data-driven, decision-led design at Companion — and the UI patterns established here were reused across the platform."
+---
+
+<ProjectHero />
+
+<SectionTitle eyebrow="01 — Problem" label="The data was there. The layout made it unusable." />
+
+Companion's influencer profiles contained audience demographics, engagement rates, follower trends, and audience quality scores. Campaign managers ignored them. The layout showed everything at once, with no hierarchy, no signal prioritisation, and no indication of which numbers actually mattered for a given campaign brief. Users opened other platforms not because Companion lacked the data — but because they couldn't trust or navigate what was there.
+
+<EvidenceQuote
+  skill="research"
+  text="I'm constantly jumping between tools just to figure out if someone's a good fit. It's hard to tell at a glance what really matters, and honestly, I'm not even sure I trust half the metrics I'm seeing."
+/>
+
+A secondary problem: the profile viewer had grown organically, with metrics added over time without a coherent hierarchy. There was no shared design language across Companion's data views, which made the platform feel inconsistent and harder to build on.
+
+<SectionTitle eyebrow="02 — Research" label="Which signals do managers actually use to decide?" />
+
+We ran 7 moderated user interviews with campaign managers, observing how they evaluated influencer profiles during active campaign planning. We focused on task completion, tab-switching behaviour, and verbal protocol — what users said they trusted vs. what they actually acted on.
+
+<StudyResult
+  skill="research"
+  participants={7}
+  label="Moderated user interviews — influencer profile review during campaign planning"
+  options={[
+    { label: "Switched to third-party tools for serious research", percentage: 86 },
+    { label: "Exported to spreadsheets to compare profiles side-by-side", percentage: 71 },
+    { label: "Found the profile layout hard to scan or inconsistent", percentage: 100 },
+  ]}
+  variant="with-icon"
+/>
+
+We then ran a structured signal-prioritisation workshop with internal stakeholders — account managers, customer success leads, and the product team — to rank which data points were genuinely predictive of campaign performance. This gave us a defensible ordering for the redesigned content hierarchy, grounded in both user observation and domain expertise rather than opinion.
+
+The combination of direct observation and internal signal-ranking was what made the IA decision defensible in review. It wasn't a visual rearrangement; it was a data hierarchy built from evidence.
+
+<SectionTitle eyebrow="03 — Strategy" label="Reorder for decisions, not for completeness" />
+
+The existing layout optimised for showing everything. The redesign optimised for the three questions a campaign manager needs answered in the first ten seconds: Is this person in budget? Does their audience match the target? Is their engagement real?
+
+Everything else was still accessible — but demoted. Secondary and tertiary signals moved below the fold or into expandable sections. The primary panel showed only what drove decisions.
+
+<EvidenceQuote
+  skill="architecture"
+  text="Restructuring content hierarchy wasn't a visual decision — it was grounded in which signals users actually used to make decisions, ranked through direct observation."
+/>
+
+The second strategic decision was to use this project as the vehicle for introducing new design system components. Companion's data views lacked a shared language. I introduced a stat block component, a percentage bar pattern, and a confidence tag — all built as reusable tokens — and used the profile viewer as the first implementation. This meant the work compounded: the patterns shipped with the profile viewer and then propagated across the campaign builder and analytics views.
+
+<SectionTitle eyebrow="04 — Design decisions" label="Hierarchy, trust signals, and a reusable system" />
+
+**Signal hierarchy as layout.** The three primary decision signals — budget fit, audience match, engagement quality — became the top section of every profile, visible without scrolling. Their prominence was a product decision, not a visual one: they were placed first because the research showed they drove the decision.
+
+**Audience quality breakdown.** Raw follower counts were replaced with a percentage breakdown showing real vs. suspected inauthentic followers. This directly addressed the trust gap identified in research — users who had been exporting to spreadsheets to verify data now had enough context to act inside Companion.
+
+**Comparative context.** Instead of showing absolute numbers in isolation, we added benchmark context: how this creator's engagement rate compared to the platform average for their niche and follower tier. This reduced the need to cross-reference external tools, which was the primary driver of tab-switching.
+
+**Design system first.** Every new UI pattern in this redesign was built as a reusable component. Stat blocks, percentage bars, and audience breakdown tiles were designed to spec with tokens, documented, and available immediately for other surfaces. The profile viewer shipped with those components; the campaign builder adopted them two months later.
+
+<SectionTitle eyebrow="05 — Impact" label="62% more usage — and a new design system foundation" />
+
+<Metric
+  skill="interaction"
+  value="62%"
+  label="Increase in internal profile viewer use"
+  context="During campaign planning sessions, within first two months of release"
+/>
+
+<Metric
+  skill="research"
+  value="36%"
+  label="Fewer users switching to third-party tools"
+  context="Measured against pre-redesign session data — CreatorIQ and Upfluence"
+/>
+
+<Metric
+  skill="design-system"
+  value="28%"
+  label="Profile insights adoption growth"
+  context="First two months post-release; patterns later reused across campaign builder and analytics"
+/>
+
+The 62% increase in internal profile viewer use is the headline — but the longer-term impact was the design system work. The components introduced here were not profile-specific; they were the first implementation of a data display language that Companion had been lacking. The campaign builder adopted them in a subsequent sprint, and the analytics view followed.
+
+<EvidenceQuote
+  skill="interaction"
+  text="I used to jump into other platforms for serious research, but now I can get what I need right here. It's faster, clearer, and just works better for planning."
+  attribution="Campaign manager, post-launch"
+/>

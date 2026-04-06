@@ -1,0 +1,135 @@
+---
+title: "Find Talent Dashboard"
+client: "Companion"
+summary: "Centralising creator discovery inside Companion so campaign managers could build shortlists without switching platforms."
+introText: "About 30% of users were dropping off during talent discovery — switching tabs mid-workflow to search creators on LinkedIn, Instagram, and third-party tools they weren't supposed to need. Companion had four native discovery features. Users either didn't know they existed or didn't trust them. I redesigned the discovery workflow around a centralised dashboard that surfaced trust signals, reduced tool-switching, and kept managers inside the platform through the full shortlisting process."
+pullQuote: "It finally feels like Companion understands how we work. I can stay in one place, find the right creators faster, and actually trust the results."
+tags: ["Product Design", "UX Research", "Information Architecture"]
+year: "2024"
+coverImage: "/find-talent-dashboard-cover.webp"
+
+skills:
+  - research
+  - architecture
+  - interaction
+  - strategy
+
+evidence:
+  - type: metric
+    skill: research
+    label: "Drop-off during talent discovery"
+    value: "~30%"
+    context: "Identified from session analytics — users switching tabs or logging into other platforms"
+  - type: metric
+    skill: architecture
+    label: "Decrease in external tool use"
+    value: "42%"
+    context: "Users exiting Companion to use third-party discovery platforms"
+  - type: metric
+    skill: interaction
+    label: "Increase in built-in tool use"
+    value: "25%+"
+    context: "Find Similar and Database features post-redesign"
+  - type: metric
+    skill: interaction
+    label: "More creators added to campaigns"
+    value: "23%"
+    context: "Post-redesign, attributed to improved discovery workflow"
+  - type: quote
+    skill: research
+    text: "I keep switching tabs and tools and losing track of where I was. It's like juggling five apps just to shortlist five creators."
+  - type: quote
+    skill: architecture
+    text: "It finally feels like Companion understands how we work. I can stay in one place, find the right creators faster, and actually trust the results."
+    attribution: "Agency user, post-launch"
+---
+
+<ProjectHero />
+
+<SectionTitle eyebrow="01 — Problem" label="30% of users were leaving mid-workflow" />
+
+Session analytics showed approximately 30% of campaign managers dropped off during talent discovery — opening new tabs, switching to LinkedIn, or logging into CreatorIQ — before completing their shortlists inside Companion. This wasn't a feature gap: Companion had four native discovery tools. The problem was discoverability and trust. Users didn't know the tools existed, and when they did find them, the scattered layout gave no reason to stay.
+
+<EvidenceQuote
+  skill="research"
+  text="I keep switching tabs and tools and losing track of where I was. It's like juggling five apps just to shortlist five creators."
+/>
+
+The drop-off was costing the platform in a measurable way: users who left to discover creators elsewhere often didn't complete their campaign setup inside Companion. The workflow fragmentation was turning into churn risk.
+
+<SectionTitle eyebrow="02 — Research" label="12 interviews, session data, and a native tool audit" />
+
+We interviewed 12 agency users and observed them working through talent discovery for a live campaign brief. We reviewed session analytics showing the ~30% drop-off point, and audited all four of Companion's native discovery tools to understand their actual capability vs. perceived capability.
+
+<StudyResult
+  skill="research"
+  participants={12}
+  label="Agency user interviews — talent discovery during campaign setup"
+  options={[
+    { label: "Switched to external tools during campaign setup", percentage: 72 },
+    { label: "Unaware of Companion's built-in discovery features", percentage: 58 },
+    { label: "Found creator suggestions untrustworthy or hard to evaluate", percentage: 50 },
+  ]}
+  variant="with-icon"
+/>
+
+<Metric
+  skill="research"
+  value="~30%"
+  label="Drop-off rate during talent discovery"
+  context="Identified from session analytics before the redesign"
+/>
+
+The audit of native tools was a key input. Find Similar, Database search, AI suggestions, and saved lists were all functional — but none of them were surfaced at the right moment in the workflow, and they had no shared entry point. A campaign manager setting up a new brief encountered each tool in isolation, with no sense of how they connected.
+
+<SectionTitle eyebrow="03 — Strategy" label="Centralise discovery and make the tools findable" />
+
+The guiding principle was centralisation and transparency. Rather than fixing each discovery tool in isolation, the redesign gave them a shared entry point: a dashboard that brought all four tools into one view, oriented around the campaign brief the user was working on.
+
+<EvidenceQuote
+  skill="architecture"
+  text="Users weren't switching tools because Companion's features were worse — they were switching because they didn't know the features existed."
+/>
+
+Transparency meant surfacing the signals users needed to evaluate a creator without having to click through to a full profile. Budget fit, audience match, and engagement quality appeared inline in the discovery results. This directly addressed the trust gap the interviews had revealed: users who couldn't evaluate at a glance defaulted to external platforms where they felt more in control.
+
+<SectionTitle eyebrow="04 — Design decisions" label="One entry point, trust signals inline, smart suggestions" />
+
+**Unified discovery dashboard.** All four native tools moved under a single entry point in the campaign setup flow. Users landing on the talent step saw one destination rather than four scattered features. Navigation between tools was tab-based, keeping context intact.
+
+**Smart suggestions panel.** The most-used entry point became an AI-powered suggestions panel that pre-populated based on the campaign brief. Each suggestion carried inline trust tags — Fits budget, Audience match, Engagement rate — so managers could evaluate without opening a profile. This reduced the back-and-forth that had been driving users to open external tools.
+
+**Saved shortlist in context.** The shortlist appeared as a persistent sidebar throughout discovery, so users could see how close they were to a complete brief as they worked. This addressed the disorientation that interviews had described: "losing track of where I was."
+
+**Confidence signals, not just data.** Rather than showing raw follower counts, suggestions showed contextualised signals: what percentage of an influencer's audience matched the target demographic, and how their engagement compared to the platform benchmark for their tier. This changed the question from "what does this number mean?" to "does this fit the brief?"
+
+<SectionTitle eyebrow="05 — Impact" label="42% fewer users leaving, 25%+ more using built-in tools" />
+
+<Metric
+  skill="architecture"
+  value="42%"
+  label="Fewer users leaving for external tools"
+  context="Compared to pre-redesign session data"
+/>
+
+<Metric
+  skill="interaction"
+  value="25%+"
+  label="Increase in built-in tool use"
+  context="Find Similar and Database features post-launch"
+/>
+
+<Metric
+  skill="interaction"
+  value="23%"
+  label="More creators added to campaigns"
+  context="Post-redesign, attributed to improved discovery workflow"
+/>
+
+The 42% reduction in external tool use confirmed the diagnosis: users weren't leaving because Companion's tools were worse. They were leaving because they didn't know the tools were there, or couldn't trust them at a glance. Making the tools findable and giving them inline trust signals was enough to change the behaviour.
+
+<EvidenceQuote
+  skill="architecture"
+  text="It finally feels like Companion understands how we work. I can stay in one place, find the right creators faster, and actually trust the results."
+  attribution="Agency user, post-launch"
+/>

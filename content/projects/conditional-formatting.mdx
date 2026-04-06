@@ -1,0 +1,118 @@
+---
+title: "Conditional Formatting"
+client: "Tulip"
+summary: "Closing Tulip's gap with Tableau and Retool by giving manufacturing builders a native conditional formatting system for tables."
+introText: "Tulip's tables displayed the right data. They didn't communicate it. Builders had been workarounding a missing feature for years — using variable-based colouring, custom widgets, and external exports to achieve what platforms like Tableau and Google Sheets offered natively. Conditional formatting was the gap, and closing it required a feature that was immediately usable by non-technical builders while leaving room to extend for advanced users later."
+pullQuote: "It's way easier to spot what matters now. The visual cues cut through the noise — I don't have to dig or build custom workarounds anymore."
+tags: ["Product Design", "UX Research", "Systems Design"]
+year: "2025"
+coverImage: "/conditional-formatting-cover.webp"
+
+skills:
+  - interaction
+  - research
+  - system-thinking
+  - strategy
+
+evidence:
+  - type: metric
+    skill: interaction
+    label: "Builder adoption rate"
+    value: "47%"
+    context: "Builders integrating conditional formatting into new and existing tables within 60 days of launch"
+  - type: metric
+    skill: research
+    label: "Reduction in manual workarounds"
+    value: "52%"
+    context: "Users no longer relying on variable-based colouring and custom widgets"
+  - type: quote
+    skill: research
+    text: "I'm constantly second-guessing what the data is telling me. Without clear visual cues, tables feel cluttered and hard to read."
+  - type: quote
+    skill: interaction
+    text: "It's way easier to spot what matters now. The visual cues cut through the noise — I don't have to dig or build custom workarounds anymore."
+    attribution: "Builder, post-launch"
+  - type: quote
+    skill: strategy
+    text: "Delivered a positioning advantage, closing a key feature gap with platforms like Tableau and Retool."
+---
+
+<ProjectHero />
+
+<SectionTitle eyebrow="01 — Problem" label="Tables that displayed data but couldn't communicate it" />
+
+Tulip's table component showed the numbers. It couldn't highlight which ones mattered. Builders on the shop floor needed to scan tables at a glance — catching defects, flagging out-of-tolerance readings, tracking completion rates. Without conditional formatting, they built workarounds: variable-driven cell colouring, custom widgets, and side-by-side exports to Google Sheets. The workarounds were fragile, time-consuming, and invisible to the platform.
+
+<EvidenceQuote
+  skill="research"
+  text="I'm constantly second-guessing what the data is telling me. Without clear visual cues, tables feel cluttered and hard to read."
+/>
+
+Meanwhile, every major competitor — Tableau, Google Sheets, Sigma, Retool — shipped this feature natively. The absence was a positioning liability.
+
+<SectionTitle eyebrow="02 — Research" label="Breadth before depth" />
+
+The research here was multi-source rather than interview-based. We pulled from customer support tickets, community forum posts, direct customer feedback, and a competitive audit across four platforms.
+
+<StudyResult
+  skill="research"
+  participants={0}
+  label="Multi-source discovery — tickets, community requests, analytics, and competitive benchmarking"
+  cards={[
+    { title: "Consistent community demand", description: "Conditional formatting appeared repeatedly in feature requests across Tulip's customer community and support channels." },
+    { title: "Workarounds confirmed at scale", description: "Session data and support tickets showed builders using variable-based colouring and custom widget hacks to replicate the missing feature." },
+    { title: "Competitive gap confirmed", description: "Audit of Sigma, Tableau, Google Sheets, and Retool showed all four supported rule-based conditional formatting — Tulip was the clear outlier." },
+  ]}
+  variant="basic"
+/>
+
+The competitive audit was the most actionable output. Seeing how four platforms handled the same problem — and where their implementations created confusion or friction — gave us a direct brief: match the baseline, then improve on the points where competitors had made poor tradeoffs.
+
+<SectionTitle eyebrow="03 — Strategy" label="Phase 1 ships. Phase 2 follows real usage." />
+
+The core strategic decision was deliberate scope reduction. Conditional formatting in tools like Excel includes formula-driven rules, regex matching, icon sets, data bars, and colour scales. Shipping all of that immediately would have created a feature most builders wouldn't use — and would have buried the simple, frequent use cases in a complex setup flow.
+
+<EvidenceQuote
+  skill="strategy"
+  text="We intentionally delayed function-writing complexity. The goal was to ship something builders would actually use, then let real usage patterns inform what came next."
+/>
+
+Phase 1 covered the 80% case: rule-based cell colouring with a visual condition builder. No formula syntax required. Accessible to non-technical builders on day one. The decision to defer advanced modes wasn't a capability limitation — it was a product bet that adoption would be higher if the entry point was simple, and that real usage data would tell us which advanced features to build next.
+
+The phased model also served a systems goal: getting the data model and rule-evaluation engine right before adding complexity on top. Building clean foundations in Phase 1 meant Phase 2 wouldn't require rework.
+
+<SectionTitle eyebrow="04 — Design decisions" label="Visual condition builder over formula syntax" />
+
+**Condition builder, not formula editor.** The primary design decision was to build a UI-driven condition builder rather than a formula field. A builder setting a rule should be able to do it by selecting "is greater than" from a dropdown and entering a value — not by writing `IF(value > 10, "red", "")`. This was a deliberate accessibility tradeoff; the formula approach was deferred to Phase 2 for power users.
+
+**Rule ordering and precedence.** When multiple rules apply to the same cell, order determines which colour wins. We added explicit drag-to-reorder with a visible precedence model rather than hiding the logic. Builders needed to trust the rules — and that meant being able to see and adjust the hierarchy.
+
+**Colour system integration.** Rather than a freeform colour picker, formatting colours mapped to Tulip's existing semantic colour system (success, warning, error, neutral). This constrained the palette to choices that had consistent meaning across the platform — making conditional formatting outputs legible to operators who hadn't set up the rule themselves.
+
+**Preview in context.** Every rule change updated a live preview of the affected table in real time. This closed the feedback loop immediately: builders saw the result before committing, which removed the uncertainty that had been driving the workaround behaviour.
+
+<SectionTitle eyebrow="05 — Impact" label="47% adoption and a closed competitive gap" />
+
+<Metric
+  skill="interaction"
+  value="47%"
+  label="Builder adoption rate"
+  context="Builders integrating conditional formatting into new and existing tables within 60 days of launch"
+/>
+
+<Metric
+  skill="research"
+  value="52%"
+  label="Reduction in manual workarounds"
+  context="Users who previously relied on variable-based colouring and custom widgets"
+/>
+
+47% adoption within 60 days is unusually high for a new editor feature — particularly one that replaces an established workaround pattern. The 52% reduction in manual workarounds confirms that users didn't adopt the feature and keep the workarounds. They switched.
+
+The competitive positioning outcome was harder to quantify but strategically meaningful. Conditional formatting was one of the features most commonly cited in competitive comparisons with Sigma and Retool. Closing the gap removed a frequent objection in sales and renewal conversations.
+
+<EvidenceQuote
+  skill="interaction"
+  text="It's way easier to spot what matters now. The visual cues cut through the noise — I don't have to dig or build custom workarounds anymore."
+  attribution="Builder, post-launch"
+/>
