@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/optimistic-chebyshev", "run", "dev"],
       "port": 5175
+    },
+    {
+      "name": "Portfolio Dev (awesome-liskov)",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/awesome-liskov", "--port", "5176"],
+      "port": 5176
     }
   ]
 }
