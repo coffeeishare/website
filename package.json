@@ -16,6 +16,7 @@
     "@react-three/postprocessing": "^2.19.1",
     "contentful": "^10.15.0",
     "framer": "^2.0.0",
+    "gsap": "^3.14.2",
     "iconoir-react": "^7.11.0",
     "lottie-react": "^2.4.1",
     "postprocessing": "^6.39.0",

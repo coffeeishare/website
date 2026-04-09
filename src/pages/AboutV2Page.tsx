@@ -1,0 +1,453 @@
+import { useState, useRef, useEffect, useCallback } from 'react'
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+type Tab = 'home' | 'photos' | 'game' | 'loves'
+
+// ─── Game constants ───────────────────────────────────────────────────────────
+const CW = 900
+const CH = 340
+const GROUND = CH - 64       // y of ground line (character bottom rests here)
+const CHAR_X = 80
+const CHAR_SZ = 46
+const GRAV = 0.74
+const JUMP_V = -15.5
+const BASE_SPD = 5.2
+
+interface Obs { x: number; w: number; h: number; color: string }
+interface GS {
+  started: boolean; dead: boolean
+  cy: number; vy: number; onGround: boolean
+  obs: Obs[]; frame: number; score: number; speed: number
+}
+
+function mkGS(): GS {
+  return { started: false, dead: false, cy: GROUND, vy: 0, onGround: true, obs: [], frame: 0, score: 0, speed: BASE_SPD }
+}
+
+const OBS_POOL = [
+  { w: 22, h: 44, color: 'rgba(255,180,50,0.9)' },
+  { w: 18, h: 70, color: 'rgba(180,100,255,0.9)' },
+  { w: 28, h: 36, color: 'rgba(80,200,255,0.9)' },
+  { w: 22, h: 56, color: 'rgba(255,100,120,0.9)' },
+  { w: 52, h: 38, color: 'rgba(120,220,150,0.9)' },
+]
+
+function drawRR(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if ((ctx as any).roundRect) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ;(ctx as any).roundRect(x, y, w, h, r)
+  } else {
+    ctx.rect(x, y, w, h)
+  }
+  ctx.closePath()
+}
+
+// ─── Photo data ───────────────────────────────────────────────────────────────
+interface Photo { filename: string; bg: string; caption: string | null }
+
+const PHOTOS: Photo[] = [
+  { filename: 'tokyo_cherry_blossoms.jpg', bg: 'linear-gradient(135deg, #ffb8c6 0%, #ff7eb3 40%, #c77dff 100%)', caption: 'Beautiful sunset in Japan. I loved exploring Tokyo.' },
+  { filename: 'ueno_temple_gate.jpg',      bg: 'linear-gradient(135deg, #2d3561 0%, #c05c7e 60%, #f0a500 100%)', caption: null },
+  { filename: 'shibuya_apartments.jpg',    bg: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',               caption: null },
+  { filename: 'yoyogi_park_trees.jpg',     bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)', caption: null },
+  { filename: 'street_corner_dusk.jpg',   bg: 'linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)',  caption: null },
+]
+
+// ─── Loves data ───────────────────────────────────────────────────────────────
+const LOVES = [
+  { icon: '🎨', label: 'Drawing & painting',  desc: 'Watercolour, gouache, anything slow' },
+  { icon: '📹', label: 'Videography',          desc: 'Capturing moments before they\'re gone' },
+  { icon: '✂️', label: 'Video editing',        desc: 'The craft of telling stories in cuts' },
+  { icon: '🐱', label: 'Cats',                 desc: 'Beans specifically, but cats generally' },
+  { icon: '🍵', label: 'Matcha',               desc: 'Ritual, not just caffeine' },
+  { icon: '🌍', label: 'Travel',               desc: 'Tokyo changed me. More places to go.' },
+  { icon: '🎵', label: 'Music',                desc: 'Always on, rarely silent' },
+  { icon: '📚', label: 'Design books',         desc: 'Physical, dog-eared, embarrassingly many' },
+  { icon: '🏙️', label: 'Urbanism',             desc: 'How cities think about people' },
+  { icon: '🇵🇱', label: 'Polish language',     desc: 'Home in my first tongue' },
+]
+
+// ─── References data ──────────────────────────────────────────────────────────
+const REFS = [
+  { quote: "Working with Ula has been an absolute delight. She has been a driving force in transforming our platform's design and overall direction. Her impact on our organization – both the platform and the team – has been remarkable.", author: 'Ariel Kendall', title: 'Product Manager, Companion', badge: 'manager' },
+  { quote: "To say that Ula is exceptional is really an understatement. She has, for our team, been absolutely key to the elevation in design quality and excellence – intrinsic to our overall success.", author: 'Kashif Amin', title: 'Global Experience Design Manager, Haleon', badge: 'manager' },
+  { quote: "Ula is a rare, incredible talent. Although she is off-the-charts artistically gifted, she is also technical and analytical. Her raw talent is immeasurable.", author: 'Joy Radachy Bannister', title: 'Quality Control Specialist, Marks', badge: 'colleague' },
+  { quote: "Ula's most valued strength is her ability to take complete ownership of any design task and consistently deliver high-quality creative output which exceeds expectations.", author: 'Craig Bainton', title: 'Associate Creative Director, Marks', badge: 'colleague' },
+  { quote: "Ula is one of the most hardworking and diligent creatives I have ever encountered. Her commitment to quality and ability to apply design thinking to every project made it very easy working with her.", author: 'Evgueni Spiridonov', title: 'Global Client Lead, Marks', badge: 'colleague' },
+  { quote: "Beyond her technical skills, Ula carried herself with a professionalism that was above her position at the time; her confidence and capability were clear and she quickly earned the respect of both senior colleagues and her peers.", author: 'Natalie Saint', title: 'Senior Operations Manager, 383 Project', badge: 'colleague' },
+]
+
+// ─── Dock icons (inline SVG) ──────────────────────────────────────────────────
+function DockIcon({ id }: { id: Tab }) {
+  switch (id) {
+    case 'home':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    case 'photos':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+    case 'game':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4"/><circle cx="17" cy="11" r="0.5" fill="currentColor"/><circle cx="14" cy="13" r="0.5" fill="currentColor"/></svg>
+    case 'loves':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+  }
+}
+
+const TAB_LABELS: Record<Tab, string> = {
+  home: 'Home', photos: 'Photos', game: 'Game', loves: 'What I love',
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MAIN PAGE
+// ─────────────────────────────────────────────────────────────────────────────
+export function AboutV2Page() {
+  const [tab, setTab] = useState<Tab>('home')
+  const tabs: Tab[] = ['home', 'photos', 'game', 'loves']
+
+  return (
+    <div className="av2-root">
+      <div className="av2-bg" aria-hidden="true" />
+
+      <div className="av2-layout">
+        {/* left dock */}
+        <nav className="av2-dock" aria-label="About sections">
+          {tabs.map(t => (
+            <button
+              key={t}
+              className={`av2-dock-btn${tab === t ? ' av2-dock-btn--active' : ''}`}
+              onClick={() => setTab(t)}
+              title={TAB_LABELS[t]}
+              aria-pressed={tab === t}
+            >
+              <DockIcon id={t} />
+            </button>
+          ))}
+        </nav>
+
+        {/* main panel */}
+        <div className="av2-panel" data-tab={tab}>
+          {tab === 'home'   && <HomePanel />}
+          {tab === 'photos' && <PhotosPanel />}
+          {tab === 'game'   && <GamePanel />}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HOME
+// ─────────────────────────────────────────────────────────────────────────────
+function HomePanel() {
+  return (
+    <div className="av2-home">
+      <p className="av2-flavor-text">Welcome to the sandbox. Explore.<br />Find. 0001</p>
+
+      <div className="av2-sticky av2-sticky--a">
+        <p>Hi, I'm Ula — Senior Designer at Tulip. I make things that make sense, and occasionally things that make you smile.</p>
+        <p>This is my corner of the internet. Poke around.</p>
+      </div>
+
+      <div className="av2-sticky av2-sticky--b">
+        <p>Polish · English · German B1</p>
+        <p>Drawing · Painting · Film · Cats</p>
+      </div>
+
+      <div className="av2-home-hint">
+        <span>Use the panel →</span>
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PHOTOS
+// ─────────────────────────────────────────────────────────────────────────────
+function PhotosPanel() {
+  // order: first element = back, last = front
+  const [order, setOrder] = useState(() => PHOTOS.map((_, i) => i))
+
+  const bringToFront = (photoIdx: number) => {
+    setOrder(prev => [...prev.filter(i => i !== photoIdx), photoIdx])
+  }
+
+  const frontPhoto = PHOTOS[order[order.length - 1]]
+
+  return (
+    <div className="av2-photos">
+      <div className="av2-photo-scene">
+        <div className="av2-photo-stack">
+          {order.map((photoIdx, stackPos) => {
+            const depth = order.length - 1 - stackPos  // 0 = front
+            const photo = PHOTOS[photoIdx]
+            return (
+              <div
+                key={photoIdx}
+                className={`av2-photo-win${depth === 0 ? ' av2-photo-win--front' : ''}`}
+                style={{
+                  zIndex: stackPos + 1,
+                  transform: depth === 0
+                    ? 'none'
+                    : `translate(${depth * 26}px, ${depth * -20}px)`,
+                }}
+                onClick={() => depth !== 0 && bringToFront(photoIdx)}
+              >
+                {/* Titlebar — matches Figma node 89:9213 */}
+                <div className="av2-photo-bar">
+                  <div className="av2-photo-filename">
+                    <span>{photo.filename.split('_')[0]}</span>
+                    <span>{'_' + photo.filename.split('_').slice(1).join('_')}</span>
+                  </div>
+                  {/* xmark icon — plus rotated 45° */}
+                  <svg className="av2-photo-xmark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                {/* Image body — overflow matches Figma absolute positioning */}
+                <div className="av2-photo-body">
+                  <div className="av2-photo-img" style={{ background: photo.bg }} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {frontPhoto.caption && (
+          <p className="av2-photo-caption">{frontPhoto.caption}</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GAME
+// ─────────────────────────────────────────────────────────────────────────────
+function GamePanel() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const gsRef     = useRef<GS>(mkGS())
+  const rafRef    = useRef(0)
+  const imgRef    = useRef<HTMLImageElement | null>(null)
+  // stable ref to the tick function so we can call it recursively inside RAF
+  const tickRef   = useRef<FrameRequestCallback>(() => {})
+
+  const startLoop = useCallback(() => {
+    cancelAnimationFrame(rafRef.current)
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')!
+
+    tickRef.current = () => {
+      const gs = gsRef.current
+      ctx.clearRect(0, 0, CW, CH)
+
+      // background
+      ctx.fillStyle = '#080808'
+      ctx.fillRect(0, 0, CW, CH)
+
+      // ground line
+      ctx.strokeStyle = 'rgba(255,255,255,0.07)'
+      ctx.lineWidth = 1
+      ctx.beginPath(); ctx.moveTo(0, GROUND); ctx.lineTo(CW, GROUND); ctx.stroke()
+
+      const img = imgRef.current
+      const imgReady = img?.complete && img.naturalWidth > 0
+
+      // ── idle screen ──
+      if (!gs.started) {
+        if (imgReady) ctx.drawImage(img!, CHAR_X, GROUND - CHAR_SZ, CHAR_SZ, CHAR_SZ)
+        else { ctx.fillStyle = '#ffd264'; drawRR(ctx, CHAR_X, GROUND - CHAR_SZ, CHAR_SZ, CHAR_SZ, 8); ctx.fill() }
+
+        ctx.fillStyle = 'rgba(255,255,255,0.28)'
+        ctx.font = '13px monospace'
+        ctx.textAlign = 'center'
+        ctx.fillText('press Space or tap to start', CW / 2, GROUND - 80)
+
+        rafRef.current = requestAnimationFrame(tickRef.current)
+        return
+      }
+
+      // ── game over screen ──
+      if (gs.dead) {
+        // draw frozen obstacles
+        gs.obs.forEach(o => {
+          ctx.fillStyle = o.color
+          drawRR(ctx, o.x, GROUND - o.h, o.w, o.h, 5)
+          ctx.fill()
+        })
+        // dead character (faded)
+        ctx.globalAlpha = 0.35
+        if (imgReady) ctx.drawImage(img!, CHAR_X, gs.cy - CHAR_SZ, CHAR_SZ, CHAR_SZ)
+        else { ctx.fillStyle = '#ffd264'; drawRR(ctx, CHAR_X, gs.cy - CHAR_SZ, CHAR_SZ, CHAR_SZ, 8); ctx.fill() }
+        ctx.globalAlpha = 1
+
+        ctx.fillStyle = 'rgba(255,255,255,0.88)'
+        ctx.font = 'bold 22px monospace'
+        ctx.textAlign = 'center'
+        ctx.fillText('GAME OVER', CW / 2, CH / 2 - 18)
+        ctx.font = '13px monospace'
+        ctx.fillStyle = 'rgba(255,255,255,0.38)'
+        ctx.fillText(`score: ${gs.score}  ·  tap or space to restart`, CW / 2, CH / 2 + 12)
+        return // no next RAF — loop ends here
+      }
+
+      // ── physics ──
+      gs.vy += GRAV
+      gs.cy += gs.vy
+      if (gs.cy >= GROUND) { gs.cy = GROUND; gs.vy = 0; gs.onGround = true }
+
+      // ── progression ──
+      gs.frame++
+      gs.score = Math.floor(gs.frame / 6)
+      gs.speed = BASE_SPD + Math.floor(gs.score / 300) * 0.6
+
+      // ── spawn ──
+      const interval = Math.max(46, 90 - Math.floor(gs.score / 120) * 4)
+      if (gs.frame % interval === 0) {
+        const t = OBS_POOL[Math.floor(Math.random() * OBS_POOL.length)]
+        gs.obs.push({ x: CW + 24, ...t })
+      }
+
+      // ── move + cull ──
+      gs.obs = gs.obs.filter(o => { o.x -= gs.speed; return o.x > -80 })
+
+      // ── draw obstacles ──
+      gs.obs.forEach(o => {
+        ctx.fillStyle = o.color
+        drawRR(ctx, o.x, GROUND - o.h, o.w, o.h, 5)
+        ctx.fill()
+      })
+
+      // ── draw character ──
+      const charTop = gs.cy - CHAR_SZ
+      if (imgReady) {
+        ctx.drawImage(img!, CHAR_X, charTop, CHAR_SZ, CHAR_SZ)
+      } else {
+        ctx.fillStyle = '#ffd264'
+        drawRR(ctx, CHAR_X, charTop, CHAR_SZ, CHAR_SZ, 8)
+        ctx.fill()
+      }
+
+      // ── collision ──
+      const cL = CHAR_X + 6, cR = CHAR_X + CHAR_SZ - 6, cT = charTop + 8, cB = gs.cy
+      for (const o of gs.obs) {
+        if (cR > o.x && cL < o.x + o.w && cB > GROUND - o.h && cT < GROUND) {
+          gs.dead = true
+          break
+        }
+      }
+
+      // ── score display ──
+      ctx.fillStyle = 'rgba(255,255,255,0.28)'
+      ctx.font = '13px monospace'
+      ctx.textAlign = 'right'
+      ctx.fillText(String(gs.score).padStart(5, '0'), CW - 20, 32)
+
+      if (!gs.dead) rafRef.current = requestAnimationFrame(tickRef.current)
+    }
+
+    rafRef.current = requestAnimationFrame(tickRef.current)
+  }, [])
+
+  const jump = useCallback(() => {
+    const gs = gsRef.current
+    if (!gs.started) gs.started = true
+    if (gs.onGround && !gs.dead) { gs.vy = JUMP_V; gs.onGround = false }
+  }, [])
+
+  const restart = useCallback(() => {
+    gsRef.current = mkGS()
+    gsRef.current.started = true
+    startLoop()
+  }, [startLoop])
+
+  const handleInput = useCallback(() => {
+    if (gsRef.current.dead) restart()
+    else jump()
+  }, [jump, restart])
+
+  // mount: load image + start loop
+  useEffect(() => {
+    const img = new Image()
+    img.src = '/beans/beans.png'
+    imgRef.current = img
+    startLoop()
+    return () => cancelAnimationFrame(rafRef.current)
+  }, [startLoop])
+
+  // keyboard
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); handleInput() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [handleInput])
+
+  return (
+    <div className="av2-game">
+      <canvas
+        ref={canvasRef}
+        width={CW}
+        height={CH}
+        className="av2-game-canvas"
+        onClick={handleInput}
+      />
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LOVES
+// ─────────────────────────────────────────────────────────────────────────────
+function LovesPanel() {
+  return (
+    <div className="av2-loves">
+      <h2 className="av2-section-title">Things I love</h2>
+      <div className="av2-loves-grid">
+        {LOVES.map(item => (
+          <div key={item.label} className="av2-love-card">
+            <span className="av2-love-icon">{item.icon}</span>
+            <strong className="av2-love-label">{item.label}</strong>
+            <span className="av2-love-desc">{item.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INSPO
+// ─────────────────────────────────────────────────────────────────────────────
+function InspoPanel() {
+  return (
+    <div className="av2-inspo">
+      <h2 className="av2-section-title">Inspo board</h2>
+      <p className="av2-inspo-note">Curating. Come back soon.</p>
+    </div>
+  )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// REFERENCES
+// ─────────────────────────────────────────────────────────────────────────────
+function RefsPanel() {
+  return (
+    <div className="av2-refs">
+      <h2 className="av2-section-title">What people say</h2>
+      <div className="av2-refs-grid">
+        {REFS.map((r, i) => (
+          <div key={i} className="av2-ref-card">
+            <span className={`ssp-chip ssp-chip--${r.badge === 'manager' ? 'violet' : 'sky'}`}>{r.badge}</span>
+            <p className="av2-ref-quote">"{r.quote}"</p>
+            <div className="av2-ref-author">
+              <strong>{r.author}</strong>
+              <span>{r.title}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}

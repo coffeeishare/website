@@ -11,6 +11,7 @@ import heroImg from "../content/images/homepage-hero.png"
 import { ProjectDetail } from "./pages/ProjectDetail"
 import { ProjectMDXPage } from "./pages/ProjectMDXPage"
 import DesignSystemPage from "./pages/DesignSystem"
+import { AboutV2Page } from "./pages/AboutV2Page"
 import { GlitchText } from "./components/GlitchText"
 import { getAllProjects } from "./lib/contentful"
 import { SkillFilterBar } from "./components/filter/SkillFilterBar"
@@ -83,7 +84,7 @@ function clientLogo(client: string) {
   return null
 }
 
-type Page = "home" | "about" | "other-work" | "design-system"
+type Page = "home" | "about" | "spaces" | "other-work" | "design-system"
 
 function useScrollReveal(dep?: unknown) {
   useEffect(() => {
@@ -433,6 +434,7 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
       <div className="nav-links">
         <button className={page === "home" ? "active" : ""} onClick={() => setPage("home")}>Work</button>
         <button className={page === "about" ? "active" : ""} onClick={() => setPage("about")}>About me</button>
+        <button className={page === "spaces" ? "active" : ""} onClick={() => setPage("spaces")}>Spaces</button>
         <button className={page === "other-work" ? "active" : ""} onClick={() => setPage("other-work")}>Other work</button>
         <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}><GlitchText text="Syntax Sugar" /></button>
       </div>
@@ -1084,9 +1086,10 @@ export default function App() {
               <Nav page={page} setPage={setPage} isDark={isDark} toggleDark={toggleDark} />
               {page === "home" && <HomePage />}
               {page === "about" && <AboutPage />}
+              {page === "spaces" && <AboutV2Page />}
               {page === "other-work" && <OtherWorkPage />}
               {page === "design-system" && <DesignSystemPage isDark={isDark} toggleDark={toggleDark} />}
-              <Footer />
+              {page !== "spaces" && <Footer />}
               {page === "about" && <BeansChat />}
             </>
           }
