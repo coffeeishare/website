@@ -139,14 +139,13 @@ const ROTATING_PHRASES = [
   "pushes code to monorepos",
 ]
 
-// Tool icons shown in the hero (Figma CDN URLs, valid 7 days from generation)
 const HERO_TOOLS = [
-  { src: "https://www.figma.com/api/mcp/asset/6331fba1-6bef-43bb-a457-025eff684138", label: "Gemini" },
-  { src: "https://www.figma.com/api/mcp/asset/f02c3a93-c3e2-4124-bba1-e7c6dbe3a3a9", label: "Claude Code" },
-  { src: "https://www.figma.com/api/mcp/asset/1f112691-b8a1-4dc6-9477-c890012d96f7", label: "Lovable" },
-  { src: "https://www.figma.com/api/mcp/asset/a2702b61-1118-4205-b70a-98f605e3ffa9", label: "Replit" },
-  { src: "https://www.figma.com/api/mcp/asset/7602a7f0-e3a5-41c3-ba8e-f58a950ae666", label: "Claude" },
-  { src: "https://www.figma.com/api/mcp/asset/b11a75be-f03d-45d1-9a1b-e4d8184f128a", label: "Figma" },
+  { src: "/logos/gemini.png", label: "Gemini" },
+  { src: "/logos/claude-code.png", label: "Claude Code" },
+  { src: "/logos/lovable.png", label: "Lovable" },
+  { src: "/logos/replit.png", label: "Replit" },
+  { src: "/logos/claude.png", label: "Claude" },
+  { src: "/logos/figma.png", label: "Figma" },
 ]
 
 // Symbols used during the glitch flash
@@ -655,8 +654,8 @@ function ReferencesGrid() {
 
 // ── Beans Chat ──────────────────────────────────────────────────────────────
 
-const BEANS_AVATAR = "https://www.figma.com/api/mcp/asset/342bc686-c728-4d2e-93c2-2d5af2447438"
-const BEANS_TRIGGER_CAT = "https://www.figma.com/api/mcp/asset/cd19452f-5413-4007-a4a7-7969fb6ebde7"
+const BEANS_AVATAR = "/beans/beans.png"
+const BEANS_TRIGGER_CAT = "/beans/beans.png"
 
 const BEANS_RESPONSES = [
   "I don't know, I'm a cat.",
