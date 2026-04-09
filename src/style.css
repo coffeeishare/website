@@ -4946,3 +4946,439 @@ a.project-card {
   color: #f87171;
   margin: 0;
 }
+
+/* ============================================================
+   ABOUT V2 — OS Sandbox
+   ============================================================ */
+
+/* ── Root / background ─────────────────────────────────────── */
+.av2-root {
+  position: relative;
+  min-height: calc(100vh - var(--nav-height));
+  overflow: hidden;
+  background: #0c0c0c;
+}
+
+.av2-bg {
+  position: absolute;
+  inset: 0;
+  background: url('/warm-bg.webp') center center / cover no-repeat;
+}
+
+/* ── Layout shell ──────────────────────────────────────────── */
+.av2-layout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 12px;
+  padding: 20px 20px 20px 20px;
+  min-height: calc(100vh - var(--nav-height));
+  box-sizing: border-box;
+}
+
+/* ── Main panel ────────────────────────────────────────────── */
+.av2-panel {
+  flex: 1;
+  position: relative;
+  background: rgba(7, 7, 7, 0.9);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* home tab allows overflow so sticky notes can peek outside */
+.av2-panel[data-tab="home"] {
+  overflow: visible;
+}
+
+/* photos tab — transparent panel so stack floats on gradient */
+.av2-panel[data-tab="photos"] {
+  background: transparent;
+  border-color: transparent;
+}
+
+/* ── Dock ──────────────────────────────────────────────────── */
+.av2-dock {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 12px;
+  align-self: center;
+  flex-shrink: 0;
+  height: fit-content;
+}
+
+.av2-dock-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s;
+  padding: 0;
+  border-radius: 4px;
+}
+
+.av2-dock-btn:hover {
+  color: var(--text-primary);
+}
+
+.av2-dock-btn--active {
+  color: var(--text-primary);
+}
+
+/* ── Shared section title ──────────────────────────────────── */
+.av2-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0 0 1.5rem;
+  letter-spacing: -0.01em;
+}
+
+/* ── HOME ──────────────────────────────────────────────────── */
+.av2-home {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+}
+
+.av2-flavor-text {
+  position: absolute;
+  top: 1.75rem;
+  right: 2rem;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.28);
+  text-align: right;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.av2-sticky {
+  position: absolute;
+  background: #f5d76e;
+  padding: 1.4rem 1.5rem;
+  max-width: 270px;
+  box-shadow: 4px 8px 28px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(0,0,0,0.1);
+  line-height: 1.65;
+  font-size: 0.88rem;
+  color: #1a1600;
+}
+
+.av2-sticky p { margin: 0; }
+.av2-sticky p + p { margin-top: 0.85rem; }
+
+.av2-sticky--a {
+  top: 18%;
+  left: 12%;
+  transform: rotate(-2.5deg);
+}
+
+.av2-sticky--b {
+  top: 52%;
+  left: 28%;
+  transform: rotate(1.8deg);
+  background: #c8f0b8;
+  max-width: 200px;
+  font-size: 0.82rem;
+}
+
+.av2-home-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.18);
+}
+
+/* ── PHOTOS ────────────────────────────────────────────────── */
+.av2-photos {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.av2-photo-scene {
+  position: relative;
+  /* extra margin so back cards (offset up/right) aren't clipped */
+  margin-top: 80px;
+  margin-right: 110px;
+}
+
+.av2-photo-stack {
+  position: relative;
+  width: 580px;
+  height: 400px;
+}
+
+.av2-photo-win {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
+}
+
+.av2-photo-win:not(.av2-photo-win--front) {
+  cursor: pointer;
+}
+
+.av2-photo-win:not(.av2-photo-win--front):hover {
+  box-shadow: 0 14px 52px rgba(0, 0, 0, 0.7);
+}
+
+/* Titlebar — Figma node 89:9213 */
+.av2-photo-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* Filename — DM Mono Medium 14px, text-secondary, tracking 0.2px */
+.av2-photo-filename {
+  display: flex;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* × icon — 24px, rotated plus, text-secondary */
+.av2-photo-xmark {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: var(--text-secondary);
+  transform: rotate(45deg);
+  opacity: 0.6;
+}
+
+/* Body — fills remaining space, overflow hidden, position relative for img */
+.av2-photo-body {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* Image — absolutely positioned, slightly overflowing (matches Figma offset) */
+.av2-photo-img {
+  position: absolute;
+  top: -4%;
+  left: -3%;
+  right: -3%;
+  bottom: -4%;
+}
+
+.av2-photo-caption {
+  position: absolute;
+  bottom: -2.5rem;
+  right: -6rem;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.38);
+  text-align: right;
+  max-width: 220px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── GAME ──────────────────────────────────────────────────── */
+.av2-game {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080808;
+}
+
+.av2-game-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* ── LOVES ─────────────────────────────────────────────────── */
+.av2-loves {
+  position: absolute;
+  inset: 0;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.av2-loves-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.av2-love-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: background 0.15s;
+}
+
+.av2-love-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.av2-love-icon {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+}
+
+.av2-love-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.av2-love-desc {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1.5;
+}
+
+/* ── INSPO ─────────────────────────────────────────────────── */
+.av2-inspo {
+  position: absolute;
+  inset: 0;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.av2-inspo-note {
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.25);
+  margin: 0;
+}
+
+/* ── REFS ──────────────────────────────────────────────────── */
+.av2-refs {
+  position: absolute;
+  inset: 0;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+.av2-refs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+
+.av2-ref-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.av2-ref-quote {
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  font-style: italic;
+}
+
+.av2-ref-author {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: auto;
+}
+
+.av2-ref-author strong {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+}
+
+.av2-ref-author span {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .av2-layout {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .av2-dock {
+    padding: 4px;
+  }
+
+  .av2-dock-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .av2-photo-stack {
+    width: 90vw;
+    height: 56vw;
+  }
+
+  .av2-photo-scene {
+    margin-top: 60px;
+    margin-right: 60px;
+  }
+
+  .av2-photo-caption {
+    right: -2rem;
+    bottom: -3.5rem;
+  }
+
+  .av2-loves-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .av2-refs-grid {
+    grid-template-columns: 1fr;
+  }
+}
