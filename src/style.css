@@ -4866,3 +4866,83 @@ a.project-card {
 .pl-nav-item:hover .pl-nav-label {
   color: var(--text-primary);
 }
+
+/* === PASSWORD GATE === */
+
+.pg-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background);
+  z-index: 9999;
+}
+
+.pg-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 360px;
+  padding: 0 24px;
+}
+
+.pg-label {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.pg-field-row {
+  display: flex;
+  gap: 8px;
+}
+
+.pg-input {
+  flex: 1;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.pg-input:focus {
+  border-color: var(--text-secondary);
+}
+
+.pg-input--error {
+  border-color: #f87171;
+}
+
+.pg-btn {
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--text-primary);
+  color: var(--background);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.pg-btn:hover {
+  opacity: 0.85;
+}
+
+.pg-error {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: #f87171;
+  margin: 0;
+}

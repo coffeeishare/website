@@ -986,10 +986,49 @@ function SplashScreen({ onDone }: { onDone: () => void }) {
   )
 }
 
+const PASSWORD = "portfolio-layout"
+
+function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
+  const [value, setValue] = useState("")
+  const [error, setError] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (value === PASSWORD) {
+      sessionStorage.setItem("pgAuth", "1")
+      onUnlock()
+    } else {
+      setError(true)
+      setValue("")
+    }
+  }
+
+  return (
+    <div className="pg-overlay">
+      <form className="pg-box" onSubmit={handleSubmit}>
+        <p className="pg-label">Enter password to continue</p>
+        <div className="pg-field-row">
+          <input
+            className={`pg-input${error ? " pg-input--error" : ""}`}
+            type="password"
+            placeholder="Password"
+            value={value}
+            autoFocus
+            onChange={(e) => { setValue(e.target.value); setError(false) }}
+          />
+          <button className="pg-btn" type="submit">Enter</button>
+        </div>
+        {error && <p className="pg-error">Incorrect password</p>}
+      </form>
+    </div>
+  )
+}
+
 export default function App() {
   const [page, setPage] = useState<Page>("home")
   const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") !== "light")
   const [showSplash, setShowSplash] = useState(() => !sessionStorage.getItem("splashSeen"))
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem("pgAuth") === "1")
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light")
@@ -1019,6 +1058,8 @@ export default function App() {
     sessionStorage.setItem("splashSeen", "1")
     setShowSplash(false)
   }, [])
+
+  if (!authed) return <PasswordGate onUnlock={() => setAuthed(true)} />
 
   return (
     <>
