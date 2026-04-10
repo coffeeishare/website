@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import gsap from 'gsap'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = 'home' | 'photos' | 'game' | 'loves'
+type Tab = 'home' | 'photos' | 'game'
 
 // ─── Game constants ───────────────────────────────────────────────────────────
 const CW = 900
@@ -50,20 +50,20 @@ interface Photo { filename: string; bg: string; caption: string | null }
 
 const PHOTOS: Photo[] = [
   { filename: 'tokyo_cherry_blossoms.jpg', bg: '#3a3a3a', caption: 'Beautiful sunset in Japan. I loved exploring Tokyo.' },
-  { filename: 'ueno_temple_gate.jpg',      bg: '#333333', caption: null },
-  { filename: 'shibuya_apartments.jpg',    bg: '#2e2e2e', caption: null },
-  { filename: 'yoyogi_park_trees.jpg',     bg: '#383838', caption: null },
-  { filename: 'street_corner_dusk.jpg',   bg: '#303030', caption: null },
-  { filename: 'akihabara_evening.jpg',     bg: '#2a2a2a', caption: null },
-  { filename: 'shinjuku_rain.jpg',         bg: '#353535', caption: null },
-  { filename: 'asakusa_lanterns.jpg',      bg: '#2c2c2c', caption: null },
-  { filename: 'harajuku_street.jpg',       bg: '#323232', caption: null },
-  { filename: 'odaiba_bridge.jpg',         bg: '#2f2f2f', caption: null },
-  { filename: 'meiji_shrine.jpg',          bg: '#363636', caption: null },
-  { filename: 'nakameguro_canal.jpg',      bg: '#2d2d2d', caption: null },
-  { filename: 'roppongi_night.jpg',        bg: '#313131', caption: null },
-  { filename: 'shimokitazawa_cafe.jpg',    bg: '#393939', caption: null },
-  { filename: 'yanaka_cemetery.jpg',       bg: '#2b2b2b', caption: null },
+  { filename: 'ueno_temple_gate.jpg',      bg: '#333333', caption: 'Ueno temple gate. One of my favourite walks.' },
+  { filename: 'shibuya_apartments.jpg',    bg: '#2e2e2e', caption: 'Shibuya apartments. I love how dense it all is.' },
+  { filename: 'yoyogi_park_trees.jpg',     bg: '#383838', caption: 'Yoyogi Park. Green in the middle of the city.' },
+  { filename: 'street_corner_dusk.jpg',   bg: '#303030', caption: 'A street corner at dusk. Tokyo golden hour.' },
+  { filename: 'akihabara_evening.jpg',     bg: '#2a2a2a', caption: 'Akihabara in the evening. Neon everywhere.' },
+  { filename: 'shinjuku_rain.jpg',         bg: '#353535', caption: 'Shinjuku in the rain. Still beautiful.' },
+  { filename: 'asakusa_lanterns.jpg',      bg: '#2c2c2c', caption: 'Asakusa lanterns. Classic Tokyo.' },
+  { filename: 'harajuku_street.jpg',       bg: '#323232', caption: 'Harajuku street. Fashion and chaos.' },
+  { filename: 'odaiba_bridge.jpg',         bg: '#2f2f2f', caption: 'Odaiba bridge. Views of the bay.' },
+  { filename: 'meiji_shrine.jpg',          bg: '#363636', caption: 'Meiji Shrine. Quiet in the middle of the city.' },
+  { filename: 'nakameguro_canal.jpg',      bg: '#2d2d2d', caption: 'Nakameguro canal. Cherry blossoms in bloom.' },
+  { filename: 'roppongi_night.jpg',        bg: '#313131', caption: 'Roppongi at night. The city never sleeps.' },
+  { filename: 'shimokitazawa_cafe.jpg',    bg: '#393939', caption: 'A cafe in Shimokitazawa. My favourite neighbourhood.' },
+  { filename: 'yanaka_cemetery.jpg',       bg: '#2b2b2b', caption: 'Yanaka cemetery. Peaceful and full of history.' },
 ]
 
 // ─── Loves data ───────────────────────────────────────────────────────────────
@@ -94,18 +94,16 @@ const REFS = [
 function DockIcon({ id }: { id: Tab }) {
   switch (id) {
     case 'home':
-      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     case 'photos':
       return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
     case 'game':
       return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="6"/><path d="M6 12h4M8 10v4"/><circle cx="17" cy="11" r="0.5" fill="currentColor"/><circle cx="14" cy="13" r="0.5" fill="currentColor"/></svg>
-    case 'loves':
-      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
   }
 }
 
 const TAB_LABELS: Record<Tab, string> = {
-  home: 'Home', photos: 'Photos', game: 'Game', loves: 'What I love',
+  home: 'Love', photos: 'Photos', game: 'Game',
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -113,7 +111,7 @@ const TAB_LABELS: Record<Tab, string> = {
 // ─────────────────────────────────────────────────────────────────────────────
 export function AboutV2Page() {
   const [tab, setTab] = useState<Tab>('home')
-  const tabs: Tab[] = ['home', 'photos', 'game', 'loves']
+  const tabs: Tab[] = ['home', 'photos', 'game']
 
   return (
     <div className="av2-root">
@@ -136,26 +134,11 @@ export function AboutV2Page() {
 
         {/* main panel */}
         <div className="av2-panel" data-tab={tab}>
-          {tab === 'home'   && <HomePanel />}
+          {tab === 'home'   && <LovesPanel />}
           {tab === 'photos' && <PhotosPanel />}
           {tab === 'game'   && <GamePanel />}
         </div>
       </div>
-      </div>
-    </div>
-  )
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// HOME
-// ─────────────────────────────────────────────────────────────────────────────
-function HomePanel() {
-  return (
-    <div className="av2-home">
-      <p className="av2-flavor-text">Welcome to the sandbox. Explore.<br />Find. 0001</p>
-
-      <div className="av2-home-hint">
-        <span>Use the panel →</span>
       </div>
     </div>
   )
@@ -200,47 +183,38 @@ function PhotosPanel() {
       const card = cardRefs.current[frontCardIdx]
       if (!card) return
 
-      // Animate front card off to the left
       gsap.to(card, {
         x: -860,
         y: 210,
         skewY: 6,
+        opacity: 0,
         duration: 0.5,
         ease: 'power3.in',
         onComplete: () => {
-          // Teleport it to back position instantly (off-screen behind the stack)
           const backDepth = N - 1
           gsap.set(card, {
             ...getStackTransform(backDepth),
-            x: getStackTransform(backDepth).x + 300,  // slightly further right, hidden behind
+            x: getStackTransform(backDepth).x + 300,
             zIndex: 1,
+            opacity: 0,
           })
 
-          // Update logical order: decrement all depths, wrapped card goes to back
           const newOrder = order.map(d => (d === 0 ? N - 1 : d - 1))
           orderRef.current = newOrder
 
-          // Update z-indices for all cards
           cardRefs.current.forEach((c, i) => {
             if (!c) return
             gsap.set(c, { zIndex: N - newOrder[i] })
           })
 
-          // Shift all other cards forward (reduce depth by 1)
           cardRefs.current.forEach((c, i) => {
             if (!c || i === frontCardIdx) return
             gsap.to(c, { ...getStackTransform(newOrder[i]), duration: 0.45, ease: 'power2.out' })
           })
 
-          // Slide wrapped card into its back position smoothly
-          gsap.to(card, {
-            ...getStackTransform(N - 1),
-            duration: 0.45,
-            ease: 'power2.out',
-          })
+          gsap.to(card, { ...getStackTransform(N - 1), duration: 0.45, ease: 'power2.out' })
 
-          const newFront = newOrder.indexOf(0)
-          setFrontIdx(newFront)
+          setFrontIdx(newOrder.indexOf(0))
           animatingRef.current = false
         },
       })
@@ -294,12 +268,12 @@ function PhotosPanel() {
           ))}
         </div>
 
-        {frontPhoto.caption && (
-          <p className="av2-photo-caption">{frontPhoto.caption}</p>
-        )}
-
         <p className="av2-photo-scroll-hint">scroll to browse</p>
       </div>
+
+      {frontPhoto.caption && (
+        <p className="av2-photo-caption">{frontPhoto.caption}</p>
+      )}
     </div>
   )
 }
@@ -485,20 +459,7 @@ function GamePanel() {
 // LOVES
 // ─────────────────────────────────────────────────────────────────────────────
 function LovesPanel() {
-  return (
-    <div className="av2-loves">
-      <h2 className="av2-section-title">Things I love</h2>
-      <div className="av2-loves-grid">
-        {LOVES.map(item => (
-          <div key={item.label} className="av2-love-card">
-            <span className="av2-love-icon">{item.icon}</span>
-            <strong className="av2-love-label">{item.label}</strong>
-            <span className="av2-love-desc">{item.desc}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+  return <div className="av2-loves" />
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
