@@ -9,8 +9,8 @@
     },
     {
       "name": "Portfolio Dev (branch)",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/optimistic-chebyshev", "run", "dev"],
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/fervent-burnell", "--port", "5175"],
       "port": 5175
     },
     {
@@ -18,6 +18,12 @@
       "runtimeExecutable": "/usr/local/bin/node",
       "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/awesome-liskov", "--port", "5176"],
       "port": 5176
+    },
+    {
+      "name": "Portfolio Dev (about-me-v2)",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer", "--port", "5177"],
+      "port": 5177
     }
   ]
 }

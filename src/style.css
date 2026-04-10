@@ -4955,15 +4955,22 @@ a.project-card {
 .av2-root {
   position: relative;
   min-height: calc(100vh - var(--nav-height));
+  background: var(--background);
+  padding: 16px;
+  box-sizing: border-box;
   overflow: hidden;
-  background: #0c0c0c;
 }
 
-.av2-bg {
-  position: absolute;
-  inset: 0;
+/* ── Outer gradient container ──────────────────────────────── */
+.av2-outer {
+  position: relative;
+  min-height: calc(100vh - var(--nav-height) - 32px);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
   background: url('/warm-bg.webp') center center / cover no-repeat;
 }
+
 
 /* ── Layout shell ──────────────────────────────────────────── */
 .av2-layout {
@@ -4972,15 +4979,17 @@ a.project-card {
   display: flex;
   flex-direction: row;
   align-items: stretch;
+  justify-content: center;
   gap: 12px;
-  padding: 20px 20px 20px 20px;
-  min-height: calc(100vh - var(--nav-height));
+  padding: 20px;
+  min-height: calc(100vh - var(--nav-height) - 32px);
   box-sizing: border-box;
 }
 
 /* ── Main panel ────────────────────────────────────────────── */
 .av2-panel {
   flex: 1;
+  max-width: 1200px;
   position: relative;
   background: rgba(7, 7, 7, 0.9);
   border-radius: 16px;
@@ -4989,16 +4998,36 @@ a.project-card {
   min-height: 0;
 }
 
-/* home tab allows overflow so sticky notes can peek outside */
+/* home tab — glass panel, inset from outer container */
 .av2-panel[data-tab="home"] {
   overflow: visible;
+  background: rgba(27, 24, 21, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  margin: 1.5rem 1.5rem 1.5rem 0;
+  position: relative;
 }
 
-/* photos tab — transparent panel so stack floats on gradient */
+.av2-panel[data-tab="home"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+  background-size: 10px 10px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 12px;
+}
+
+/* photos tab — transparent panel so stack floats on gradient, unclipped */
 .av2-panel[data-tab="photos"] {
   background: transparent;
   border-color: transparent;
+  overflow: visible;
 }
+
 
 /* ── Dock ──────────────────────────────────────────────────── */
 .av2-dock {
@@ -5009,9 +5038,12 @@ a.project-card {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px 12px;
-  align-self: center;
-  flex-shrink: 0;
   height: fit-content;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
 }
 
 .av2-dock-btn {
@@ -5116,15 +5148,17 @@ a.project-card {
 
 .av2-photo-scene {
   position: relative;
-  /* extra margin so back cards (offset up/right) aren't clipped */
-  margin-top: 80px;
-  margin-right: 110px;
+  margin-top: 160px;
+  margin-right: 140px;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 .av2-photo-stack {
   position: relative;
   width: 580px;
   height: 400px;
+  transform-style: preserve-3d;
 }
 
 .av2-photo-win {
@@ -5137,7 +5171,7 @@ a.project-card {
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.2s;
+  transform-style: preserve-3d;
 }
 
 .av2-photo-win:not(.av2-photo-win--front) {
@@ -5211,6 +5245,17 @@ a.project-card {
   max-width: 220px;
   line-height: 1.7;
   margin: 0;
+}
+
+.av2-photo-scroll-hint {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 0;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 0.68rem;
+  color: rgba(255, 255, 255, 0.2);
+  margin: 0;
+  letter-spacing: 0.04em;
 }
 
 /* ── GAME ──────────────────────────────────────────────────── */
