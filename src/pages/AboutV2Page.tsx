@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import gsap from 'gsap'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Tab = 'home' | 'photos' | 'game' | 'loves'
@@ -48,11 +49,21 @@ function drawRR(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, 
 interface Photo { filename: string; bg: string; caption: string | null }
 
 const PHOTOS: Photo[] = [
-  { filename: 'tokyo_cherry_blossoms.jpg', bg: 'linear-gradient(135deg, #ffb8c6 0%, #ff7eb3 40%, #c77dff 100%)', caption: 'Beautiful sunset in Japan. I loved exploring Tokyo.' },
-  { filename: 'ueno_temple_gate.jpg',      bg: 'linear-gradient(135deg, #2d3561 0%, #c05c7e 60%, #f0a500 100%)', caption: null },
-  { filename: 'shibuya_apartments.jpg',    bg: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',               caption: null },
-  { filename: 'yoyogi_park_trees.jpg',     bg: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%)', caption: null },
-  { filename: 'street_corner_dusk.jpg',   bg: 'linear-gradient(135deg, #3a1c71 0%, #d76d77 50%, #ffaf7b 100%)',  caption: null },
+  { filename: 'tokyo_cherry_blossoms.jpg', bg: '#3a3a3a', caption: 'Beautiful sunset in Japan. I loved exploring Tokyo.' },
+  { filename: 'ueno_temple_gate.jpg',      bg: '#333333', caption: null },
+  { filename: 'shibuya_apartments.jpg',    bg: '#2e2e2e', caption: null },
+  { filename: 'yoyogi_park_trees.jpg',     bg: '#383838', caption: null },
+  { filename: 'street_corner_dusk.jpg',   bg: '#303030', caption: null },
+  { filename: 'akihabara_evening.jpg',     bg: '#2a2a2a', caption: null },
+  { filename: 'shinjuku_rain.jpg',         bg: '#353535', caption: null },
+  { filename: 'asakusa_lanterns.jpg',      bg: '#2c2c2c', caption: null },
+  { filename: 'harajuku_street.jpg',       bg: '#323232', caption: null },
+  { filename: 'odaiba_bridge.jpg',         bg: '#2f2f2f', caption: null },
+  { filename: 'meiji_shrine.jpg',          bg: '#363636', caption: null },
+  { filename: 'nakameguro_canal.jpg',      bg: '#2d2d2d', caption: null },
+  { filename: 'roppongi_night.jpg',        bg: '#313131', caption: null },
+  { filename: 'shimokitazawa_cafe.jpg',    bg: '#393939', caption: null },
+  { filename: 'yanaka_cemetery.jpg',       bg: '#2b2b2b', caption: null },
 ]
 
 // ─── Loves data ───────────────────────────────────────────────────────────────
@@ -106,8 +117,7 @@ export function AboutV2Page() {
 
   return (
     <div className="av2-root">
-      <div className="av2-bg" aria-hidden="true" />
-
+      <div className="av2-outer" data-tab={tab}>
       <div className="av2-layout">
         {/* left dock */}
         <nav className="av2-dock" aria-label="About sections">
@@ -131,6 +141,7 @@ export function AboutV2Page() {
           {tab === 'game'   && <GamePanel />}
         </div>
       </div>
+      </div>
     </div>
   )
 }
@@ -143,16 +154,6 @@ function HomePanel() {
     <div className="av2-home">
       <p className="av2-flavor-text">Welcome to the sandbox. Explore.<br />Find. 0001</p>
 
-      <div className="av2-sticky av2-sticky--a">
-        <p>Hi, I'm Ula — Senior Designer at Tulip. I make things that make sense, and occasionally things that make you smile.</p>
-        <p>This is my corner of the internet. Poke around.</p>
-      </div>
-
-      <div className="av2-sticky av2-sticky--b">
-        <p>Polish · English · German B1</p>
-        <p>Drawing · Painting · Film · Cats</p>
-      </div>
-
       <div className="av2-home-hint">
         <span>Use the panel →</span>
       </div>
@@ -163,58 +164,141 @@ function HomePanel() {
 // ─────────────────────────────────────────────────────────────────────────────
 // PHOTOS
 // ─────────────────────────────────────────────────────────────────────────────
+
+const getStackTransform = (depth: number) => ({
+  x: depth * 52,
+  y: depth * -34,
+  skewY: 6,
+  scale: 1 - depth * 0.02,
+  opacity: depth < 5 ? 1 : Math.max(0, 1 - (depth - 4) * 0.22),
+})
+
+const N = PHOTOS.length
+
 function PhotosPanel() {
-  // order: first element = back, last = front
-  const [order, setOrder] = useState(() => PHOTOS.map((_, i) => i))
+  const containerRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+  const animatingRef = useRef(false)
+  // orderRef[i] = depth of card i (0 = front)
+  const orderRef = useRef<number[]>(PHOTOS.map((_, i) => i))
+  const [frontIdx, setFrontIdx] = useState(0) // which card index is currently at depth 0
 
-  const bringToFront = (photoIdx: number) => {
-    setOrder(prev => [...prev.filter(i => i !== photoIdx), photoIdx])
-  }
+  useEffect(() => {
+    // Set initial transforms
+    cardRefs.current.forEach((card, i) => {
+      if (!card) return
+      gsap.set(card, { ...getStackTransform(i), zIndex: N - i })
+    })
 
-  const frontPhoto = PHOTOS[order[order.length - 1]]
+    const advance = () => {
+      if (animatingRef.current) return
+      animatingRef.current = true
+
+      const order = orderRef.current
+      // Find which card is at depth 0 (front)
+      const frontCardIdx = order.indexOf(0)
+      const card = cardRefs.current[frontCardIdx]
+      if (!card) return
+
+      // Animate front card off to the left
+      gsap.to(card, {
+        x: -860,
+        y: 210,
+        skewY: 6,
+        duration: 0.5,
+        ease: 'power3.in',
+        onComplete: () => {
+          // Teleport it to back position instantly (off-screen behind the stack)
+          const backDepth = N - 1
+          gsap.set(card, {
+            ...getStackTransform(backDepth),
+            x: getStackTransform(backDepth).x + 300,  // slightly further right, hidden behind
+            zIndex: 1,
+          })
+
+          // Update logical order: decrement all depths, wrapped card goes to back
+          const newOrder = order.map(d => (d === 0 ? N - 1 : d - 1))
+          orderRef.current = newOrder
+
+          // Update z-indices for all cards
+          cardRefs.current.forEach((c, i) => {
+            if (!c) return
+            gsap.set(c, { zIndex: N - newOrder[i] })
+          })
+
+          // Shift all other cards forward (reduce depth by 1)
+          cardRefs.current.forEach((c, i) => {
+            if (!c || i === frontCardIdx) return
+            gsap.to(c, { ...getStackTransform(newOrder[i]), duration: 0.45, ease: 'power2.out' })
+          })
+
+          // Slide wrapped card into its back position smoothly
+          gsap.to(card, {
+            ...getStackTransform(N - 1),
+            duration: 0.45,
+            ease: 'power2.out',
+          })
+
+          const newFront = newOrder.indexOf(0)
+          setFrontIdx(newFront)
+          animatingRef.current = false
+        },
+      })
+    }
+
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      if (e.deltaY > 0) advance()
+    }
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') advance()
+    }
+
+    const el = containerRef.current
+    el?.addEventListener('wheel', onWheel, { passive: false })
+    window.addEventListener('keydown', onKey)
+
+    return () => {
+      gsap.killTweensOf(cardRefs.current.filter(Boolean))
+      el?.removeEventListener('wheel', onWheel)
+      window.removeEventListener('keydown', onKey)
+    }
+  }, [])
+
+  const frontPhoto = PHOTOS[frontIdx]
 
   return (
-    <div className="av2-photos">
+    <div className="av2-photos" ref={containerRef}>
       <div className="av2-photo-scene">
         <div className="av2-photo-stack">
-          {order.map((photoIdx, stackPos) => {
-            const depth = order.length - 1 - stackPos  // 0 = front
-            const photo = PHOTOS[photoIdx]
-            return (
-              <div
-                key={photoIdx}
-                className={`av2-photo-win${depth === 0 ? ' av2-photo-win--front' : ''}`}
-                style={{
-                  zIndex: stackPos + 1,
-                  transform: depth === 0
-                    ? 'none'
-                    : `translate(${depth * 26}px, ${depth * -20}px)`,
-                }}
-                onClick={() => depth !== 0 && bringToFront(photoIdx)}
-              >
-                {/* Titlebar — matches Figma node 89:9213 */}
-                <div className="av2-photo-bar">
-                  <div className="av2-photo-filename">
-                    <span>{photo.filename.split('_')[0]}</span>
-                    <span>{'_' + photo.filename.split('_').slice(1).join('_')}</span>
-                  </div>
-                  {/* xmark icon — plus rotated 45° */}
-                  <svg className="av2-photo-xmark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
+          {PHOTOS.map((photo, i) => (
+            <div
+              key={i}
+              ref={el => { cardRefs.current[i] = el }}
+              className="av2-photo-win"
+            >
+              <div className="av2-photo-bar">
+                <div className="av2-photo-filename">
+                  <span>{photo.filename.split('_')[0]}</span>
+                  <span>{'_' + photo.filename.split('_').slice(1).join('_')}</span>
                 </div>
-                {/* Image body — overflow matches Figma absolute positioning */}
-                <div className="av2-photo-body">
-                  <div className="av2-photo-img" style={{ background: photo.bg }} />
-                </div>
+                <svg className="av2-photo-xmark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
               </div>
-            )
-          })}
+              <div className="av2-photo-body">
+                <div className="av2-photo-img" style={{ background: photo.bg }} />
+              </div>
+            </div>
+          ))}
         </div>
 
         {frontPhoto.caption && (
           <p className="av2-photo-caption">{frontPhoto.caption}</p>
         )}
+
+        <p className="av2-photo-scroll-hint">scroll to browse</p>
       </div>
     </div>
   )
