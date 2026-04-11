@@ -62,6 +62,7 @@
   --text-secondary: #9C9892;
   --text-light: #b8ada8;
   --accent-yellow: rgba(255, 210, 100, 0.45);
+  --accent-yellow-solid: rgba(255, 210, 100, 1);
   --accent-secondary: #dbeafe;
   --border: #DCD2CD;
 
@@ -1535,6 +1536,7 @@ footer {
   --text-secondary: #9C9892;
   --text-light: #6b6864;
   --accent-yellow: rgba(255, 210, 100, 0.2);
+  --accent-yellow-solid: rgba(255, 210, 100, 1);
   --accent-secondary: #272522;
   --border: #2D2B28;
 
@@ -4512,7 +4514,7 @@ a.project-card {
   display: inline-block;
   align-self: flex-start;
   width: fit-content;
-  margin-top: 12px;
+  margin-top: var(--space-3);
   font-family: 'DM Mono', monospace;
   font-size: 11px;
   font-weight: 400;
@@ -4520,7 +4522,7 @@ a.project-card {
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 6px;
-  padding: 2px 8px;
+  padding: 2px var(--space-2);
 }
 
 /* --- Metric --- */
@@ -4528,13 +4530,13 @@ a.project-card {
   display: flex;
   flex-direction: column;
   background: var(--bg-card);
-  border-radius: 16px;
-  padding: 1.5rem 2rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-8);
   max-width: 420px;
 }
 
 .mdx-metric-value {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   font-size: 3rem;
   font-weight: 700;
   line-height: 1;
@@ -4543,51 +4545,78 @@ a.project-card {
 }
 
 .mdx-metric-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-primary);
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
 }
 
 .mdx-metric-context {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   color: var(--text-secondary);
-  margin-top: 0.25rem;
+  margin-top: var(--space-1);
   line-height: 1.5;
 }
 
 /* --- EvidenceQuote --- */
 .mdx-quote {
-  padding: 1.25rem 1.5rem;
-  border-left: 3px solid rgba(255, 210, 100, 0.8);
-  background: var(--bg-card);
-  border-radius: 0 12px 12px 0;
+  background: var(--ref-card-bg);
+  border: 1px solid var(--ref-card-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 0;
 }
 
-.mdx-quote-text {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1.05rem;
-  font-style: italic;
-  line-height: 1.65;
-  color: var(--text-primary);
+.mdx-quote-body {
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--ref-card-divider);
+  display: flex;
+  flex-direction: column;
+}
+
+.mdx-quote-mark {
+  font-family: var(--font-body);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--ref-quote-color);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.mdx-quote .mdx-quote-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.2px;
+  color: var(--ref-quote-color);
   margin: 0;
+  max-width: none;
+  font-style: normal;
+}
+
+.mdx-quote-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
 }
 
 .mdx-quote-attr {
   font-family: 'DM Mono', monospace;
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  margin-top: 0.75rem;
+  font-size: 12px;
+  color: var(--ref-title-color);
+  margin: 0;
 }
 
 /* --- StudyResult --- */
 .sr-root {
   background: var(--background);
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -4605,16 +4634,16 @@ a.project-card {
 .sr-header {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 1.25rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
 }
 
 .sr-icon-bubble {
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  background: rgba(255, 210, 100, 0.9);
-  border-radius: 50%;
+  background: var(--accent-yellow-solid);
+  border-radius: var(--radius-full);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -4627,7 +4656,7 @@ a.project-card {
 }
 
 .sr-participants {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-primary);
@@ -4644,14 +4673,14 @@ a.project-card {
 .sr-options {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-3);
 }
 
 .sr-option-row {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-rows: auto auto;
-  gap: 4px 8px;
+  gap: var(--space-1) var(--space-2);
   align-items: center;
 }
 
@@ -4667,7 +4696,7 @@ a.project-card {
   font-family: 'DM Mono', monospace;
   font-size: 0.75rem;
   font-weight: 700;
-  color: rgba(255, 210, 100, 1);
+  color: var(--accent-yellow-solid);
   grid-column: 2;
   grid-row: 1;
   text-align: right;
@@ -4676,7 +4705,7 @@ a.project-card {
 .sr-bar-track {
   height: 8px;
   background: var(--bg-card);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   grid-column: 1 / -1;
   grid-row: 2;
@@ -4684,8 +4713,8 @@ a.project-card {
 
 .sr-bar-fill {
   height: 100%;
-  background: rgba(255, 210, 100, 1);
-  border-radius: 4px;
+  background: var(--accent-yellow-solid);
+  border-radius: var(--radius-sm);
   transition: width 0.6s ease;
 }
 
@@ -4693,21 +4722,21 @@ a.project-card {
 .sr-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .sr-card {
   background: var(--bg-card);
-  border-radius: 12px;
-  padding: 1rem;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
 }
 
 .sr-card-title {
-  font-family: 'DM Sans', sans-serif;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 4px;
+  margin-bottom: var(--space-1);
 }
 
 .sr-card-desc {
@@ -4809,7 +4838,7 @@ a.project-card {
 
 /* Scroll offset so sticky header doesn't cover section headings */
 [data-section="true"] {
-  scroll-margin-top: calc(var(--nav-height) + 32px);
+  scroll-margin-top: calc(var(--nav-height) + var(--space-8));
 }
 
 /* Hero zone: full-width above the sidebar grid */

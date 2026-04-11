@@ -166,6 +166,44 @@ function PhotosPanel() {
   const orderRef = useRef<number[]>(PHOTOS.map((_, i) => i))
   const [frontIdx, setFrontIdx] = useState(0) // which card index is currently at depth 0
 
+  const handleCardClick = useCallback((cardIdx: number) => {
+    if (animatingRef.current) return
+    const order = orderRef.current
+    const depth = order[cardIdx]
+    if (depth === 0) return // already front
+
+    animatingRef.current = true
+
+    const newOrder = order.map((d, i) => {
+      if (i === cardIdx) return 0
+      if (d < depth) return d + 1
+      return d
+    })
+
+    orderRef.current = newOrder
+
+    cardRefs.current.forEach((c, i) => {
+      if (!c) return
+      gsap.set(c, { zIndex: N - newOrder[i] })
+    })
+
+    let completed = 0
+    cardRefs.current.forEach((c, i) => {
+      if (!c) return
+      gsap.to(c, {
+        ...getStackTransform(newOrder[i]),
+        duration: 0.45,
+        ease: 'power2.out',
+        onComplete: () => {
+          completed++
+          if (completed === N) animatingRef.current = false
+        },
+      })
+    })
+
+    setFrontIdx(cardIdx)
+  }, [])
+
   useEffect(() => {
     // Set initial transforms
     cardRefs.current.forEach((card, i) => {
@@ -251,6 +289,8 @@ function PhotosPanel() {
               key={i}
               ref={el => { cardRefs.current[i] = el }}
               className="av2-photo-win"
+              onClick={() => handleCardClick(i)}
+              style={{ cursor: i === frontIdx ? 'default' : 'pointer' }}
             >
               <div className="av2-photo-bar">
                 <div className="av2-photo-filename">
