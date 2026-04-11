@@ -7,6 +7,7 @@ import ProjectHero from "../project/ProjectHero"
 import { Metric } from "./Metric"
 import { EvidenceQuote } from "./EvidenceQuote"
 import { StudyResult } from "./StudyResult"
+import { StickyNotes } from "./StickyNotes"
 
 export const mdxComponents = {
   CardSortStudy,
@@ -18,4 +19,5 @@ export const mdxComponents = {
   Metric,
   EvidenceQuote,
   StudyResult,
+  StickyNotes,
 }

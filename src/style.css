@@ -4519,6 +4519,7 @@ a.project-card {
   font-size: 11px;
   font-weight: 400;
   color: var(--text-secondary);
+  background: var(--background);
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 2px var(--space-2);
@@ -4753,6 +4754,84 @@ a.project-card {
   .mdx-metric-value {
     font-size: 2.25rem;
   }
+}
+
+/* --- StickyNotes --- */
+.sn-root {
+  background-color: var(--background);
+  background-image:
+    repeating-linear-gradient(var(--border) 0px, var(--border) 1px, transparent 1px, transparent 24px),
+    repeating-linear-gradient(90deg, var(--border) 0px, var(--border) 1px, transparent 1px, transparent 24px);
+  background-size: 24px 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+}
+
+.sn-header {
+  padding: 1.75rem 1.75rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.sn-participants {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  line-height: 1.7;
+  color: var(--text-primary);
+}
+
+.sn-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.sn-row {
+  display: flex;
+  gap: 14px;
+  justify-content: safe center;
+  overflow-x: auto;
+  overflow-y: visible;
+  padding: 12px 1.75rem 1.75rem;
+  scrollbar-width: none;
+}
+
+.sn-row::-webkit-scrollbar {
+  display: none;
+}
+
+.sn-card {
+  flex-shrink: 0;
+  width: 214px;
+  height: 224px;
+  border-radius: 0;
+  padding: 1.25rem;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.34, 1.2, 0.64, 1);
+  cursor: default;
+}
+
+.sn-card:hover {
+  transform: rotate(4deg) translateY(-6px) !important;
+}
+
+.sn-card-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  display: block;
+}
+
+.sn-chip-wrap {
+  padding: 0 1.75rem 1.25rem;
 }
 
 /* === PROJECT SIDE NAV === */

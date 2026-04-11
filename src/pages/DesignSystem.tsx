@@ -4,6 +4,7 @@ import CardSortStudy from "../components/dataviz/CardSortStudy"
 import CompetitiveAnalysis from "../components/dataviz/CompetitiveAnalysis"
 import ProcessBoard from "../components/dataviz/ProcessBoard"
 import FlowDiagram from "../components/dataviz/FlowDiagram"
+import { StickyNotes } from "../components/mdx/StickyNotes"
 
 // ── Types ─────────────────────────────────────────────────────────────────
 type MainSection = "foundation" | "components" | "motion" | "patterns"
@@ -69,12 +70,12 @@ const sections: SectionDef[] = [
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const semanticTokens: { label: string; var: string; light: string; dark: string; lightText?: boolean }[] = [
-  { label: "Background",       var: "--background",         light: "#ffffff",   dark: "#1E1E1E",   lightText: false },
-  { label: "Foreground",       var: "--text-primary",       light: "#1a1a1a",   dark: "#f0ede8",   lightText: true  },
-  { label: "Card",             var: "--bg-card",            light: "#f0f4f8",   dark: "#1e1d1b",   lightText: false },
-  { label: "Muted",            var: "--background-subtle",  light: "#fafafa",   dark: "#1a1917",   lightText: false },
-  { label: "Muted foreground", var: "--text-secondary",     light: "#6b7280",   dark: "#9c9892",   lightText: true  },
-  { label: "Border",           var: "--border",             light: "#e5e7eb",   dark: "#2d2b28",   lightText: false },
+  { label: "Background",       var: "--background",         light: "#FAF1ED",   dark: "#1B1815",   lightText: false },
+  { label: "Foreground",       var: "--text-primary",       light: "#2C2B2B",   dark: "#F0EDE8",   lightText: true  },
+  { label: "Card",             var: "--bg-card",            light: "#F8EDE7",   dark: "#201C18",   lightText: false },
+  { label: "Muted",            var: "--background-subtle",  light: "#F3E8E1",   dark: "#17140F",   lightText: false },
+  { label: "Muted foreground", var: "--text-secondary",     light: "#9C9892",   dark: "#9C9892",   lightText: true  },
+  { label: "Border",           var: "--border",             light: "#DCD2CD",   dark: "#2D2B28",   lightText: false },
   { label: "Accent yellow",    var: "--accent-yellow",      light: "#FFD26473", dark: "#FFD26433", lightText: false },
   { label: "Accent secondary", var: "--accent-secondary",   light: "#dbeafe",   dark: "#272522",   lightText: false },
 ]
@@ -594,6 +595,16 @@ const datavizComponents = [
       { name: "edges", type: "Array<{ from, to, label?, color? }>", desc: 'color: "green" | "red" or default' },
     ],
   },
+  {
+    name: "StickyNotes",
+    description: "FigJam-style colored sticky notes for embedding qualitative insights, quotes, or synthesis themes. Cards scroll horizontally with subtle rotations.",
+    props: [
+      { name: "skill", type: "SkillKey", desc: "Skill attribution shown as a chip below the row" },
+      { name: "participants", type: "number?", desc: "Optional participant count shown in header" },
+      { name: "label", type: "string", desc: "Study subtitle or description line below participant count" },
+      { name: "notes", type: "string[]", desc: "One string per sticky note card — cycles through yellow, blue, pink, purple palette" },
+    ],
+  },
 ]
 
 function DataVizSection() {
@@ -682,6 +693,21 @@ function DataVizSection() {
             { label: "Research", color: "purple", items: [{ label: "Audit competitors" }, { label: "Propose IA", detail: "Information architecture proposal" }] },
             { label: "Design", color: "yellow", items: [{ label: "Create components" }, { label: "Iterate on designs" }] },
             { label: "Launch", color: "teal", items: [{ label: "Support engineering" }, { label: "Design QA" }] },
+          ]}
+        />
+      </div>
+
+      <div className="ds-dataviz-preview">
+        <p className="ds-dataviz-preview-label">StickyNotes</p>
+        <StickyNotes
+          skill="user-research"
+          participants={5}
+          label="Key themes from user interviews"
+          notes={[
+            "Users preferred seeing the full picture before making a decision",
+            "Navigation felt unfamiliar — expected left rail, got top bar",
+            "Loved the speed of the new builder but missed undo history",
+            "Onboarding was skipped entirely by 4 of 5 participants",
           ]}
         />
       </div>

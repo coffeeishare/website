@@ -36,6 +36,10 @@
       "runtimeExecutable": "/usr/local/bin/node",
       "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/unruffled-yonath", "--port", "5180"],
       "port": 5180
+      "name": "Portfolio Dev (lucid-banach)",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/lucid-banach", "--port", "5179"],
+      "port": 5179
     }
   ]
 }
