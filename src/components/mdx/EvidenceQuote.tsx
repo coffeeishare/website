@@ -12,12 +12,15 @@ export function EvidenceQuote({ skill, text, attribution }: EvidenceQuoteProps) 
 
   return (
     <blockquote className="mdx-quote">
-      <p className="mdx-quote-text">{text}</p>
-      {attribution && (
-        <footer className="mdx-quote-attr">— {attribution}</footer>
-      )}
-      {skillDef && (
-        <span className="mdx-skill-chip">{skillDef.label}</span>
+      <div className="mdx-quote-body">
+        <span className="mdx-quote-mark">"</span>
+        <p className="mdx-quote-text">{text}</p>
+      </div>
+      {(attribution || skillDef) && (
+        <div className="mdx-quote-footer">
+          {attribution && <span className="mdx-quote-attr">— {attribution}</span>}
+          {skillDef && <span className="mdx-skill-chip">{skillDef.label}</span>}
+        </div>
       )}
     </blockquote>
   )
