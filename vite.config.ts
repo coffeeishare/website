@@ -26,6 +26,7 @@ export default defineConfig(async () => {
         },
         server: {
             port: 5173,
+            historyApiFallback: true,
         },
     }
 })

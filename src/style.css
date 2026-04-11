@@ -3201,7 +3201,7 @@ a.project-card {
 }
 
 .pl-content {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: calc(var(--nav-height) + var(--space-12)) var(--space-10) var(--space-20);
   display: flex;
@@ -3310,6 +3310,16 @@ a.project-card {
 }
 
 /* ── Prose paragraphs inside MDX ────────────────────────────── */
+.pl-body-content p,
+.pl-body-content ul,
+.pl-body-content ol,
+.pl-body-content blockquote,
+.pl-body-content .st-wrapper {
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .pl-content p {
   font-size: 16px;
   line-height: 1.7;
@@ -4725,7 +4735,7 @@ a.project-card {
 
 /* Hero zone: full-width above the sidebar grid */
 .pl-hero-zone {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: calc(var(--nav-height) + var(--space-12)) var(--space-10) 0;
   display: flex;
@@ -4763,7 +4773,7 @@ a.project-card {
 /* Body: grid starts immediately after the hero */
 .pl-page-body {
   display: block;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--space-10);
 }
@@ -4782,31 +4792,35 @@ a.project-card {
 
 @media (min-width: 1024px) {
   .pl-page-body {
-    display: grid;
-    grid-template-columns: 160px 680px;
-    gap: 0 2.5rem;
-    max-width: none;
+    display: block;
+    max-width: 1200px;
+    padding: 0 var(--space-10);
     padding: 0 2rem;
     align-items: start;
     justify-content: center;
   }
 }
 
-/* Body content: fixed 680px — same width as prose */
+/* Body content: block layout so margin: auto centering works reliably */
 .pl-body-content {
-  max-width: 680px;
+  display: block !important;
+  max-width: 100%;
   margin: 0;
   padding: 0 0 var(--space-20) !important;
 }
 
-/* Sidebar */
+.pl-body-content > * + * {
+  margin-top: var(--space-12);
+}
+
+/* Sidebar — hidden, pending redesign */
 .pl-sidenav {
   display: none;
 }
 
 @media (min-width: 1024px) {
   .pl-sidenav {
-    display: block;
+    display: none;
     position: sticky;
     top: calc(var(--nav-height) + 2rem);
     /* Align first nav item with the first section title */
