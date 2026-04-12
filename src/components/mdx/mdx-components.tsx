@@ -5,6 +5,7 @@ import FlowDiagram from "../dataviz/FlowDiagram"
 import SectionTitle from "../project/SectionTitle"
 import ProjectHero from "../project/ProjectHero"
 import { Metric } from "./Metric"
+import { MetricGroup } from "./MetricGroup"
 import { EvidenceQuote } from "./EvidenceQuote"
 import { StudyResult } from "./StudyResult"
 import { StickyNotes } from "./StickyNotes"
@@ -34,6 +35,7 @@ export const mdxComponents = {
   SectionTitle,
   ProjectHero,
   Metric,
+  MetricGroup,
   EvidenceQuote,
   StudyResult,
   StickyNotes,

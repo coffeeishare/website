@@ -6,6 +6,11 @@ import { EvidenceCard } from './EvidenceCard'
 import { SkillSummaryPanel } from './SkillSummaryPanel'
 import type { FilterableProject } from '../../types/filter'
 
+const CLIENT_LOGOS: Record<string, string> = {
+  Tulip: '/company logo/Tulip Logo.svg',
+  Companion: '/company logo/Companion Logo.svg',
+}
+
 // v2 — passes filteredProjects to SkillSummaryPanel
 export function FilteredProjectGrid() {
   const [projects, setProjects] = useState<FilterableProject[]>([])
@@ -66,7 +71,16 @@ export function FilteredProjectGrid() {
                   className="project-card reveal"
                 >
                   <div className="project-info">
-                    <div className="project-company-logo" />
+                    <div className="project-company-logo">
+                      {project.client && CLIENT_LOGOS[project.client] && (
+                        <div
+                          className="project-company-logo-img"
+                          role="img"
+                          aria-label={`${project.client} logo`}
+                          style={{ '--logo-src': `url('${CLIENT_LOGOS[project.client]}')` } as React.CSSProperties}
+                        />
+                      )}
+                    </div>
                     {project.client && (
                       <div className="project-company">{project.client}.</div>
                     )}
