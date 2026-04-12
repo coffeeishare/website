@@ -6,6 +6,7 @@ interface ProjectHeroProps {
   summary?: string
   tags?: string[]
   year?: string
+  team?: string[]
   coverImage?: string
   client?: string
   introText?: string
@@ -19,8 +20,8 @@ const BackArrow = () => (
   </svg>
 )
 
-export default function ProjectHero({ title, summary, tags, year, coverImage, client, introText, pullQuote }: ProjectHeroProps) {
-  const hasStats = introText || summary || year || (tags && tags.length > 0)
+export default function ProjectHero({ title, summary, tags, year, team, coverImage, client, introText, pullQuote }: ProjectHeroProps) {
+  const hasStats = introText || summary || year || team || (tags && tags.length > 0)
 
   return (
     <>
@@ -64,12 +65,24 @@ export default function ProjectHero({ title, summary, tags, year, coverImage, cl
             </div>
           )}
 
-          {year && (
+          {(team && team.length > 0) || year ? (
             <div className="pd-stats-group">
-              <span className="pd-stats-label">Year</span>
-              <p className="pd-meta-value">{year}</p>
+              {team && team.length > 0 && (
+                <>
+                  <span className="pd-stats-label">Team</span>
+                  {team.map((member) => (
+                    <p key={member} className="pd-meta-value">{member}</p>
+                  ))}
+                </>
+              )}
+              {year && (
+                <>
+                  <span className="pd-stats-label pd-stats-label--spaced">Year</span>
+                  <p className="pd-meta-value">{year}</p>
+                </>
+              )}
             </div>
-          )}
+          ) : null}
 
           {tags && tags.length > 0 && (
             <div className="pd-stats-group">

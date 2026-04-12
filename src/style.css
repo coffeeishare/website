@@ -1314,6 +1314,10 @@ footer {
    ============================================================ */
 .other-hero {
   padding: 80px 0 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .other-hero h1 {
@@ -1330,6 +1334,14 @@ footer {
   line-height: 1.7;
 }
 
+.ow-filters {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /* Other Work — full-width stacked list */
 .ow-page {
   padding-bottom: 0;
@@ -1340,6 +1352,8 @@ footer {
   flex-direction: column;
   gap: 0;
   padding: 0 40px 80px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .ow-item {
@@ -1794,6 +1808,10 @@ a.project-card {
   letter-spacing: 0.04em;
   color: var(--text-light);
   margin-bottom: 8px;
+}
+
+.pd-stats-label--spaced {
+  margin-top: 20px;
 }
 
 .pd-meta-value {
@@ -4537,7 +4555,7 @@ a.project-card {
   border-radius: 4px;
   white-space: nowrap;
   /* Default appearance — works in light and dark mode */
-  background: var(--bg-card);
+  background: var(--accent-secondary);
   color: var(--text-secondary);
 }
 
