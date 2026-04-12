@@ -627,7 +627,7 @@ mark.highlight-animated {
   margin-bottom: 24px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #1a1a1a;
+  background: var(--bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -635,7 +635,19 @@ mark.highlight-animated {
 }
 
 .project-company-logo svg { width: 26px; height: 26px; fill: var(--text-primary); }
-.project-company-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
+.project-company-logo-img {
+  width: 24px;
+  height: 24px;
+  background-color: var(--text-primary);
+  -webkit-mask-image: var(--logo-src);
+  mask-image: var(--logo-src);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
 
 .project-company {
   font-size: 13px;

@@ -73,10 +73,11 @@ export function FilteredProjectGrid() {
                   <div className="project-info">
                     <div className="project-company-logo">
                       {project.client && CLIENT_LOGOS[project.client] && (
-                        <img
-                          src={CLIENT_LOGOS[project.client]}
-                          alt={`${project.client} logo`}
+                        <div
                           className="project-company-logo-img"
+                          role="img"
+                          aria-label={`${project.client} logo`}
+                          style={{ '--logo-src': `url('${CLIENT_LOGOS[project.client]}')` } as React.CSSProperties}
                         />
                       )}
                     </div>
