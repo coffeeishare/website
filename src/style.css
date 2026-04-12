@@ -5262,13 +5262,19 @@ a.project-card {
 }
 
 /* ── Outer gradient container ──────────────────────────────── */
+/* background-color is hardcoded dark so the glass panel's backdrop-filter
+   always blurs dark content — not the white av2-root in light mode. */
 .av2-outer {
   position: relative;
   min-height: calc(100vh - var(--nav-height) - 32px);
   border-radius: 12px;
   border: 1px solid var(--border);
   overflow: hidden;
-  background: url('/warm-bg.webp') center center / cover no-repeat;
+  background-color: #1b1815;
+  background-image: url('/warm-bg.webp');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 
@@ -5280,22 +5286,47 @@ a.project-card {
   flex-direction: row;
   align-items: stretch;
   justify-content: center;
-  gap: 12px;
-  padding: 20px;
   min-height: calc(100vh - var(--nav-height) - 32px);
   box-sizing: border-box;
 }
 
 /* ── Main panel ────────────────────────────────────────────── */
 .av2-panel {
-  flex: 1;
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1000px;
   position: relative;
   background: rgba(7, 7, 7, 0.9);
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   overflow: hidden;
   min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* about tab — glass panel, flush to the bottom edge */
+.av2-panel[data-tab="about"] {
+  overflow: visible;
+  background: rgba(27, 24, 21, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  margin: 1.5rem 1.5rem 0 1.5rem;
+  position: relative;
+  align-self: stretch;
+}
+
+.av2-panel[data-tab="about"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.09) 0.5px, transparent 0.5px);
+  background-size: 10px 10px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 12px;
 }
 
 /* home tab — glass panel, inset from outer container */
@@ -5306,7 +5337,7 @@ a.project-card {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
-  margin: 1.5rem 1.5rem 1.5rem 0;
+  margin: 1.5rem;
   position: relative;
 }
 
@@ -5321,9 +5352,9 @@ a.project-card {
   border-radius: 12px;
 }
 
-/* game tab — same inset as love tab */
+/* game tab */
 .av2-panel[data-tab="game"] {
-  margin: 1.5rem 1.5rem 1.5rem 0;
+  margin: 1.5rem;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -5734,4 +5765,137 @@ a.project-card {
   .av2-refs-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SPACES LOADER
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Full-cover overlay ────────────────────────────────────── */
+.sl-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  background: #1b1815;
+  /* No border-radius or overflow:hidden here — av2-outer already clips.
+     Keeping them caused a dark flash in the rounded corners during card expansion. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+
+/* ── Gradient card ─────────────────────────────────────────── */
+.sl-card {
+  position: relative;
+  width: 58%;
+  aspect-ratio: 825 / 707;
+  border-radius: 6px;
+  overflow: hidden;
+  transform-origin: center center;
+  background: url('/warm-bg.webp') center / cover no-repeat;
+}
+
+/* ── Grain texture overlay ─────────────────────────────────── */
+.sl-card-grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.38'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+}
+
+/* ── Starburst — lines drawn in by GSAP, gentle glow ──────── */
+.sl-starburst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.18));
+}
+
+/* ── Text layer — sits outside the card in the dark surround ─ */
+.sl-text-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  /* bottom bar: status left, welcome right, code-ref below status */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 2rem 2rem;
+  gap: 0;
+}
+
+/* ── Status text block (bottom-left) ──────────────────────── */
+.sl-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  align-self: flex-start;
+}
+
+.sl-status-line {
+  margin: 0;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  color: rgba(240, 237, 232, 0.75);
+  white-space: nowrap;
+  min-height: 1.6em;
+}
+
+/* Blinking cursor */
+.sl-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 0.9em;
+  background: rgba(240, 237, 232, 0.7);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: sl-blink 0.85s step-end infinite;
+}
+
+@keyframes sl-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Welcome text (bottom-right) ───────────────────────────── */
+.sl-welcome {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  margin: 0;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 0.06em;
+  color: rgba(240, 237, 232, 0.38);
+  white-space: nowrap;
+  animation: sl-fadein 2s ease forwards;
+  opacity: 0;
+}
+
+@keyframes sl-fadein {
+  0%   { opacity: 0; }
+  55%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* ── Code reference (bottom-left, below status) ────────────── */
+.sl-code-ref {
+  margin: 0.6rem 0 0;
+  font-family: 'DM Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: rgba(240, 237, 232, 0.22);
+  animation: sl-fadein 2.4s ease forwards;
+  opacity: 0;
 }
