@@ -4949,10 +4949,13 @@ a.project-card {
 .pl-next-card {
   display: block;
   text-decoration: none;
-  border-radius: 12px;
-  overflow: hidden;
   background: var(--bg-card);
   border: 1px solid var(--border);
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 12px;
+  overflow: hidden;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 

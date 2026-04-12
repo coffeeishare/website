@@ -6,7 +6,7 @@ introText: "Tulip's tables displayed the right data. They didn't communicate it.
 pullQuote: "It's way easier to spot what matters now. The visual cues cut through the noise — I don't have to dig or build custom workarounds anymore."
 tags: ["Product Design", "UX Research", "Systems Design"]
 year: "2025"
-coverImage: "/conditional-formatting-cover.webp"
+coverImage: "/images/conditional-formatting/hero-image.webp"
 
 skills:
   - interaction
@@ -68,6 +68,8 @@ The research here was multi-source rather than interview-based. We pulled from c
 
 The competitive audit was the most actionable output. Seeing how four platforms handled the same problem — and where their implementations created confusion or friction — gave us a direct brief: match the baseline, then improve on the points where competitors had made poor tradeoffs.
 
+<ProjectImage src="/images/conditional-formatting/research-usecasemapping.webp" alt="Use case mapping from research" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
+
 <SectionTitle eyebrow="03 — Strategy" label="Phase 1 ships. Phase 2 follows real usage." />
 
 The core strategic decision was deliberate scope reduction. Conditional formatting in tools like Excel includes formula-driven rules, regex matching, icon sets, data bars, and colour scales. Shipping all of that immediately would have created a feature most builders wouldn't use — and would have buried the simple, frequent use cases in a complex setup flow.
@@ -85,11 +87,17 @@ The phased model also served a systems goal: getting the data model and rule-eva
 
 **Condition builder, not formula editor.** The primary design decision was to build a UI-driven condition builder rather than a formula field. A builder setting a rule should be able to do it by selecting "is greater than" from a dropdown and entering a value — not by writing `IF(value > 10, "red", "")`. This was a deliberate accessibility tradeoff; the formula approach was deferred to Phase 2 for power users.
 
+<ProjectImage src="/images/conditional-formatting/component-conditionwindow.webp" alt="Condition builder UI — visual rule configuration window" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
+
 **Rule ordering and precedence.** When multiple rules apply to the same cell, order determines which colour wins. We added explicit drag-to-reorder with a visible precedence model rather than hiding the logic. Builders needed to trust the rules — and that meant being able to see and adjust the hierarchy.
+
+<ProjectImage src="/images/conditional-formatting/component-addingrule.webp" alt="Rule configuration panel with drag-to-reorder" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
 
 **Colour system integration.** Rather than a freeform colour picker, formatting colours mapped to Tulip's existing semantic colour system (success, warning, error, neutral). This constrained the palette to choices that had consistent meaning across the platform — making conditional formatting outputs legible to operators who hadn't set up the rule themselves.
 
 **Preview in context.** Every rule change updated a live preview of the affected table in real time. This closed the feedback loop immediately: builders saw the result before committing, which removed the uncertainty that had been driving the workaround behaviour.
+
+<ProjectImage src="/images/conditional-formatting/component-tablepane.webp" alt="Table pane with live conditional formatting preview" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
 
 <SectionTitle eyebrow="05 — Impact" label="47% adoption and a closed competitive gap" />
 

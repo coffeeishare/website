@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ComponentType } from "react"
+import React, { useState, useEffect, useRef, ComponentType } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { MDXProvider } from "@mdx-js/react"
 import { mdxComponents } from "../components/mdx/mdx-components"
@@ -10,11 +10,11 @@ const projectModules = import.meta.glob("../../content/projects/*.mdx")
 
 // Ordered project list for next-project navigation
 const PROJECT_ORDER = [
-  { slug: "ai-composer",            title: "AI App Generation",          coverImage: "/ai-composer-cover.webp" },
-  { slug: "conditional-formatting", title: "Conditional Formatting",     coverImage: "/conditional-formatting-cover.webp" },
-  { slug: "find-talent-dashboard",  title: "Find Talent Dashboard",      coverImage: "/find-talent-dashboard-cover.webp" },
-  { slug: "influencer-data-metrics",title: "Influencer Data & Metrics",  coverImage: "/influencer-data-metrics-cover.webp" },
-  { slug: "companion-website",      title: "Marketing Website Redesign", coverImage: "/companion-website-cover.webp" },
+  { slug: "ai-composer",            title: "AI App Generation",          coverImage: "/images/ai-composer/cover-hero.webp" },
+  { slug: "conditional-formatting", title: "Conditional Formatting",     coverImage: "/images/conditional-formatting/hero-image.webp" },
+  { slug: "find-talent-dashboard",  title: "Find Talent Dashboard",      coverImage: "/images/find-talent-dashboard/hero-image.webp" },
+  { slug: "influencer-data-metrics",title: "Influencer Data & Metrics",  coverImage: "/images/influencer-data-metrics/hero-image.webp" },
+  { slug: "companion-website",      title: "Marketing Website Redesign", coverImage: "/images/companion-website/hero-image.webp" },
   { slug: "factory-composer",       title: "Operations Composer",        coverImage: "/images/factory-composer/hero-image.avif" },
 ]
 
@@ -43,11 +43,20 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
   const [mod, setMod] = useState<MDXModule | null>(null)
   const [notFound, setNotFound] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [visible, setVisible] = useState(false)
+  const fadingRef = useRef(false)
 
   useEffect(() => {
     const onScroll = () => setShowScrollTop(window.scrollY > 400)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
+  // Disable browser scroll restoration so it doesn't interfere with dissolve
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual"
+    }
   }, [])
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
@@ -60,6 +69,27 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
         PROJECT_ORDER[(currentIdx + 1) % PROJECT_ORDER.length],
         PROJECT_ORDER[(currentIdx + 2) % PROJECT_ORDER.length],
       ]
+
+  // Fade in on slug change
+  useEffect(() => {
+    setVisible(false)
+    const t = requestAnimationFrame(() => requestAnimationFrame(() => {
+      setVisible(true)
+      fadingRef.current = false
+    }))
+    return () => cancelAnimationFrame(t)
+  }, [slug])
+
+  const navigateWithDissolve = (nextSlug: string) => {
+    if (fadingRef.current) return
+    fadingRef.current = true
+    setVisible(false)
+    setTimeout(() => {
+      // 'instant' bypasses CSS scroll-behavior: smooth on <html>
+      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
+      navigate(`/projects/${nextSlug}`)
+    }, 310)
+  }
 
   useEffect(() => {
     const key = `../../content/projects/${slug}.mdx`
@@ -106,7 +136,7 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
   }
 
   return (
-    <div className="pl-wrapper">
+    <div className="pl-wrapper" style={{ opacity: visible ? 1 : 0, transition: "opacity 0.28s ease" }}>
       <DetailNav isDark={isDark} toggleDark={toggleDark} />
 
       {/* Hero: full-width, outside the sidebar grid */}
@@ -137,10 +167,10 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
             <h2 className="pl-next-heading">See more projects</h2>
             <div className="pl-next-grid">
               {nextProjects.map((project) => (
-                <Link
+                <button
                   key={project.slug}
-                  to={`/project/${project.slug}`}
                   className="pl-next-card"
+                  onClick={() => navigateWithDissolve(project.slug)}
                 >
                   <div className="pl-next-card-img">
                     {project.coverImage && (
@@ -148,7 +178,7 @@ export function ProjectMDXPage({ isDark, toggleDark }: ProjectMDXPageProps) {
                     )}
                   </div>
                   <p className="pl-next-card-title">{project.title}</p>
-                </Link>
+                </button>
               ))}
             </div>
           </div>
