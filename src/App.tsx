@@ -912,52 +912,72 @@ function AboutPage() {
   )
 }
 
-const workTiles = [
-  { title: "Profile Comments", desc: "Quick, contextual input to streamline decision-making on talent fit.", bg: undefined, accent: undefined },
-  { title: "Feature Highlight", desc: "Engaging visual cues to drive understanding and adoption.", bg: "linear-gradient(135deg,#e0f2fe,#bae6fd)", accent: "#7dd3fc" },
-  { title: "Smart Error Hub", desc: "Prioritised by validation level, built for fast, frictionless access.", bg: "linear-gradient(135deg,#fef3c7,#fde68a)", accent: "#fbbf24" },
-  { title: "Toolbar Pattern", desc: "Streamlined design and interaction model for hierarchical item control.", bg: undefined, accent: undefined },
-  { title: "Branding Overhaul", desc: "A visual narrative of the end-to-end transformation I designed.", bg: "linear-gradient(135deg,#fce7f3,#fbcfe8)", accent: "#f9a8d4" },
-  { title: "Talent Profiles on Mobile", desc: "Designed for anytime access, enabling quicker insights and actions.", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", accent: "#c4b5fd" },
-  { title: "Pricing Modal Revamp", desc: "Enhanced clarity and user understanding through smarter component design.", bg: "linear-gradient(135deg,#d1fae5,#a7f3d0)", accent: "#6ee7b7" },
-  { title: "Campaign Wizard", desc: "Guided input flow to deliver hyper-relevant talent recommendations.", bg: "linear-gradient(135deg,#ede9fe,#ddd6fe)", accent: "#d8b4fe" },
-  { title: "HYER App Concept", desc: "Content-led design focused on safety, with clear, purposeful messaging at every touchpoint.", bg: "linear-gradient(135deg,#1e293b,#334155)", dark: true },
-  { title: "Smart TV Concept for Hilton", desc: "Intuitive content navigation and clear info architecture tailored for short-stay guests.", bg: "linear-gradient(135deg,#f0fdf4,#dcfce7)", accent: "#6ee7b7" },
-  { title: "Feature Drop: Dark Mode", desc: "Token coverage achieved and Dark Mode launched in Companion.", bg: "linear-gradient(135deg,#1e293b,#0f172a)", dark: true, accent: "#a78bfa" },
-  { title: "Airlines HUD Concept Pitch", desc: "Designed within system constraints, delivering visual delight through thoughtful UI choices. Business won.", bg: "linear-gradient(135deg,#fef9c3,#fef08a)", accent: "#fbbf24" },
+const otherWorkItems: Array<{ image?: string; video?: string; title: string; desc: string }> = [
+  { image: "/images/other-work/smarterrorhub.webp", title: "Smart Error Hub", desc: "Prioritised by validation level, built for fast, frictionless access." },
+  { image: "/images/other-work/toolbarpattern.webp", title: "Toolbar Pattern", desc: "Streamlined design and interaction model for hierarchical item control." },
+  { image: "/images/other-work/brandingoverhaul.webp", title: "Branding Overhaul", desc: "A visual narrative of the end-to-end transformation I designed." },
+  { image: "/images/other-work/talentprofiles-mobile.webp", title: "Talent Profiles on Mobile", desc: "Designed for anytime access, enabling quicker insights and actions." },
+  { image: "/images/other-work/talentprofiles-mobile2.webp", title: "Talent Profiles on Mobile — Continuation", desc: "Further exploration of the mobile profile experience with additional interaction states." },
+  { image: "/images/other-work/pricing.webp", title: "Pricing Modal Revamp", desc: "Enhanced clarity and user understanding through smarter component design." },
+  { image: "/images/other-work/campaign-wizard.webp", title: "Campaign Wizard", desc: "Guided input flow to deliver hyper-relevant talent recommendations." },
+  { image: "/images/other-work/hyer-app2.webp", title: "HYER App Concept", desc: "Content-led design focused on safety, with clear, purposeful messaging at every touchpoint." },
+  { image: "/images/other-work/hyer-taxi.webp", title: "HYER Taxi Concept", desc: "Service design exploration for on-demand transportation with a safety-first approach." },
+  { image: "/images/other-work/smart-tv-hilton.webp", title: "Smart TV Concept for Hilton", desc: "Intuitive content navigation and clear info architecture tailored for short-stay guests." },
+  { image: "/images/other-work/smart-tv.webp", title: "Smart TV UI", desc: "Ambient interface design optimised for lean-back viewing and quick interaction." },
+  { image: "/images/other-work/darkmodeannouncement.webp", title: "Feature Drop: Dark Mode", desc: "Token coverage achieved and Dark Mode launched in Companion." },
+  { image: "/images/other-work/marketing-website.webp", title: "Marketing Website Redesign", desc: "Conversion-focused redesign with a refreshed visual language and messaging hierarchy." },
+  { image: "/images/other-work/marketing.webp", title: "Marketing Campaigns", desc: "Visual design for demand-generation campaigns aligned with product positioning." },
+  { image: "/images/other-work/marketin2.webp", title: "Marketing Visual Concepts", desc: "Exploration of motion and visual identity applied to campaign assets." },
+  { image: "/images/other-work/blogpost.webp", title: "Blog Post Design", desc: "Content-first layout designed to maximise readability and engagement." },
+  { image: "/images/other-work/chat.webp", title: "Chat Feature", desc: "Conversational UI bringing real-time collaboration into the talent workflow." },
+  { image: "/images/other-work/mood-selectorapp.webp", title: "Mood Selector App", desc: "Emotional tracking interface designed for daily check-ins and mental wellness." },
+  { video: "/images/other-work/moal.mp4", title: "MOAL App", desc: "Animated prototype showcasing the full user journey through key product interactions." },
 ]
 
 function OtherWorkPage() {
+  useScrollReveal()
   return (
-    <div className="container">
-      <section className="other-hero fade-up">
-        <h1>Client work beyond the case studies</h1>
-        <p>A selection of UX projects that weren't included in full case studies, showcasing my experience designing for web, desktop SaaS, mobile applications, and airplane HMI systems.</p>
-      </section>
+    <div className="ow-page">
+      <div className="container">
+        <section className="other-hero reveal">
+          <h1>Client work beyond the case studies</h1>
+          <p>A selection of UX projects that weren't included in full case studies, showcasing my experience designing for web, desktop SaaS, mobile applications, and airplane HMI systems.</p>
+        </section>
+      </div>
 
-      <div className="work-grid fade-up-delay-1">
-        {workTiles.map((tile) => (
-          <div className="work-tile" key={tile.title}>
-            <div className="work-tile-img" style={tile.bg ? { background: tile.bg } : undefined}>
-              <div className="work-tile-inner" style={tile.dark ? { background: "#1e293b" } : undefined}>
-                <div className="tile-bar" style={tile.dark ? { background: "#334155", borderColor: "#475569" } : undefined} />
-                <div className="tile-content">
-                  <div className="tile-line--md" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
-                  <div className="tile-line--lg" style={tile.dark ? { background: "#3b82f6" } : undefined} />
-                  <div className="tile-line--sm" style={tile.accent ? { background: tile.accent } : tile.dark ? { background: "#475569" } : undefined} />
-                  <div className="tile-line--md" style={tile.dark ? { background: "#475569" } : undefined} />
-                </div>
+      <div className="ow-list">
+        {otherWorkItems.map((item, i) => (
+          <div className="ow-item reveal" key={i}>
+            <div className="ow-card">
+              <div className="ow-image-wrap">
+                {item.video ? (
+                  <video
+                    className="ow-media"
+                    src={item.video}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img className="ow-media" src={item.image} alt={item.title} loading="lazy" />
+                )}
               </div>
-            </div>
-            <div className="work-tile-label">
-              <h3>{tile.title}</h3>
-              <p>{tile.desc}</p>
+              <div className="ow-label">
+                <span className="ow-mono">{String(i + 1).padStart(2, "0")}</span>
+                <span className="ow-sep-slash" aria-hidden="true" />
+                <span className="ow-mono ow-title">{item.title}</span>
+                <span className="ow-sep-line" aria-hidden="true" />
+                <span className="ow-mono ow-desc">{item.desc}</span>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <CTA />
+      <div className="container">
+        <CTA />
+      </div>
     </div>
   )
 }
