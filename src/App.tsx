@@ -912,41 +912,72 @@ function AboutPage() {
   )
 }
 
-const otherWorkItems: Array<{ image?: string; video?: string; title: string; desc: string }> = [
-  { image: "/images/other-work/smarterrorhub.webp", title: "Smart Error Hub", desc: "Prioritised by validation level, built for fast, frictionless access." },
-  { image: "/images/other-work/toolbarpattern.webp", title: "Toolbar Pattern", desc: "Streamlined design and interaction model for hierarchical item control." },
-  { image: "/images/other-work/brandingoverhaul.webp", title: "Branding Overhaul", desc: "A visual narrative of the end-to-end transformation I designed." },
-  { image: "/images/other-work/talentprofiles-mobile.webp", title: "Talent Profiles on Mobile", desc: "Designed for anytime access, enabling quicker insights and actions." },
-  { image: "/images/other-work/talentprofiles-mobile2.webp", title: "Talent Profiles on Mobile — Continuation", desc: "Further exploration of the mobile profile experience with additional interaction states." },
-  { image: "/images/other-work/pricing.webp", title: "Pricing Modal Revamp", desc: "Enhanced clarity and user understanding through smarter component design." },
-  { image: "/images/other-work/campaign-wizard.webp", title: "Campaign Wizard", desc: "Guided input flow to deliver hyper-relevant talent recommendations." },
-  { image: "/images/other-work/hyer-app2.webp", title: "HYER App Concept", desc: "Content-led design focused on safety, with clear, purposeful messaging at every touchpoint." },
-  { image: "/images/other-work/hyer-taxi.webp", title: "HYER Taxi Concept", desc: "Service design exploration for on-demand transportation with a safety-first approach." },
-  { image: "/images/other-work/smart-tv-hilton.webp", title: "Smart TV Concept for Hilton", desc: "Intuitive content navigation and clear info architecture tailored for short-stay guests." },
-  { image: "/images/other-work/smart-tv.webp", title: "Smart TV UI", desc: "Ambient interface design optimised for lean-back viewing and quick interaction." },
-  { image: "/images/other-work/darkmodeannouncement.webp", title: "Feature Drop: Dark Mode", desc: "Token coverage achieved and Dark Mode launched in Companion." },
-  { image: "/images/other-work/marketing-website.webp", title: "Marketing Website Redesign", desc: "Conversion-focused redesign with a refreshed visual language and messaging hierarchy." },
-  { image: "/images/other-work/marketing.webp", title: "Marketing Campaigns", desc: "Visual design for demand-generation campaigns aligned with product positioning." },
-  { image: "/images/other-work/marketin2.webp", title: "Marketing Visual Concepts", desc: "Exploration of motion and visual identity applied to campaign assets." },
-  { image: "/images/other-work/blogpost.webp", title: "Blog Post Design", desc: "Content-first layout designed to maximise readability and engagement." },
-  { image: "/images/other-work/chat.webp", title: "Chat Feature", desc: "Conversational UI bringing real-time collaboration into the talent workflow." },
-  { image: "/images/other-work/mood-selectorapp.webp", title: "Mood Selector App", desc: "Emotional tracking interface designed for daily check-ins and mental wellness." },
-  { video: "/images/other-work/moal.mp4", title: "MOAL App", desc: "Animated prototype showcasing the full user journey through key product interactions." },
+type OtherWorkCategory = "marketing" | "design-system" | "mobile"
+
+const otherWorkItems: Array<{ image?: string; video?: string; title: string; desc: string; category: OtherWorkCategory }> = [
+  { image: "/images/other-work/smarterrorhub.webp", title: "Smart Error Hub", desc: "Prioritised by validation level, built for fast, frictionless access.", category: "design-system" },
+  { image: "/images/other-work/toolbarpattern.webp", title: "Toolbar Pattern", desc: "Streamlined design and interaction model for hierarchical item control.", category: "design-system" },
+  { image: "/images/other-work/brandingoverhaul.webp", title: "Branding Overhaul", desc: "A visual narrative of the end-to-end transformation I designed.", category: "marketing" },
+  { image: "/images/other-work/talentprofiles-mobile.webp", title: "Talent Profiles on Mobile", desc: "Designed for anytime access, enabling quicker insights and actions.", category: "mobile" },
+  { image: "/images/other-work/talentprofiles-mobile2.webp", title: "Talent Profiles on Mobile — Continuation", desc: "Further exploration of the mobile profile experience with additional interaction states.", category: "mobile" },
+  { image: "/images/other-work/pricing.webp", title: "Pricing Modal Revamp", desc: "Enhanced clarity and user understanding through smarter component design.", category: "design-system" },
+  { image: "/images/other-work/campaign-wizard.webp", title: "Campaign Wizard", desc: "Guided input flow to deliver hyper-relevant talent recommendations.", category: "marketing" },
+  { image: "/images/other-work/hyer-app2.webp", title: "HYER App Concept", desc: "Content-led design focused on safety, with clear, purposeful messaging at every touchpoint.", category: "mobile" },
+  { image: "/images/other-work/hyer-taxi.webp", title: "HYER Taxi Concept", desc: "Service design exploration for on-demand transportation with a safety-first approach.", category: "mobile" },
+  { image: "/images/other-work/smart-tv-hilton.webp", title: "Smart TV Concept for Hilton", desc: "Intuitive content navigation and clear info architecture tailored for short-stay guests.", category: "mobile" },
+  { image: "/images/other-work/smart-tv.webp", title: "Smart TV UI", desc: "Ambient interface design optimised for lean-back viewing and quick interaction.", category: "mobile" },
+  { image: "/images/other-work/darkmodeannouncement.webp", title: "Feature Drop: Dark Mode", desc: "Token coverage achieved and Dark Mode launched in Companion.", category: "design-system" },
+  { image: "/images/other-work/marketing-website.webp", title: "Marketing Website Redesign", desc: "Conversion-focused redesign with a refreshed visual language and messaging hierarchy.", category: "marketing" },
+  { image: "/images/other-work/marketing.webp", title: "Marketing Campaigns", desc: "Visual design for demand-generation campaigns aligned with product positioning.", category: "marketing" },
+  { image: "/images/other-work/marketin2.webp", title: "Marketing Visual Concepts", desc: "Exploration of motion and visual identity applied to campaign assets.", category: "marketing" },
+  { image: "/images/other-work/blogpost.webp", title: "Blog Post Design", desc: "Content-first layout designed to maximise readability and engagement.", category: "marketing" },
+  { image: "/images/other-work/chat.webp", title: "Chat Feature", desc: "Conversational UI bringing real-time collaboration into the talent workflow.", category: "design-system" },
+  { image: "/images/other-work/mood-selectorapp.webp", title: "Mood Selector App", desc: "Emotional tracking interface designed for daily check-ins and mental wellness.", category: "mobile" },
+  { video: "/images/other-work/moal.mp4", title: "MOAL App", desc: "Animated prototype showcasing the full user journey through key product interactions.", category: "mobile" },
+]
+
+const OW_FILTERS: Array<{ key: OtherWorkCategory; label: string }> = [
+  { key: "marketing", label: "Marketing" },
+  { key: "design-system", label: "Design system" },
+  { key: "mobile", label: "Mobile" },
 ]
 
 function OtherWorkPage() {
+  const [activeFilter, setActiveFilter] = React.useState<OtherWorkCategory | null>(null)
   useScrollReveal()
+
+  const filtered = activeFilter
+    ? otherWorkItems.filter(item => item.category === activeFilter)
+    : otherWorkItems
+
   return (
     <div className="ow-page">
       <div className="container">
         <section className="other-hero reveal">
           <h1>Client work beyond the case studies</h1>
           <p>A selection of UX projects that weren't included in full case studies, showcasing my experience designing for web, desktop SaaS, mobile applications, and airplane HMI systems.</p>
+          <div className="ow-filters">
+            <button
+              className={`sf-chip${activeFilter === null ? " sf-chip--active" : ""}`}
+              onClick={() => setActiveFilter(null)}
+            >
+              All
+            </button>
+            {OW_FILTERS.map(f => (
+              <button
+                key={f.key}
+                className={`sf-chip${activeFilter === f.key ? " sf-chip--active" : ""}`}
+                onClick={() => setActiveFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
         </section>
       </div>
 
       <div className="ow-list">
-        {otherWorkItems.map((item, i) => (
+        {filtered.map((item, i) => (
           <div className="ow-item reveal" key={i}>
             <div className="ow-card">
               <div className="ow-image-wrap">
