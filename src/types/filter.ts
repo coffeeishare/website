@@ -21,6 +21,7 @@ export interface FilterableProject {
   title: string
   client?: string
   year?: string
+  order?: number
   coverImage?: string
   summary?: string
   skills: SkillKey[]

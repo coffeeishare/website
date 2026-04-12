@@ -430,16 +430,16 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
         <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}><GlitchText text="Syntax Sugar" /></button>
       </div>
       <div className="nav-icons">
-        <button className="dark-toggle" onClick={toggleDark} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}>
+        <button className="dark-toggle" onClick={toggleDark} aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"} data-tooltip={isDark ? "Light mode" : "Dark mode"}>
           {isDark ? <SunIcon /> : <MoonIcon />}
         </button>
-        <a href="https://www.linkedin.com/in/ulaksiazkiewicz/" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+        <a href="https://www.linkedin.com/in/ulaksiazkiewicz/" target="_blank" rel="noreferrer" aria-label="LinkedIn" data-tooltip="LinkedIn">
           <LinkedInIcon />
         </a>
-        <a href="mailto:u.ksiazkiewicz@gmail.com" aria-label="Email">
+        <a href="mailto:u.ksiazkiewicz@gmail.com" aria-label="Email" data-tooltip="Email">
           <EmailIcon />
         </a>
-        <a href="#" aria-label="Download resume">
+        <a href="#" aria-label="Download resume" data-tooltip="Resume">
           <ResumeIcon />
         </a>
       </div>
@@ -490,7 +490,7 @@ function HomePage() {
         <SkillFilterBar />
       </section>
 
-      <div className="container">
+      <div className="container container--no-x-pad">
         <FilteredProjectGrid />
         <CTA />
       </div>
