@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import gsap from 'gsap'
+import { ReferencesGrid, LogoCarousel } from '../App'
+import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SPACES LOADER
@@ -226,15 +228,6 @@ const LOVES = [
   { icon: '🇵🇱', label: 'Polish language',     desc: 'Home in my first tongue' },
 ]
 
-// ─── References data ──────────────────────────────────────────────────────────
-const REFS = [
-  { quote: "Working with Ula has been an absolute delight. She has been a driving force in transforming our platform's design and overall direction. Her impact on our organization – both the platform and the team – has been remarkable.", author: 'Ariel Kendall', title: 'Product Manager, Companion', badge: 'manager' },
-  { quote: "To say that Ula is exceptional is really an understatement. She has, for our team, been absolutely key to the elevation in design quality and excellence – intrinsic to our overall success.", author: 'Kashif Amin', title: 'Global Experience Design Manager, Haleon', badge: 'manager' },
-  { quote: "Ula is a rare, incredible talent. Although she is off-the-charts artistically gifted, she is also technical and analytical. Her raw talent is immeasurable.", author: 'Joy Radachy Bannister', title: 'Quality Control Specialist, Marks', badge: 'colleague' },
-  { quote: "Ula's most valued strength is her ability to take complete ownership of any design task and consistently deliver high-quality creative output which exceeds expectations.", author: 'Craig Bainton', title: 'Associate Creative Director, Marks', badge: 'colleague' },
-  { quote: "Ula is one of the most hardworking and diligent creatives I have ever encountered. Her commitment to quality and ability to apply design thinking to every project made it very easy working with her.", author: 'Evgueni Spiridonov', title: 'Global Client Lead, Marks', badge: 'colleague' },
-  { quote: "Beyond her technical skills, Ula carried herself with a professionalism that was above her position at the time; her confidence and capability were clear and she quickly earned the respect of both senior colleagues and her peers.", author: 'Natalie Saint', title: 'Senior Operations Manager, 383 Project', badge: 'colleague' },
-]
 
 // ─── Dock icons (inline SVG) ──────────────────────────────────────────────────
 function DockIcon({ id }: { id: Tab }) {
@@ -668,10 +661,154 @@ function GamePanel() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ABOUT ME (default tab — content coming soon)
+// ABOUT ME
 // ─────────────────────────────────────────────────────────────────────────────
+
+const EXPERIENCE = [
+  { role: 'Senior Product Designer', company: 'Tulip Interfaces', city: 'Munich, Germany',    date: 'Jul 2024 – Present',  coords: [11.58,  48.14] as [number, number] },
+  { role: 'Lead Product Designer',   company: 'Companion',        city: 'London, UK',         date: 'Sep 2022 – Jul 2024', coords: [-0.12,  51.50] as [number, number] },
+  { role: 'Lead Product Designer',   company: '383 Project',      city: 'Birmingham, UK',     date: 'Aug 2021 – Sep 2022', coords: [-1.89,  52.49] as [number, number] },
+  { role: 'Senior Designer',         company: 'Marks',            city: 'Birmingham, UK',     date: 'May 2019 – Aug 2021', coords: [-1.84,  52.46] as [number, number] },
+  { role: 'Product Designer',        company: 'Euro Packaging',   city: 'Birmingham, UK',     date: 'Oct 2017 – May 2019', coords: [-1.94,  52.52] as [number, number] },
+]
+
+const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+
+function WorkMap({ activeIdx }: { activeIdx: number | null }) {
+  return (
+    <div className="ab-map">
+      <ComposableMap
+        projection="geoMercator"
+        projectionConfig={{ center: [2, 52], scale: 1600 }}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <Geographies geography={GEO_URL}>
+          {({ geographies }) =>
+            geographies.map(geo => (
+              <Geography
+                key={geo.rsmKey}
+                geography={geo}
+                fill="#252220"
+                style={{
+                  default: { outline: 'none', stroke: 'var(--border)', strokeWidth: 0.6 },
+                  hover:   { outline: 'none', fill: '#252220', stroke: 'var(--border)', strokeWidth: 0.6 },
+                  pressed: { outline: 'none', stroke: 'var(--border)', strokeWidth: 0.6 },
+                }}
+              />
+            ))
+          }
+        </Geographies>
+
+        {EXPERIENCE.map((loc, i) => {
+          const isActive = activeIdx === i
+          // Munich is east — label goes left; UK markers label goes right
+          const labelLeft = loc.coords[0] > 8
+          return (
+            <Marker key={i} coordinates={loc.coords}>
+              <rect
+                x={-4} y={-4}
+                width={8} height={8}
+                fill={isActive ? '#c084fc' : '#4a4541'}
+                style={{ transition: 'fill 0.15s' }}
+              />
+              {isActive && (
+                <text
+                  x={labelLeft ? -12 : 12}
+                  y={4}
+                  textAnchor={labelLeft ? 'end' : 'start'}
+                  style={{
+                    fontFamily: "'DM Mono', 'Courier New', monospace",
+                    fontSize: 22,
+                    fill: '#c084fc',
+                    pointerEvents: 'none',
+                  }}
+                >
+                  {loc.company}, {loc.city}
+                </text>
+              )}
+            </Marker>
+          )
+        })}
+      </ComposableMap>
+    </div>
+  )
+}
+
+type AboutSubTab = 'experience' | 'references'
+
 function AboutPanel() {
-  return <div className="av2-about" />
+  const [subTab, setSubTab] = useState<AboutSubTab>('experience')
+  const [activeIdx, setActiveIdx] = useState<number | null>(null)
+
+  return (
+    <div className="ab-root">
+      {/* ── Info card ── */}
+      <div className="ab-card">
+        <div className="ab-photo-col">
+          <img className="ab-photo" src="/splash-photo.webp" alt="Ula Ksiazkiewicz" />
+        </div>
+        <div className="ab-bio-col">
+          <h2 className="ab-title">About me</h2>
+          <p className="ab-text">Hi, I'm Ula, currently a Senior Designer at Tulip.</p>
+          <p className="ab-text">I specialise in making complex experiences intuitive and delightful, with a strong focus on research, collaboration, and craft.</p>
+          <p className="ab-text">I've led design for B2B, B2C and B2B2C products, built design systems from the ground up, and thrive when working closely with cross-functional teams. I love diving into new domains, especially where AI has the potential to empower users and simplify how we work.</p>
+          <div className="ab-meta">
+            <div className="ab-meta-row">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span>Polish, English &amp; German (B1)</span>
+            </div>
+            <div className="ab-meta-row">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              <span>Drawing, painting, videography &amp; video editing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Sub-tabs ── */}
+      <div className="ab-tabs">
+        <button
+          className={`ab-tab-btn${subTab === 'experience' ? ' ab-tab-btn--active' : ''}`}
+          onClick={() => setSubTab('experience')}
+        >Experience</button>
+        <button
+          className={`ab-tab-btn${subTab === 'references' ? ' ab-tab-btn--active' : ''}`}
+          onClick={() => setSubTab('references')}
+        >References</button>
+      </div>
+
+      {/* ── Experience ── */}
+      {subTab === 'experience' && (
+        <>
+          <LogoCarousel />
+          <div className="experience-list ab-exp-list">
+            {EXPERIENCE.map((item, i) => (
+              <div
+                key={item.date}
+                className={`experience-item${activeIdx === i ? ' experience-item--active' : ''}`}
+                onMouseEnter={() => setActiveIdx(i)}
+                onMouseLeave={() => setActiveIdx(null)}
+              >
+                <div className="experience-left">
+                  <span className="experience-role">{item.role}</span>
+                  <span className="experience-company">{item.company}</span>
+                </div>
+                <span className="experience-date">{item.date}</span>
+              </div>
+            ))}
+          </div>
+          <WorkMap activeIdx={activeIdx} />
+        </>
+      )}
+
+      {/* ── References ── */}
+      {subTab === 'references' && (
+        <div className="ab-refs-wrap">
+          <ReferencesGrid />
+        </div>
+      )}
+    </div>
+  )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

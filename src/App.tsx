@@ -274,7 +274,7 @@ function HeroOrbit() {
   )
 }
 
-function LogoCarousel() {
+export function LogoCarousel() {
   return (
     <div className="logo-carousel">
       <div className="logo-track">
@@ -424,8 +424,7 @@ function Nav({ page, setPage, isDark, toggleDark }: { page: Page; setPage: (p: P
       </div>
       <div className="nav-links">
         <button className={page === "home" ? "active" : ""} onClick={() => setPage("home")}>Work</button>
-        <button className={page === "about" ? "active" : ""} onClick={() => setPage("about")}>About me</button>
-        <button className={page === "spaces" ? "active" : ""} onClick={() => setPage("spaces")}>Spaces</button>
+        <button className={page === "spaces" ? "active" : ""} onClick={() => setPage("spaces")}>Ula.exe</button>
         <button className={page === "other-work" ? "active" : ""} onClick={() => setPage("other-work")}>Other work</button>
         <button className={page === "design-system" ? "active" : ""} onClick={() => setPage("design-system")}><GlitchText text="Syntax Sugar" /></button>
       </div>
@@ -613,7 +612,7 @@ function getInitials(name: string) {
     : parts[0].slice(0, 2).toUpperCase()
 }
 
-function ReferencesGrid() {
+export function ReferencesGrid() {
   return (
     <div className="references-grid">
       {references.map((r, i) => (

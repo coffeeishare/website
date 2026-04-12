@@ -32,14 +32,10 @@
       "port": 5177
     },
     {
-      "name": "Portfolio Dev (priceless-engelbart)",
+      "name": "Portfolio Dev (jolly-meninsky)",
       "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/priceless-engelbart", "--port", "5182"],
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/jolly-meninsky", "--port", "5182"],
       "port": 5182
-      "name": "gifted-leavitt",
-      "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/gifted-leavitt", "--port", "5179"],
-      "port": 5179
     }
   ]
 }

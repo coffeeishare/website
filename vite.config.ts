@@ -21,6 +21,10 @@ export default defineConfig(async () => {
                 // Redirect `framer` imports to the local mock so components
                 // render in plain React without the Framer canvas runtime.
                 framer: path.resolve(__dirname, "src/framer-mock.ts"),
+                // Force a single React copy — prevents "invalid hook call" when
+                // libraries are resolved from the root node_modules.
+                react: path.resolve(__dirname, "node_modules/react"),
+                "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
             },
             dedupe: ["react", "react-dom"],
         },
