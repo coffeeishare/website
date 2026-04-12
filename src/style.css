@@ -631,7 +631,7 @@ mark.highlight-animated {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid var(--border);
 }
 
 .project-company-logo svg { width: 26px; height: 26px; fill: var(--text-primary); }
