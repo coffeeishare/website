@@ -32,10 +32,10 @@
       "port": 5177
     },
     {
-      "name": "magical-goodall",
+      "name": "Portfolio Dev (priceless-engelbart)",
       "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "--config", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/magical-goodall/vite.config.ts", "--root", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/magical-goodall", "--port", "5174"],
-      "port": 5174
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/priceless-engelbart", "--port", "5182"],
+      "port": 5182
     }
   ]
 }

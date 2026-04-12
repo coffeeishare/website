@@ -1,8 +1,154 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import gsap from 'gsap'
 
+// ─────────────────────────────────────────────────────────────────────────────
+// SPACES LOADER
+// ─────────────────────────────────────────────────────────────────────────────
+
+const STATUS_LINES = [
+  'INTERFACE/DIGITAL SPACE',
+  'EXPLORATION 2026',
+  'LOADING SYNTAX SUGAR...',
+]
+
+function slDelay(ms: number) {
+  return new Promise<void>(r => setTimeout(r, ms))
+}
+
+function StarBurst({ svgRef }: { svgRef: React.RefObject<SVGSVGElement | null> }) {
+  const count = 22
+  const cx = 63, cy = 63, inner = 16, outer = 52
+  return (
+    <svg
+      ref={svgRef}
+      className="sl-starburst"
+      width="126" height="126"
+      viewBox="0 0 126 126"
+      fill="none"
+      aria-hidden="true"
+    >
+      {Array.from({ length: count }, (_, i) => {
+        const angle = (i * 360) / count
+        const rad = (angle * Math.PI) / 180
+        return (
+          <line
+            key={i}
+            x1={cx + Math.cos(rad) * inner}
+            y1={cy + Math.sin(rad) * inner}
+            x2={cx + Math.cos(rad) * outer}
+            y2={cy + Math.sin(rad) * outer}
+            stroke="rgba(255,255,255,0.55)"
+            strokeWidth="1"
+            opacity={0}
+          />
+        )
+      })}
+    </svg>
+  )
+}
+
+interface SpacesLoaderProps {
+  onDone: () => void
+}
+
+function SpacesLoader({ onDone }: SpacesLoaderProps) {
+  const overlayRef   = useRef<HTMLDivElement>(null)
+  const textLayerRef = useRef<HTMLDivElement>(null)
+  const starburstRef = useRef<SVGSVGElement>(null)
+  const [typedLines, setTypedLines] = useState(['', '', ''])
+  const [activeLineIdx, setActiveLineIdx] = useState(0)
+  const expandedRef = useRef(false)
+
+  // Draw starburst lines in one-by-one on mount
+  useEffect(() => {
+    const svg = starburstRef.current
+    if (!svg) return
+    const lines = svg.querySelectorAll('line')
+    gsap.to(lines, {
+      opacity: 0.55,
+      duration: 0.06,
+      stagger: { each: 0.07, from: 'start' },
+      ease: 'none',
+    })
+  }, [])
+
+  // Typewriter
+  useEffect(() => {
+    let cancelled = false
+    async function run() {
+      for (let li = 0; li < STATUS_LINES.length; li++) {
+        setActiveLineIdx(li)
+        const full = STATUS_LINES[li]
+        for (let ci = 1; ci <= full.length; ci++) {
+          if (cancelled) return
+          setTypedLines(prev => {
+            const next = [...prev]
+            next[li] = full.slice(0, ci)
+            return next
+          })
+          await slDelay(30 + Math.random() * 18)
+        }
+        if (li < STATUS_LINES.length - 1) await slDelay(160)
+      }
+      setActiveLineIdx(-1)
+      await slDelay(150)
+      if (!cancelled) triggerExpand()
+    }
+    run()
+    return () => { cancelled = true }
+  }, [])
+
+  function triggerExpand() {
+    if (expandedRef.current) return
+    expandedRef.current = true
+
+    const overlay   = overlayRef.current
+    const textLayer = textLayerRef.current
+    if (!overlay) { onDone(); return }
+
+    // 1. Dissolve text layer
+    if (textLayer) {
+      gsap.to(textLayer, { opacity: 0, duration: 0.3, ease: 'power2.out' })
+    }
+
+    // 2. Dissolve whole overlay — no scaling, just a clean fade
+    gsap.to(overlay, {
+      opacity: 0,
+      delay: 0.2,
+      duration: 0.55,
+      ease: 'power2.out',
+      onComplete: onDone,
+    })
+  }
+
+  return (
+    <div className="sl-overlay" ref={overlayRef}>
+      <div className="sl-card">
+        <div className="sl-card-grain" aria-hidden="true" />
+        <StarBurst svgRef={starburstRef} />
+      </div>
+
+      {/* Text layer lives outside the card in the dark surround */}
+      <div className="sl-text-layer" ref={textLayerRef}>
+        <div className="sl-status">
+          {typedLines.map((line, i) => (
+            <p key={i} className="sl-status-line">
+              {line}
+              {i === activeLineIdx && <span className="sl-cursor" aria-hidden="true" />}
+            </p>
+          ))}
+        </div>
+
+        <p className="sl-welcome">Welcome to the sandbox. Explore. Find. 0001</p>
+
+        <p className="sl-code-ref">013-23132</p>
+      </div>
+    </div>
+  )
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
-type Tab = 'home' | 'photos' | 'game'
+type Tab = 'about' | 'home' | 'photos' | 'game'
 
 // ─── Game constants ───────────────────────────────────────────────────────────
 const CW = 900
@@ -93,6 +239,8 @@ const REFS = [
 // ─── Dock icons (inline SVG) ──────────────────────────────────────────────────
 function DockIcon({ id }: { id: Tab }) {
   switch (id) {
+    case 'about':
+      return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
     case 'home':
       return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     case 'photos':
@@ -103,42 +251,66 @@ function DockIcon({ id }: { id: Tab }) {
 }
 
 const TAB_LABELS: Record<Tab, string> = {
-  home: 'Love', photos: 'Photos', game: 'Game',
+  about: 'About me', home: 'Love', photos: 'Photos', game: 'Game',
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN PAGE
 // ─────────────────────────────────────────────────────────────────────────────
 export function AboutV2Page() {
-  const [tab, setTab] = useState<Tab>('home')
-  const tabs: Tab[] = ['home', 'photos', 'game']
+  const [tab, setTab] = useState<Tab>('about')
+  const [loaded, setLoaded] = useState(false)
+  const dockRef = useRef<HTMLElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+  const tabs: Tab[] = ['about', 'home', 'photos', 'game']
+
+  const handleLoaderDone = useCallback(() => {
+    setLoaded(true)
+    // Animate dock in from left
+    if (dockRef.current) {
+      gsap.fromTo(dockRef.current,
+        { opacity: 0, x: -24 },
+        { opacity: 1, x: 0, duration: 0.55, ease: 'power3.out', delay: 0.05 }
+      )
+    }
+    // Animate panel in from below
+    if (panelRef.current) {
+      gsap.fromTo(panelRef.current,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.65, ease: 'power3.out', delay: 0.15 }
+      )
+    }
+  }, [])
 
   return (
     <div className="av2-root">
       <div className="av2-outer" data-tab={tab}>
-      <div className="av2-layout">
-        {/* left dock */}
-        <nav className="av2-dock" aria-label="About sections">
-          {tabs.map(t => (
-            <button
-              key={t}
-              className={`av2-dock-btn${tab === t ? ' av2-dock-btn--active' : ''}`}
-              onClick={() => setTab(t)}
-              title={TAB_LABELS[t]}
-              aria-pressed={tab === t}
-            >
-              <DockIcon id={t} />
-            </button>
-          ))}
-        </nav>
+        {!loaded && <SpacesLoader onDone={handleLoaderDone} />}
 
-        {/* main panel */}
-        <div className="av2-panel" data-tab={tab}>
-          {tab === 'home'   && <LovesPanel />}
-          {tab === 'photos' && <PhotosPanel />}
-          {tab === 'game'   && <GamePanel />}
+        <div className="av2-layout" style={{ visibility: loaded ? 'visible' : 'hidden' }}>
+          {/* left dock */}
+          <nav className="av2-dock" ref={dockRef} aria-label="About sections">
+            {tabs.map(t => (
+              <button
+                key={t}
+                className={`av2-dock-btn${tab === t ? ' av2-dock-btn--active' : ''}`}
+                onClick={() => setTab(t)}
+                title={TAB_LABELS[t]}
+                aria-pressed={tab === t}
+              >
+                <DockIcon id={t} />
+              </button>
+            ))}
+          </nav>
+
+          {/* main panel */}
+          <div className="av2-panel" ref={panelRef} data-tab={tab}>
+            {tab === 'about'  && <AboutPanel />}
+            {tab === 'home'   && <LovesPanel />}
+            {tab === 'photos' && <PhotosPanel />}
+            {tab === 'game'   && <GamePanel />}
+          </div>
         </div>
-      </div>
       </div>
     </div>
   )
@@ -493,6 +665,13 @@ function GamePanel() {
       />
     </div>
   )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ABOUT ME (default tab — content coming soon)
+// ─────────────────────────────────────────────────────────────────────────────
+function AboutPanel() {
+  return <div className="av2-about" />
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
