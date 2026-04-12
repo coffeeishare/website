@@ -197,21 +197,11 @@ function drawRR(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, 
 interface Photo { filename: string; bg: string; caption: string | null }
 
 const PHOTOS: Photo[] = [
-  { filename: 'tokyo_cherry_blossoms.jpg', bg: '#3a3a3a', caption: 'Beautiful sunset in Japan. I loved exploring Tokyo.' },
-  { filename: 'ueno_temple_gate.jpg',      bg: '#333333', caption: 'Ueno temple gate. One of my favourite walks.' },
-  { filename: 'shibuya_apartments.jpg',    bg: '#2e2e2e', caption: 'Shibuya apartments. I love how dense it all is.' },
-  { filename: 'yoyogi_park_trees.jpg',     bg: '#383838', caption: 'Yoyogi Park. Green in the middle of the city.' },
-  { filename: 'street_corner_dusk.jpg',   bg: '#303030', caption: 'A street corner at dusk. Tokyo golden hour.' },
-  { filename: 'akihabara_evening.jpg',     bg: '#2a2a2a', caption: 'Akihabara in the evening. Neon everywhere.' },
-  { filename: 'shinjuku_rain.jpg',         bg: '#353535', caption: 'Shinjuku in the rain. Still beautiful.' },
-  { filename: 'asakusa_lanterns.jpg',      bg: '#2c2c2c', caption: 'Asakusa lanterns. Classic Tokyo.' },
-  { filename: 'harajuku_street.jpg',       bg: '#323232', caption: 'Harajuku street. Fashion and chaos.' },
-  { filename: 'odaiba_bridge.jpg',         bg: '#2f2f2f', caption: 'Odaiba bridge. Views of the bay.' },
-  { filename: 'meiji_shrine.jpg',          bg: '#363636', caption: 'Meiji Shrine. Quiet in the middle of the city.' },
-  { filename: 'nakameguro_canal.jpg',      bg: '#2d2d2d', caption: 'Nakameguro canal. Cherry blossoms in bloom.' },
-  { filename: 'roppongi_night.jpg',        bg: '#313131', caption: 'Roppongi at night. The city never sleeps.' },
-  { filename: 'shimokitazawa_cafe.jpg',    bg: '#393939', caption: 'A cafe in Shimokitazawa. My favourite neighbourhood.' },
-  { filename: 'yanaka_cemetery.jpg',       bg: '#2b2b2b', caption: 'Yanaka cemetery. Peaceful and full of history.' },
+  { filename: '3wdOehqIY6GcppSnUIwtKUURUwI.avif', bg: '#2a2a2a', caption: null },
+  { filename: 'O6O23k2nBtDTb0aw70ED7K9Mqoc.avif', bg: '#2e2e2e', caption: null },
+  { filename: 'PCL6WIITSJASqrhyAxKQzIRRxyY.avif', bg: '#303030', caption: null },
+  { filename: 'U8Msjoq65Gzmx2ul9D9z0ykRT0.avif',  bg: '#333333', caption: null },
+  { filename: 'sFdz7ZRllSK4UQjRmrphJuLonE.avif',  bg: '#2c2c2c', caption: null },
 ]
 
 // ─── Loves data ───────────────────────────────────────────────────────────────
@@ -459,15 +449,20 @@ function PhotosPanel() {
             >
               <div className="av2-photo-bar">
                 <div className="av2-photo-filename">
-                  <span>{photo.filename.split('_')[0]}</span>
-                  <span>{'_' + photo.filename.split('_').slice(1).join('_')}</span>
+                  <span>{photo.filename.split('.')[0].slice(0, 12)}</span>
+                  <span>.{photo.filename.split('.').pop()}</span>
                 </div>
                 <svg className="av2-photo-xmark" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
               </div>
               <div className="av2-photo-body">
-                <div className="av2-photo-img" style={{ background: photo.bg }} />
+                <img
+                  className="av2-photo-img"
+                  src={`/images/photos/${photo.filename}`}
+                  alt=""
+                  style={{ background: photo.bg }}
+                />
               </div>
             </div>
           ))}
@@ -688,11 +683,10 @@ function WorkMap({ activeIdx }: { activeIdx: number | null }) {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill="#252220"
                 style={{
-                  default: { outline: 'none', stroke: 'var(--border)', strokeWidth: 0.6 },
-                  hover:   { outline: 'none', fill: '#252220', stroke: 'var(--border)', strokeWidth: 0.6 },
-                  pressed: { outline: 'none', stroke: 'var(--border)', strokeWidth: 0.6 },
+                  default: { outline: 'none', fill: 'var(--map-geo-fill)', stroke: 'var(--map-border)', strokeWidth: 0.6 },
+                  hover:   { outline: 'none', fill: 'var(--map-geo-fill)', stroke: 'var(--map-border)', strokeWidth: 0.6 },
+                  pressed: { outline: 'none', fill: 'var(--map-geo-fill)', stroke: 'var(--map-border)', strokeWidth: 0.6 },
                 }}
               />
             ))
@@ -718,7 +712,7 @@ function WorkMap({ activeIdx }: { activeIdx: number | null }) {
                   textAnchor={labelLeft ? 'end' : 'start'}
                   style={{
                     fontFamily: "'DM Mono', 'Courier New', monospace",
-                    fontSize: 22,
+                    fontSize: 30,
                     fill: '#c084fc',
                     pointerEvents: 'none',
                   }}
@@ -742,6 +736,7 @@ function AboutPanel() {
 
   return (
     <div className="ab-root">
+      <div className="ab-top-fade" />
       {/* ── Info card ── */}
       <div className="ab-card">
         <div className="ab-photo-col">
@@ -814,8 +809,92 @@ function AboutPanel() {
 // ─────────────────────────────────────────────────────────────────────────────
 // LOVES
 // ─────────────────────────────────────────────────────────────────────────────
+const MOODBOARD_ITEMS = [
+  { src: '/images/favourites/Frame 11161.png',            cls: 'mb-sticky',     alt: 'About me note',              left:  3.2, top: -3.8,  rotate: -2 },
+  { src: '/images/favourites/image 25.png',               cls: 'mb-camera',     alt: 'Canon G7X camera',           left: 31.8, top: -8.4,  rotate:  4 },
+  { src: '/images/favourites/Frame 21173.png',            cls: 'mb-movie',      alt: 'Movie still',                left: 67,   top:  4.9,  rotate:  1 },
+  { src: '/images/favourites/image 29.png',               cls: 'mb-vinyl',      alt: 'Pink Floyd',                 left: 84.4, top: 15.1,  rotate:  4 },
+  { src: '/images/favourites/img20260412_22333122 3.png', cls: 'mb-boarding',   alt: 'Boarding pass',              left: 36,   top: 16.6,  rotate:-11 },
+  { src: '/images/favourites/img20260412_22333122 1.png', cls: 'mb-shinkansen', alt: 'Shinkansen ticket',          left: 50.9, top: 31.8,  rotate: -7 },
+  { src: '/images/favourites/img20260412_22333122 2.png', cls: 'mb-temple',     alt: 'Temple pass',                left: 47.1, top: 44.6,  rotate: -4 },
+  { src: '/images/favourites/image 27.png',               cls: 'mb-crane',      alt: 'Red origami crane',          left: 73.1, top: 27,    rotate:  6 },
+  { src: '/images/favourites/image 26.png',               cls: 'mb-crumpled',   alt: 'Crumpled note',              left: -1.5, top: 39,    rotate:-12 },
+  { src: '/images/favourites/img20260412_22233526 2.png', cls: 'mb-journal',    alt: 'Hobonichi journal',          left: -6.2, top: 45.9,  rotate: -4 },
+  { src: '/images/favourites/Open-1.png',                 cls: 'mb-cat',        alt: 'Cat sketch',                 left: 54.7, top: 66.7,  rotate:  1 },
+  { src: '/images/favourites/Open.png',                   cls: 'mb-anime',      alt: 'Anime illustration',         left: 69.5, top: 54.3,  rotate:  5 },
+]
+
 function LovesPanel() {
-  return <div className="av2-loves" />
+  const boardRef = useRef<HTMLDivElement>(null)
+  const [positions, setPositions] = useState(() =>
+    MOODBOARD_ITEMS.map(item => ({ left: item.left, top: item.top, rotate: item.rotate }))
+  )
+  const [zOrders, setZOrders] = useState(() => MOODBOARD_ITEMS.map((_, i) => i === 1 ? 10 : i + 1))
+  const drag = useRef<{ idx: number; startMouseX: number; startMouseY: number; startLeft: number; startTop: number } | null>(null)
+
+  const onMouseDown = useCallback((e: React.MouseEvent, idx: number) => {
+    e.preventDefault()
+    const board = boardRef.current
+    if (!board) return
+    const { left, top, rotate } = positions[idx]
+    drag.current = { idx, startMouseX: e.clientX, startMouseY: e.clientY, startLeft: left, startTop: top }
+    setZOrders(prev => {
+      const max = Math.max(...prev)
+      return prev.map((z, i) => i === idx ? max + 1 : z)
+    })
+    // suppress rotate during drag
+    setPositions(prev => prev.map((p, i) => i === idx ? { ...p, rotate: rotate * 0.3 } : p))
+  }, [positions])
+
+  useEffect(() => {
+    const onMove = (e: MouseEvent) => {
+      if (!drag.current || !boardRef.current) return
+      const { idx, startMouseX, startMouseY, startLeft, startTop } = drag.current
+      const { width, height } = boardRef.current.getBoundingClientRect()
+      const dx = ((e.clientX - startMouseX) / width) * 100
+      const dy = ((e.clientY - startMouseY) / height) * 100
+      setPositions(prev => prev.map((p, i) =>
+        i === idx ? { ...p, left: startLeft + dx, top: startTop + dy } : p
+      ))
+    }
+    const onUp = () => {
+      if (!drag.current) return
+      const idx = drag.current.idx
+      drag.current = null
+      setPositions(prev => prev.map((p, i) =>
+        i === idx ? { ...p, rotate: MOODBOARD_ITEMS[idx].rotate } : p
+      ))
+    }
+    window.addEventListener('mousemove', onMove)
+    window.addEventListener('mouseup', onUp)
+    return () => {
+      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mouseup', onUp)
+    }
+  }, [])
+
+  return (
+    <div className="av2-loves" ref={boardRef}>
+      {MOODBOARD_ITEMS.map((item, i) => (
+        <img
+          key={item.cls}
+          className={`mb-item ${item.cls}`}
+          src={item.src}
+          alt={item.alt}
+          draggable={false}
+          onMouseDown={e => onMouseDown(e, i)}
+          style={{
+            left: `${positions[i].left}%`,
+            top: `${positions[i].top}%`,
+            transform: `rotate(${positions[i].rotate}deg)`,
+            zIndex: zOrders[i],
+            cursor: drag.current?.idx === i ? 'grabbing' : 'grab',
+            transition: drag.current?.idx === i ? 'none' : 'transform 0.2s ease',
+          }}
+        />
+      ))}
+    </div>
+  )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
