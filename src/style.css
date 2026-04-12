@@ -627,16 +627,15 @@ mark.highlight-animated {
   margin-bottom: 24px;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--bg-card);
+  background: #1a1a1a;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 .project-company-logo svg { width: 26px; height: 26px; fill: var(--text-primary); }
-/* border-radius and overflow clipping is handled by the parent container */
-.project-company-logo img { width: 100%; height: 100%; object-fit: cover; }
+.project-company-logo-img { width: 100%; height: 100%; object-fit: contain; padding: 5px; }
 
 .project-company {
   font-size: 13px;
@@ -4552,6 +4551,16 @@ a.project-card {
 }
 
 /* --- Metric --- */
+.mdx-metric-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.mdx-metric-group .mdx-metric {
+  max-width: none;
+}
+
 .mdx-metric {
   display: flex;
   flex-direction: column;

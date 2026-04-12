@@ -11,7 +11,7 @@ const GLITCH_COLORS = [
   "#fde68a", // yellow
 ]
 
-function useGlitch(text: string) {
+export function useGlitch(text: string) {
   const settled = text.split("").map(c => ({ char: c, settled: true, color: undefined as string | undefined }))
   const [chars, setChars] = useState(settled)
   const busyRef  = useRef(false)
