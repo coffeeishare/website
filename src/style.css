@@ -1330,74 +1330,87 @@ footer {
   line-height: 1.7;
 }
 
-.work-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  padding-bottom: 80px;
+/* Other Work — full-width stacked list */
+.ow-page {
+  padding-bottom: 0;
 }
 
-.work-tile {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  cursor: default;
-}
-
-.work-tile:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.08);
-}
-
-.work-tile-img {
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #e8edf5, #d4dce8);
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.work-tile-inner {
-  background: white;
-  border-radius: var(--radius-md);
-  width: 70%;
-  height: 60%;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+.ow-list {
   display: flex;
   flex-direction: column;
+  gap: 0;
+  padding: 0 40px 80px;
+}
+
+.ow-item {
+  padding-bottom: 16px;
+}
+
+/* Card — border + rounded, matches Figma */
+.ow-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
   overflow: hidden;
+  background: var(--bg-card);
 }
 
-.tile-bar { height: 20px; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
-
-.tile-content { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
-.tile-line { height: 6px; border-radius: 3px; background: #e5e7eb; }
-.tile-line--sm { width: 35%; }
-.tile-line--md { width: 60%; }
-.tile-line--lg { width: 80%; }
-.tile-line--accent-blue { background: #bfdbfe; width: 45%; }
-.tile-line--accent-purple { background: #d8b4fe; width: 55%; }
-.tile-line--accent-green { background: #bbf7d0; width: 40%; }
-
-.work-tile-label {
-  padding: 16px 18px;
+/* Image padded inside the card */
+.ow-image-wrap {
+  padding: 8px;
+  line-height: 0;
 }
 
-.work-tile-label h3 {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-  line-height: 1.4;
+.ow-media {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
 }
 
-.work-tile-label p {
+/* Label bar — horizontal, border-top, DM Mono */
+.ow-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--border);
+}
+
+.ow-mono {
+  font-family: 'DM Mono', 'Courier New', monospace;
   font-size: 12px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.ow-title {
+  color: var(--text-primary);
+}
+
+.ow-desc {
   color: var(--text-secondary);
-  line-height: 1.5;
+  white-space: normal;
+}
+
+/* Slash separator — diagonal line */
+.ow-sep-slash {
+  display: inline-block;
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+  transform: rotate(20deg);
+  flex-shrink: 0;
+}
+
+/* Dash separator — short horizontal line */
+.ow-sep-line {
+  display: inline-block;
+  width: 12px;
+  height: 1px;
+  background: var(--text-light);
+  flex-shrink: 0;
 }
 
 /* ============================================================
@@ -1421,7 +1434,7 @@ footer {
   .about-photo { max-width: 100%; }
 
   .references-grid { columns: 1; }
-  .work-grid { grid-template-columns: 1fr 1fr; }
+  .ow-list { padding: 0 24px 64px; }
 }
 
 @media (max-width: 600px) {
@@ -1444,7 +1457,7 @@ footer {
   .experience-date { flex-shrink: 0; margin-top: 2px; }
 
   /* Other pages */
-  .work-grid { grid-template-columns: 1fr; }
+  .ow-list { padding: 0 16px 48px; }
   .about-hero { padding: 48px 0 40px; }
   .cta-section { padding: 60px 0 40px; }
 }
@@ -1629,9 +1642,6 @@ footer {
   fill: #2d2b28;
 }
 
-[data-theme="dark"] .work-tile {
-  background: var(--bg-card);
-}
 
 /* Logo carousel — invert light logos so they read on a dark background */
 [data-theme="dark"] .logo-item img {
