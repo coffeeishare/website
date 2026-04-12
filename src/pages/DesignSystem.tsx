@@ -43,8 +43,9 @@ const sections: SectionDef[] = [
       { id: "comp-badges",  label: "Badges & chips" },
       { id: "comp-tabs",    label: "Tabs" },
       { id: "comp-cards",   label: "Cards" },
-      { id: "comp-avatar",  label: "Avatar pill" },
-      { id: "comp-dataviz", label: "Data Viz" },
+      { id: "comp-avatar",   label: "Avatar pill" },
+      { id: "comp-tooltip",  label: "Tooltip" },
+      { id: "comp-dataviz",  label: "Data Viz" },
     ],
   },
   {
@@ -70,12 +71,12 @@ const sections: SectionDef[] = [
 
 // ── Data ──────────────────────────────────────────────────────────────────
 const semanticTokens: { label: string; var: string; light: string; dark: string; lightText?: boolean }[] = [
-  { label: "Background",       var: "--background",         light: "#FAF1ED",   dark: "#1B1815",   lightText: false },
-  { label: "Foreground",       var: "--text-primary",       light: "#2C2B2B",   dark: "#F0EDE8",   lightText: true  },
-  { label: "Card",             var: "--bg-card",            light: "#F8EDE7",   dark: "#201C18",   lightText: false },
+  { label: "Background",       var: "--background",         light: "#ffffff",   dark: "#1B1815",   lightText: false },
+  { label: "Foreground",       var: "--text-primary",       light: "#453838",   dark: "#F0EDE8",   lightText: true  },
+  { label: "Card",             var: "--bg-card",            light: "#ffffff",   dark: "#201C18",   lightText: false },
   { label: "Muted",            var: "--background-subtle",  light: "#F3E8E1",   dark: "#17140F",   lightText: false },
-  { label: "Muted foreground", var: "--text-secondary",     light: "#9C9892",   dark: "#9C9892",   lightText: true  },
-  { label: "Border",           var: "--border",             light: "#DCD2CD",   dark: "#2D2B28",   lightText: false },
+  { label: "Muted foreground", var: "--text-secondary",     light: "#71625E",   dark: "#9C9892",   lightText: true  },
+  { label: "Border",           var: "--border",             light: "#E5E7EB",   dark: "#2D2B28",   lightText: false },
   { label: "Accent yellow",    var: "--accent-yellow",      light: "#FFD26473", dark: "#FFD26433", lightText: false },
   { label: "Accent secondary", var: "--accent-secondary",   light: "#dbeafe",   dark: "#272522",   lightText: false },
 ]
@@ -548,6 +549,60 @@ function ComponentsContent() {
             <div className="ds-avatar-circle" />
             <span className="ds-avatar-name">Ula Ksiazkiewicz</span>
           </div>
+        </div>
+      </section>
+
+      <div className="ds-section-rule" />
+
+      <section id="comp-tooltip" className="ds-sub-section">
+        <SectionHeader title="Tooltip" description="CSS-only tooltip via data-tooltip attribute. Appears below the trigger on hover. Used on nav icon buttons." />
+        <GroupLabel>Usage · data-tooltip="{"{label}"}"</GroupLabel>
+        <div className="ds-component-canvas" style={{ display: "flex", gap: 32, paddingTop: 8, paddingBottom: 32 }}>
+          {["Dark mode", "LinkedIn", "Email", "Resume"].map((label) => (
+            <div key={label} className="nav-icons" style={{ position: "relative" }}>
+              <span
+                data-tooltip={label}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: 32,
+                  height: 32,
+                  borderRadius: 6,
+                  background: "var(--background-subtle)",
+                  color: "var(--text-secondary)",
+                  fontSize: 12,
+                  cursor: "default",
+                  userSelect: "none",
+                }}
+              >
+                {label[0]}
+              </span>
+            </div>
+          ))}
+        </div>
+        <GroupLabel>CSS pattern</GroupLabel>
+        <div className="ds-component-canvas">
+          <pre className="ds-code-block">{`.nav-icons [data-tooltip] { position: relative; }
+.nav-icons [data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--text-primary);
+  color: var(--background);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.nav-icons [data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}`}</pre>
         </div>
       </section>
 

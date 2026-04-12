@@ -55,16 +55,16 @@
    ============================================================ */
 :root {
   /* ── Colour palette ────────────────────────────────────────── */
-  --background: #FAF1ED;
+  --background: #ffffff;
   --background-subtle: #F3E8E1;
-  --bg-card: #F8EDE7;
-  --text-primary: #2C2B2B;
-  --text-secondary: #9C9892;
+  --bg-card: #ffffff;
+  --text-primary: #453838;
+  --text-secondary: #71625E;
   --text-light: #b8ada8;
   --accent-yellow: rgba(255, 210, 100, 0.45);
   --accent-yellow-solid: rgba(255, 210, 100, 1);
   --accent-secondary: #dbeafe;
-  --border: #DCD2CD;
+  --border: #E5E7EB;
 
   /* ── Typography ────────────────────────────────────────────── */
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -156,7 +156,7 @@ nav {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(250, 241, 237, 0.92);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
@@ -176,16 +176,16 @@ nav.nav--scrolled {
   font-family: var(--font-body);
   font-size: 28px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   letter-spacing: -0.5px;
   cursor: pointer;
 }
 
-/* Logo Lottie SVG tinted to match text-primary in each mode */
-/* Light: brightness(0) → #000 ≈ --text-primary #1a1a1a */
-/* Dark:  brightness(0) invert(1) sepia(0.08) → warm near-white ≈ --text-primary #f0ede8 */
-.nav-logo svg { filter: brightness(0); }
-[data-theme="dark"] .nav-logo svg { filter: brightness(0) invert(1) sepia(0.08); }
+/* Logo Lottie SVG tinted per mode */
+/* Light: → approx --text-secondary #71625E */
+/* Dark:  → warm near-white approx --text-primary #f0ede8 */
+.nav-logo svg { filter: brightness(0) invert(1) sepia(1) brightness(0.44); }
+.dark-mode .nav-logo svg { filter: brightness(0) invert(1) sepia(0.08); }
 
 .nav-links {
   display: flex;
@@ -217,12 +217,36 @@ nav.nav--scrolled {
 .nav-icons a {
   display: flex;
   align-items: center;
-  color: var(--text-light);
+  color: var(--text-secondary);
   transition: color 0.2s;
 }
 .nav-icons a:hover { color: var(--text-primary); }
 
 .nav-icons svg { width: 18px; height: 18px; }
+
+.nav-icons [data-tooltip] { position: relative; }
+.nav-icons [data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: var(--text-primary);
+  color: var(--background);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.nav-icons [data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 
 /* ============================================================
    4. LAYOUT
@@ -233,6 +257,7 @@ nav.nav--scrolled {
   margin: 0 auto;
   padding: 0 40px;
 }
+.container--no-x-pad { padding-left: 0; padding-right: 0; }
 
 /* ============================================================
    5. AVATAR PILL
@@ -590,7 +615,7 @@ mark.highlight-animated {
 }
 
 .project-info {
-  padding: 36px 32px;
+  padding: 32px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -4310,6 +4335,8 @@ a.project-card {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .fpg-item {

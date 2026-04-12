@@ -11,6 +11,8 @@ interface MDXFrontmatter {
   pullQuote?: string
   skills?: SkillKey[]
   evidence?: EvidenceItem[]
+  draft?: boolean
+  order?: number
 }
 
 // Import only frontmatter from each MDX file — no component code loaded
@@ -35,9 +37,13 @@ function pullQuoteToEvidence(text: string, skills: SkillKey[]): EvidenceItem[] {
 export async function parseAllMDXProjects(): Promise<FilterableProject[]> {
   const entries = Object.entries(mdxModules)
 
-  const projects = await Promise.all(
-    entries.map(async ([path, loader]) => {
-      const fm = await loader()
+  const settled = await Promise.all(
+    entries.map(async ([path, loader]) => ({ path, fm: await loader() }))
+  )
+
+  const projects = settled
+    .filter(({ fm }) => !fm.draft)
+    .map(({ path, fm }) => {
 
       const slug = slugFromPath(path)
       const skills: SkillKey[] = fm.skills ?? []
@@ -52,6 +58,7 @@ export async function parseAllMDXProjects(): Promise<FilterableProject[]> {
         title: fm.title ?? slug,
         client: fm.client,
         year: fm.year,
+        order: fm.order,
         coverImage: fm.coverImage,
         summary: fm.summary,
         skills,
@@ -59,13 +66,15 @@ export async function parseAllMDXProjects(): Promise<FilterableProject[]> {
         evidence: [...frontmatterEvidence, ...pullQuoteItems],
       } satisfies FilterableProject
     })
-  )
 
-  // Newest first; stable fallback by slug
+  // Newest first; within same year use explicit order, then slug
   return projects.sort((a, b) => {
-    if (a.year && b.year) return b.year.localeCompare(a.year)
-    if (a.year) return -1
-    if (b.year) return 1
+    if (a.year && b.year && a.year !== b.year) return b.year.localeCompare(a.year)
+    if (a.year && !b.year) return -1
+    if (!a.year && b.year) return 1
+    if (a.order !== undefined && b.order !== undefined) return a.order - b.order
+    if (a.order !== undefined) return -1
+    if (b.order !== undefined) return 1
     return a.slug.localeCompare(b.slug)
   })
 }
