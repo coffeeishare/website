@@ -30,12 +30,6 @@
       "runtimeExecutable": "/usr/local/bin/node",
       "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer", "--port", "5177"],
       "port": 5177
-    },
-    {
-      "name": "Portfolio Dev (jolly-meninsky)",
-      "runtimeExecutable": "/usr/local/bin/node",
-      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer/.claude/worktrees/jolly-meninsky", "--port", "5182"],
-      "port": 5182
     }
   ]
 }
