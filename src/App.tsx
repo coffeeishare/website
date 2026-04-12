@@ -27,16 +27,7 @@ interface ProjectStub {
 }
 
 // MDX case studies — always shown alongside Contentful projects
-const MDX_PROJECTS: ProjectStub[] = [
-  {
-    slug: "projects/example-project",
-    title: "Operations Composer",
-    client: "Tulip",
-    description: "A modular no-code workflow builder for manufacturing teams. End-to-end product design spanning research, IA, and design systems.",
-    imageUrl: "/operations-composer-cover.webp",
-    tags: ["Product Design", "UX Research", "Design Systems"],
-  },
-]
+const MDX_PROJECTS: ProjectStub[] = []
 
 const FALLBACK_PROJECTS: ProjectStub[] = [
   {

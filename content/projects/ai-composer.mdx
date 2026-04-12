@@ -6,7 +6,7 @@ introText: "AI Composer is a new product at Tulip, built in close collaboration 
 pullQuote: "Users wanted help, not hand-holding. Finding that line — between automation and control — was the central design challenge."
 tags: ["AI", "Product Design", "UX Research", "Prototyping"]
 year: "2024"
-coverImage: "/ai-composer-cover.webp"
+coverImage: "/images/ai-composer/cover-hero.webp"
 
 skills:
   - ai-integration
@@ -51,6 +51,8 @@ Some customers need to digitise over 200 work instructions on Tulip — step-by-
 
 The challenge wasn't just speed. Customers lacked a consistent, repeatable structure for what a good work instruction looked like. Before designing anything, we needed to understand what the work actually was — and what realistic AI generation could produce.
 
+<ProjectImage src="/images/ai-composer/problem-log.webp" alt="Problem log showing the scale of work instructions" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
+
 <SectionTitle eyebrow="02 — Research" label="Understanding the work before designing the tool" />
 
 We ran **internal interviews with solutions engineers** to understand where app-building workflows broke down and where time was being lost. We then conducted a **workflow audit across 100+ real customer work instructions** to identify standard formats, common patterns, and edge cases the model would need to handle.
@@ -74,6 +76,8 @@ We ran **internal interviews with solutions engineers** to understand where app-
 />
 
 I worked directly with ML engineering to map the capabilities and limitations of early model output — understanding where generation was reliable, where it hallucinated, and what that meant for the interaction model. We then ran **usability testing with 12 internal builders and external early adopters** to gauge predictability and trust.
+
+<ProjectImage src="/images/ai-composer/research.avif" alt="Research board mapping AI model capabilities and edge cases" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
 
 <StudyResult
   skill="user-research"
@@ -108,6 +112,8 @@ The central tension in every decision was the same: how much should the AI do, a
 
 **Prompt to structure, not prompt to finish.** A lightweight input field generated app steps live, giving structure without taking over. Users retained full editing rights at every point — the AI proposed, the user decided.
 
+<ProjectImage src="/images/ai-composer/component-step.webp" alt="Step generation UI — prompt to structure interaction" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
+
 **Editable generation panel.** We gave users control over AI output through an editable suggestions pane. This directly addressed the anxiety researchers identified around black-box automation. Seeing the output as editable — rather than as a finished artefact — shifted the mental model from "I'm trusting a machine" to "I'm reviewing a draft."
 
 <EvidenceQuote
@@ -117,11 +123,15 @@ The central tension in every decision was the same: how much should the AI do, a
 
 **Scaffold-first model.** We prioritised partial, useful structures over complete app generation. The alternative — generating a finished app — tested poorly: users felt responsible for output they hadn't authored and were reluctant to trust it. A good scaffold they could complete was more valuable than a complete output they didn't own. This reduced cognitive overload and supported iterative, confident workflows.
 
+<ProjectImage src="/images/ai-composer/instruction-edit.webp" alt="Editable instruction scaffold — user editing AI-generated output" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
+
 **Confidence indicators.** Visual trust cues — showing certainty levels for generated content — helped users assess and validate AI output with informed scepticism rather than blind acceptance or reflexive rejection. We chose this over hiding uncertainty: surfacing it explicitly turned out to build more trust, not less.
 
 <SectionTitle eyebrow="05 — Prototyping" label="Designing in motion, not in static" />
 
 Given the novelty of the problem, static mockups weren't enough. I built interaction-first Figma prototypes that simulated the generation experience — including loading states, partial output, and error conditions — to test with users and co-design with ML engineering in real time.
+
+<ProjectImage src="/images/ai-composer/component-stepfeed.webp" alt="Step feed prototype showing generation states" style={{width: '100%', borderRadius: '12px', margin: '1.5rem 0'}} />
 
 <Metric
   skill="prototyping"
