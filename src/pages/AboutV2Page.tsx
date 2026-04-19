@@ -126,7 +126,6 @@ function SpacesLoader({ onDone }: SpacesLoaderProps) {
   return (
     <div className="sl-overlay" ref={overlayRef}>
       <div className="sl-card">
-        <div className="sl-card-grain" aria-hidden="true" />
         <StarBurst svgRef={starburstRef} />
       </div>
 
@@ -197,11 +196,11 @@ function drawRR(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, 
 interface Photo { filename: string; bg: string; caption: string | null }
 
 const PHOTOS: Photo[] = [
-  { filename: '3wdOehqIY6GcppSnUIwtKUURUwI.avif', bg: '#2a2a2a', caption: null },
-  { filename: 'O6O23k2nBtDTb0aw70ED7K9Mqoc.avif', bg: '#2e2e2e', caption: null },
-  { filename: 'PCL6WIITSJASqrhyAxKQzIRRxyY.avif', bg: '#303030', caption: null },
-  { filename: 'U8Msjoq65Gzmx2ul9D9z0ykRT0.avif',  bg: '#333333', caption: null },
-  { filename: 'sFdz7ZRllSK4UQjRmrphJuLonE.avif',  bg: '#2c2c2c', caption: null },
+  { filename: '3wdOehqIY6GcppSnUIwtKUURUwI.avif', bg: '#2a2a2a', caption: 'Shot on film, somewhere warm' },
+  { filename: 'O6O23k2nBtDTb0aw70ED7K9Mqoc.avif', bg: '#2e2e2e', caption: 'Golden hour, no filter' },
+  { filename: 'PCL6WIITSJASqrhyAxKQzIRRxyY.avif', bg: '#303030', caption: 'A moment worth keeping' },
+  { filename: 'U8Msjoq65Gzmx2ul9D9z0ykRT0.avif',  bg: '#333333', caption: 'Quiet and still' },
+  { filename: 'sFdz7ZRllSK4UQjRmrphJuLonE.avif',  bg: '#2c2c2c', caption: 'Light, always light' },
 ]
 
 // ─── Loves data ───────────────────────────────────────────────────────────────
@@ -270,7 +269,7 @@ export function AboutV2Page() {
       <div className="av2-outer" data-tab={tab}>
         {!loaded && <SpacesLoader onDone={handleLoaderDone} />}
 
-        <div className="av2-layout" style={{ visibility: loaded ? 'visible' : 'hidden' }}>
+        <div className="av2-layout" style={{ display: loaded ? 'flex' : 'none' }}>
           {/* left dock */}
           <nav className="av2-dock" ref={dockRef} aria-label="About sections">
             {tabs.map(t => (
@@ -468,7 +467,7 @@ function PhotosPanel() {
           ))}
         </div>
 
-        <p className="av2-photo-scroll-hint">scroll to browse</p>
+
       </div>
 
       {frontPhoto.caption && (
@@ -493,14 +492,18 @@ function GamePanel() {
     cancelAnimationFrame(rafRef.current)
     const canvas = canvasRef.current
     if (!canvas) return
+    const dpr = window.devicePixelRatio || 1
+    canvas.width  = CW * dpr
+    canvas.height = CH * dpr
     const ctx = canvas.getContext('2d')!
+    ctx.scale(dpr, dpr)
 
     tickRef.current = () => {
       const gs = gsRef.current
       ctx.clearRect(0, 0, CW, CH)
 
-      // background
-      ctx.fillStyle = '#080808'
+      // background — match --background token
+      ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--background').trim() || '#1E1E1E'
       ctx.fillRect(0, 0, CW, CH)
 
       // ground line
@@ -733,10 +736,20 @@ type AboutSubTab = 'experience' | 'references'
 function AboutPanel() {
   const [subTab, setSubTab] = useState<AboutSubTab>('experience')
   const [activeIdx, setActiveIdx] = useState<number | null>(null)
+  const [scrolled, setScrolled] = useState(false)
+  const rootRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const el = rootRef.current?.closest('.av2-panel') as HTMLElement | null
+    if (!el) return
+    const onScroll = () => setScrolled(el.scrollTop > 8)
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <div className="ab-root">
-      <div className="ab-top-fade" />
+    <div className="ab-root" ref={rootRef}>
+      <div className={`ab-top-fade${scrolled ? ' ab-top-fade--visible' : ''}`} />
       {/* ── Info card ── */}
       <div className="ab-card">
         <div className="ab-photo-col">
@@ -809,8 +822,45 @@ function AboutPanel() {
 // ─────────────────────────────────────────────────────────────────────────────
 // LOVES
 // ─────────────────────────────────────────────────────────────────────────────
-const MOODBOARD_ITEMS = [
-  { src: '/images/favourites/Frame 11161.png',            cls: 'mb-sticky',     alt: 'About me note',              left:  3.2, top: -3.8,  rotate: -2 },
+
+function StickyNoteCard({ text, tooltip, style, onMouseDown }: {
+  text: string
+  tooltip: string
+  style: React.CSSProperties
+  onMouseDown: (e: React.MouseEvent) => void
+}) {
+  const [playing, setPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+
+  const togglePlay = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (!audioRef.current) return
+    if (playing) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      setPlaying(false)
+    } else {
+      audioRef.current.play()
+      setPlaying(true)
+    }
+  }
+
+  return (
+    <div className="mb-item mb-sticky mb-sticky-note" data-tooltip={tooltip} draggable={false} onMouseDown={onMouseDown} style={style}>
+      <audio ref={audioRef} src="/audio/note.mp3" onEnded={() => setPlaying(false)} />
+      <p className="mb-sticky-text">{text}</p>
+      <button className={`mb-play-btn${playing ? ' mb-play-btn--playing' : ''}`} onClick={togglePlay}>
+        {playing
+          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="4" width="4" height="16" rx="1"/><rect x="15" y="4" width="4" height="16" rx="1"/></svg>
+          : <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l15 8-15 8V4z"/></svg>
+        }
+        {playing ? 'pause' : 'play note'}
+      </button>
+    </div>
+  )
+}
+const MOODBOARD_ITEMS: Array<{ src?: string; text?: string; cls: string; alt: string; left: number; top: number; rotate: number }> = [
+  { text: `I'm always exploring new areas of craft and believe that what I do outside of work deeply informs my design practice. Whether it's photography, video editing, or travel, these hobbies keep my creative thinking sharp and help me connect with new perspectives.\n\nI actively seek out community through these interests and carry that same mindset into my work. I care deeply about inclusivity and accessibility—values that can only be achieved by designing with, and learning from, people of diverse backgrounds.`, cls: 'mb-sticky', alt: 'About me note', left: 3.2, top: -3.8, rotate: -2 },
   { src: '/images/favourites/image 25.png',               cls: 'mb-camera',     alt: 'Canon G7X camera',           left: 31.8, top: -8.4,  rotate:  4 },
   { src: '/images/favourites/Frame 21173.png',            cls: 'mb-movie',      alt: 'Movie still',                left: 67,   top:  4.9,  rotate:  1 },
   { src: '/images/favourites/image 29.png',               cls: 'mb-vinyl',      alt: 'Pink Floyd',                 left: 84.4, top: 15.1,  rotate:  4 },
@@ -875,24 +925,39 @@ function LovesPanel() {
 
   return (
     <div className="av2-loves" ref={boardRef}>
-      {MOODBOARD_ITEMS.map((item, i) => (
-        <img
-          key={item.cls}
-          className={`mb-item ${item.cls}`}
-          src={item.src}
-          alt={item.alt}
-          draggable={false}
-          onMouseDown={e => onMouseDown(e, i)}
-          style={{
-            left: `${positions[i].left}%`,
-            top: `${positions[i].top}%`,
-            transform: `rotate(${positions[i].rotate}deg)`,
-            zIndex: zOrders[i],
-            cursor: drag.current?.idx === i ? 'grabbing' : 'grab',
-            transition: drag.current?.idx === i ? 'none' : 'transform 0.2s ease',
-          }}
-        />
-      ))}
+      {MOODBOARD_ITEMS.map((item, i) => {
+        const sharedStyle: React.CSSProperties = {
+          left: `${positions[i].left}%`,
+          top: `${positions[i].top}%`,
+          transform: `rotate(${positions[i].rotate}deg)`,
+          zIndex: zOrders[i],
+          cursor: drag.current?.idx === i ? 'grabbing' : 'grab',
+          transition: drag.current?.idx === i ? 'none' : 'transform 0.2s ease',
+        }
+        if (item.text) {
+          return (
+            <StickyNoteCard
+              key={item.cls}
+              text={item.text}
+              tooltip={item.alt}
+              style={sharedStyle}
+              onMouseDown={e => onMouseDown(e, i)}
+            />
+          )
+        }
+        return (
+          <div
+            key={item.cls}
+            className={`mb-item ${item.cls}`}
+            data-tooltip={item.alt}
+            draggable={false}
+            onMouseDown={e => onMouseDown(e, i)}
+            style={sharedStyle}
+          >
+            <img src={item.src} alt={item.alt} draggable={false} style={{ width: '100%', display: 'block', pointerEvents: 'none' }} />
+          </div>
+        )
+      })}
     </div>
   )
 }
