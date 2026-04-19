@@ -705,7 +705,7 @@ function WorkMap({ activeIdx }: { activeIdx: number | null }) {
               <rect
                 x={-4} y={-4}
                 width={8} height={8}
-                fill={isActive ? '#c084fc' : '#4a4541'}
+                fill={isActive ? '#9D6A9C' : '#4a4541'}
                 style={{ transition: 'fill 0.15s' }}
               />
               {isActive && (
@@ -716,7 +716,7 @@ function WorkMap({ activeIdx }: { activeIdx: number | null }) {
                   style={{
                     fontFamily: "'DM Mono', 'Courier New', monospace",
                     fontSize: 30,
-                    fill: '#c084fc',
+                    fill: '#9D6A9C',
                     pointerEvents: 'none',
                   }}
                 >
