@@ -30,6 +30,12 @@
       "runtimeExecutable": "/usr/local/bin/node",
       "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "/Users/urszula.ksiazkiewicz/framer", "--port", "5177"],
       "port": 5177
+    },
+    {
+      "name": "Portfolio Dev (cranky-kepler)",
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["/Users/urszula.ksiazkiewicz/framer/node_modules/.bin/vite", "--port", "5179"],
+      "port": 5179
     }
   ]
 }

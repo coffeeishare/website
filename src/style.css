@@ -1,3 +1,12 @@
+@font-face {
+  font-family: 'Ula';
+  src: url('/fonts/Ula-Regular.otf') format('opentype'),
+       url('/fonts/Ula-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /**
  * Portfolio — Global Stylesheet
  *
@@ -1328,16 +1337,18 @@ footer {
 }
 
 .other-hero h1 {
+  font-family: 'Ula', sans-serif;
   font-size: clamp(28px, 4vw, 42px);
   font-weight: 500;
   letter-spacing: -0.02em;
+  text-transform: uppercase;
   margin-bottom: 14px;
 }
 
 .other-hero p {
   font-size: 15px;
   color: var(--text-secondary);
-  max-width: 620px;
+  max-width: 651px;
   line-height: 1.7;
 }
 
@@ -5327,6 +5338,8 @@ a.project-card {
 .av2-panel[data-tab="about"] {
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: none;
+  scroll-behavior: smooth;
   background: var(--background);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
@@ -5344,12 +5357,12 @@ a.project-card {
 }
 
 
-/* home tab — glass panel, inset from outer container */
+/* home tab — always dark regardless of light/dark mode */
 .av2-panel[data-tab="home"] {
   overflow: visible;
-  background: rgba(10, 8, 7, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #1E1E1E;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 12px;
   margin: 1.5rem;
@@ -5594,10 +5607,11 @@ a.project-card {
   position: absolute;
   bottom: 1.5rem;
   right: 1.5rem;
-  font-family: 'DM Mono', 'Courier New', monospace;
-  font-size: 0.72rem;
+  font-family: 'Ula', 'DM Mono', 'Courier New', monospace;
+  font-size: 1rem;
   color: rgba(255, 255, 255, 0.38);
   text-align: right;
+  text-transform: uppercase;
   max-width: 220px;
   line-height: 1.7;
   margin: 0;
@@ -5621,14 +5635,14 @@ a.project-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #080808;
+  background: var(--background);
 }
 
 .av2-game-canvas {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
+  max-height: 100%;
   cursor: pointer;
 }
 
@@ -5648,7 +5662,80 @@ a.project-card {
   will-change: transform;
 }
 
+.mb-item[data-tooltip] { position: absolute; }
+.mb-item[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: var(--text-primary);
+  color: var(--background);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  padding: 4px 8px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 9999;
+}
+.mb-item[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .mb-sticky     { width: 33%; }
+
+.mb-sticky-note {
+  background: #f1d278;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  aspect-ratio: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.mb-play-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1rem;
+  padding: 6px 12px;
+  border: 1.5px solid rgba(32, 28, 24, 0.35);
+  border-radius: 20px;
+  background: transparent;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: #201c18;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+}
+
+.mb-play-btn:hover {
+  background: rgba(32, 28, 24, 0.08);
+}
+
+.mb-play-btn--playing {
+  border-color: rgba(32, 28, 24, 0.6);
+}
+
+.mb-sticky-text {
+  font-family: 'Ula', cursive;
+  font-size: 1.05rem;
+  line-height: 1rem;
+  color: #201c18;
+  margin: 0;
+  white-space: pre-wrap;
+  text-transform: uppercase;
+}
 .mb-camera     { width: 30%; }
 .mb-movie      { width: 26%; }
 .mb-vinyl      { width: 16%; }
@@ -5789,6 +5876,12 @@ a.project-card {
   z-index: 10;
   pointer-events: none;
   flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ab-top-fade--visible {
+  opacity: 1;
 }
 
 /* ── Info card ── */
@@ -5828,7 +5921,8 @@ a.project-card {
 }
 
 .ab-title {
-  font-size: 1.75rem;
+  font-family: 'Ula', sans-serif;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.15rem;
@@ -5954,7 +6048,10 @@ a.project-card {
   position: absolute;
   inset: 0;
   z-index: 100;
-  background: #1b1815;
+  background-color: #1b1815;
+  background-image: url('/warm-bg.webp');
+  background-position: center center;
+  background-size: cover;
   /* No border-radius or overflow:hidden here — av2-outer already clips.
      Keeping them caused a dark flash in the rounded corners during card expansion. */
   display: flex;
@@ -5963,15 +6060,13 @@ a.project-card {
   pointer-events: all;
 }
 
-/* ── Gradient card ─────────────────────────────────────────── */
+/* ── Starburst container (no card background) ──────────────── */
 .sl-card {
   position: relative;
   width: 58%;
   aspect-ratio: 825 / 707;
-  border-radius: 6px;
-  overflow: hidden;
   transform-origin: center center;
-  background: url('/warm-bg.webp') center / cover no-repeat;
+  background: none;
 }
 
 /* ── Grain texture overlay ─────────────────────────────────── */
